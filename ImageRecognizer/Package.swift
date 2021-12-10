@@ -25,7 +25,8 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "ImageRecognizer",
-            dependencies: []),
+            dependencies: [],
+            resources: [.process("MobileNetV2.mlmodelc")]),
         .testTarget(
             name: "ImageRecognizerTests",
             dependencies: ["ImageRecognizer"]),

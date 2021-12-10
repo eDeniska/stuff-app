@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0DB6D1AA2760E3E40068F985 /* DataModel in Frameworks */ = {isa = PBXBuildFile; productRef = 0DB6D1A92760E3E40068F985 /* DataModel */; };
+		0DB6D1AC2760FB460068F985 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB6D1AB2760FB460068F985 /* CloudKit.framework */; };
 		0DCC175C2760D7CC00E0322F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0DCC175A2760D7CC00E0322F /* README.md */; };
 		0DCC175D2760D7CC00E0322F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 0DCC175B2760D7CC00E0322F /* LICENSE */; };
 		0DCC17602760E34500E0322F /* ImageRecognizer in Frameworks */ = {isa = PBXBuildFile; productRef = 0DCC175F2760E34500E0322F /* ImageRecognizer */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0DB6D1AB2760FB460068F985 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		0DCC17592760CCFD00E0322F /* ImageRecognizer */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ImageRecognizer; path = ../ImageRecognizer; sourceTree = "<group>"; };
 		0DCC175A2760D7CC00E0322F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0DCC175B2760D7CC00E0322F /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -38,6 +40,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0DCC17602760E34500E0322F /* ImageRecognizer in Frameworks */,
+				0DB6D1AC2760FB460068F985 /* CloudKit.framework in Frameworks */,
 				0DFD4D36275FAEA600088631 /* Views in Frameworks */,
 				0DB6D1AA2760E3E40068F985 /* DataModel in Frameworks */,
 			);
@@ -89,6 +92,7 @@
 		0DFD4D2D275FACC000088631 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0DB6D1AB2760FB460068F985 /* CloudKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -313,8 +317,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Stuff/Preview Content\"";
+				DEVELOPMENT_TEAM = 4E63BYV878;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Take pictures of your things";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -344,8 +350,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Stuff/Preview Content\"";
+				DEVELOPMENT_TEAM = 4E63BYV878;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Take pictures of your things";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
