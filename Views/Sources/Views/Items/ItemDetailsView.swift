@@ -29,7 +29,9 @@ public struct ItemDetailsView: View {
     public var body: some View {
         VStack{
             Text(item.title ?? "Unnamed item")
-            Text(detectedInformation)
+            ScrollView(.vertical, showsIndicators: true) {
+                Text(detectedInformation)
+            }
             Spacer()
             if !selectedImages.isEmpty {
                 GroupBox {
@@ -76,24 +78,22 @@ public struct ItemDetailsView: View {
         }
         .onChange(of: selectedImages) { images in
             Task {
-                var filteredPredictions: [ImagePredictor.Prediction] = []
+                var filteredPredictions: [ItemPrediction] = []
                 var predictedText = ""
                 for image in images {
                     let predictions = try? await imagePredictor.makePredictions(for: image)
+                    filteredPredictions.append(contentsOf: predictions ?? [])
 
-                    for prediction in predictions ?? [] {
-                        if let index = filteredPredictions.firstIndex(where: { $0.classification == prediction.classification }) {
-                            let existingPrediction = filteredPredictions[index]
-
-                            filteredPredictions[index] = ImagePredictor.Prediction(classification: existingPrediction.classification, confidencePercentage: existingPrediction.confidencePercentage + prediction.confidencePercentage / Double(images.count))
-
-                        } else {
-                            filteredPredictions.append(ImagePredictor.Prediction(classification: prediction.classification, confidencePercentage: prediction.confidencePercentage / Double(images.count)))
-                        }
-                    }
                 }
-                for prediction in filteredPredictions where prediction.confidencePercentage > 0.1 {
-                    predictedText.append("\(prediction.classification) (\(prediction.confidencePercentage))\n")
+
+                predictedText.append(contentsOf: "raw results:\n")
+                for prediction in filteredPredictions {
+                    predictedText.append("\(prediction.detectedItem.description) [[ \(prediction.classification) ]] (\(prediction.confidence))\n")
+                }
+
+                predictedText.append(contentsOf: "filtered results:\n")
+                for prediction in filteredPredictions.aggregate() where prediction.confidence > 0.15 {
+                    predictedText.append("\(prediction.detectedItem.description) [[ \(prediction.classification) ]] (\(prediction.confidence))\n")
                 }
                 self.detectedInformation = predictedText
             }

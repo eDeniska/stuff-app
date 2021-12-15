@@ -7,6 +7,40 @@ Makes predictions from images using the MobileNet model.
 
 import Vision
 import UIKit
+import DataModel
+
+public struct ItemPrediction {
+    public let detectedItem: DetectedItem
+    public let classification: String
+    public var confidence: Double
+
+    public init(classification: String, confidence: Double) {
+        self.classification = classification
+        self.confidence = confidence
+        detectedItem = DetectedItem(prediction: classification)
+    }
+}
+
+public extension Array where Element == ItemPrediction {
+    func aggregate(minimumConfidence: Double = 0.1) -> [ItemPrediction] {
+        // we're summing up confidence here.
+        // this is not correct, however, I'd like to give boost for those options
+        return reduce([ItemPrediction]()) { predictions, prediction in
+            guard prediction.confidence >= minimumConfidence else {
+                return predictions
+            }
+            var existingPredictions = predictions
+            if let index = existingPredictions.firstIndex(where: { $0.detectedItem == prediction.detectedItem}) {
+                var existingPrediction = existingPredictions[index]
+                existingPrediction.confidence += prediction.confidence
+                existingPredictions[index] = existingPrediction
+            } else {
+                existingPredictions.append(prediction)
+            }
+            return existingPredictions
+        }
+    }
+}
 
 /// A convenience class that makes image classification predictions.
 ///
@@ -50,25 +84,8 @@ public class ImagePredictor {
     /// since each can be expensive in time and resources.
     private static let imageClassifier = createImageClassifier()
 
-    /// Stores a classification name and confidence for an image classifier's prediction.
-    /// - Tag: Prediction
-    public struct Prediction {
-        /// The name of the object or scene the image classifier recognizes in an image.
-        public let classification: String
-
-        /// The image classifier's confidence as a percentage string.
-        ///
-        /// The prediction string doesn't include the % symbol in the string.
-        public let confidencePercentage: Double
-
-        public init(classification: String, confidencePercentage: Double) {
-            self.classification = classification
-            self.confidencePercentage = confidencePercentage
-        }
-    }
-
     /// The function signature the caller must provide as a completion handler.
-    public typealias ImagePredictionHandler = (_ predictions: [Prediction]?) -> Void
+    public typealias ImagePredictionHandler = (_ predictions: [ItemPrediction]?) -> Void
 
     /// A dictionary of prediction handler functions, each keyed by its Vision request.
     private var predictionHandlers = [VNRequest: ImagePredictionHandler]()
@@ -84,7 +101,7 @@ public class ImagePredictor {
         return imageClassificationRequest
     }
 
-    public func makePredictions(for photo: UIImage) async throws -> [Prediction]? {
+    public func makePredictions(for photo: UIImage) async throws -> [ItemPrediction]? {
         try await withUnsafeThrowingContinuation { continuation in
             do {
                 try makePredictions(for: photo) { predictions in
@@ -130,7 +147,7 @@ public class ImagePredictor {
         }
 
         // Start with a `nil` value in case there's a problem.
-        var predictions: [Prediction]? = nil
+        var predictions: [ItemPrediction]? = nil
 
         // Call the client's completion handler after the method returns.
         defer {
@@ -162,8 +179,8 @@ public class ImagePredictor {
         // Create a prediction array from the observations.
         predictions = observations.map { observation in
             // Convert each observation into an `ImagePredictor.Prediction` instance.
-            Prediction(classification: observation.identifier,
-                       confidencePercentage: Double(observation.confidence))
+            ItemPrediction(classification: observation.identifier,
+                           confidence: Double(observation.confidence))
         }
     }
 }

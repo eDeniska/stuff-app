@@ -89,7 +89,7 @@ public enum DetectedItem: String, CustomStringConvertible {
     case accessory
     case houseItem
 
-    var category: AppCategory {
+    public var category: AppCategory {
         switch self {
 
         case .other, .food, .hygiene, .gun, .vehicle, .medical, .toy, .beauty, .bathing, .lighting, .stationery, .kitchen, .houseItem:
@@ -143,7 +143,7 @@ public enum DetectedItem: String, CustomStringConvertible {
         "\(rawValue) (\(category.rawValue))"
     }
 
-    init(prediction: String) {
+    public init(prediction: String) {
         switch prediction {
         case
             "background",
