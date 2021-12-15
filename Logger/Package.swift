@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "DataModel",
+    name: "Logger",
     platforms: [
          .macOS(.v12),
          .macCatalyst(.v15),
@@ -13,22 +13,19 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "DataModel",
-            targets: ["DataModel"]),
+            name: "Logger",
+            targets: ["Logger"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
-        .package(name: "Logger", path: "../Logger"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "DataModel",
-            dependencies: ["Logger"]),
+            name: "Logger",
+            dependencies: []),
         .testTarget(
-            name: "DataModelTests",
-            dependencies: ["DataModel"]),
+            name: "LoggerTests",
+            dependencies: ["Logger"]),
     ]
 )

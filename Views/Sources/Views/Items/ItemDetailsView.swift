@@ -28,19 +28,25 @@ public struct ItemDetailsView: View {
 
     public var body: some View {
         VStack{
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            Text(item.title ?? "Unnamed item")
             Text(detectedInformation)
             Spacer()
-            ScrollView(.horizontal, showsIndicators: true) {
-                HStack(alignment: .center) {
-                    ForEach(selectedImages) { image in
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 200, height: 200)
-                            .clipped()
+            if !selectedImages.isEmpty {
+                GroupBox {
+                    VStack{
+                        Text("Images")
+                        ScrollView(.horizontal, showsIndicators: true) {
+                            HStack(alignment: .center) {
+                                ForEach(selectedImages) { image in
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 200, height: 200)
+                                        .clipped()
+                                }
+                            }
+                        }
                     }
-
                 }
             }
         }
@@ -56,7 +62,7 @@ public struct ItemDetailsView: View {
                 }
             }
         }
-        .popover(isPresented: $showTakePhoto) {
+        .fullScreenCover(isPresented: $showTakePhoto) {
             CameraView(image: $takenImage)
         }
         .popover(isPresented: $showPhotoPicker) {
@@ -69,18 +75,27 @@ public struct ItemDetailsView: View {
             selectedImages.insert(image, at: 0)
         }
         .onChange(of: selectedImages) { images in
-            guard let image = images.first else {
-                return
-            }
-            try? imagePredictor.makePredictions(for: image) { predictions in
+            Task {
+                var filteredPredictions: [ImagePredictor.Prediction] = []
                 var predictedText = ""
-                for prediction in predictions ?? [] where prediction.confidencePercentage > 0.1 {
-                    predictedText.append("\(prediction.classification) (\(prediction.confidencePercentage))\n")
+                for image in images {
+                    let predictions = try? await imagePredictor.makePredictions(for: image)
 
+                    for prediction in predictions ?? [] {
+                        if let index = filteredPredictions.firstIndex(where: { $0.classification == prediction.classification }) {
+                            let existingPrediction = filteredPredictions[index]
+
+                            filteredPredictions[index] = ImagePredictor.Prediction(classification: existingPrediction.classification, confidencePercentage: existingPrediction.confidencePercentage + prediction.confidencePercentage / Double(images.count))
+
+                        } else {
+                            filteredPredictions.append(ImagePredictor.Prediction(classification: prediction.classification, confidencePercentage: prediction.confidencePercentage / Double(images.count)))
+                        }
+                    }
                 }
-                DispatchQueue.main.async {
-                    self.detectedInformation = predictedText
+                for prediction in filteredPredictions where prediction.confidencePercentage > 0.1 {
+                    predictedText.append("\(prediction.classification) (\(prediction.confidencePercentage))\n")
                 }
+                self.detectedInformation = predictedText
             }
         }
     }
@@ -97,9 +112,3 @@ extension UIImage: Identifiable {
         self
     }
 }
-
-//struct ItemDetailsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ItemDetailsView()
-//    }
-//}

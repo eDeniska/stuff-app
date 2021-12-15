@@ -17,7 +17,7 @@ public struct ItemListElement: View {
 
     public var body: some View {
         HStack(alignment: .center) {
-            Image(systemName: item.category?.icon ?? "cup.and.saucer")
+            Image(systemName: "cup.and.saucer")
             VStack(alignment: .leading) {
                 Text(item.title ?? "Unnamed")
                     .truncationMode(.tail)

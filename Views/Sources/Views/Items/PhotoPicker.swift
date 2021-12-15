@@ -41,8 +41,10 @@ struct PhotoPicker: UIViewControllerRepresentable {
 }
 
 extension PhotoPicker.Coordinator: PHPickerViewControllerDelegate {
+
     func picker(_ picker: PHPickerViewController,
                 didFinishPicking results: [PHPickerResult]) {
+        picker.presentingViewController?.dismiss(animated: true)
 
         var images: [UIImage] = []
         let group = DispatchGroup()
@@ -65,7 +67,6 @@ extension PhotoPicker.Coordinator: PHPickerViewControllerDelegate {
             }
             group.notify(queue: .main) {
                 self.photoPicker.images = images
-                picker.presentingViewController?.dismiss(animated: true, completion: nil)
             }
         }
     }

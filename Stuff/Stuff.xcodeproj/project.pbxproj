@@ -20,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D8EAE1C276A21DE00B39E9D /* Logger */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Logger; path = ../Logger; sourceTree = "<group>"; };
 		0DB6D1AB2760FB460068F985 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		0DCC17592760CCFD00E0322F /* ImageRecognizer */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ImageRecognizer; path = ../ImageRecognizer; sourceTree = "<group>"; };
 		0DCC175A2760D7CC00E0322F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -103,6 +104,7 @@
 				0DFD4D2C275FACA900088631 /* Views */,
 				0DCC17592760CCFD00E0322F /* ImageRecognizer */,
 				0DCC175E2760E31900E0322F /* DataModel */,
+				0D8EAE1C276A21DE00B39E9D /* Logger */,
 			);
 			name = Packages;
 			sourceTree = "<group>";

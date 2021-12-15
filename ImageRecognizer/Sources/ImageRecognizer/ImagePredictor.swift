@@ -60,6 +60,11 @@ public class ImagePredictor {
         ///
         /// The prediction string doesn't include the % symbol in the string.
         public let confidencePercentage: Double
+
+        public init(classification: String, confidencePercentage: Double) {
+            self.classification = classification
+            self.confidencePercentage = confidencePercentage
+        }
     }
 
     /// The function signature the caller must provide as a completion handler.
@@ -77,6 +82,18 @@ public class ImagePredictor {
 
         imageClassificationRequest.imageCropAndScaleOption = .centerCrop
         return imageClassificationRequest
+    }
+
+    public func makePredictions(for photo: UIImage) async throws -> [Prediction]? {
+        try await withUnsafeThrowingContinuation { continuation in
+            do {
+                try makePredictions(for: photo) { predictions in
+                continuation.resume(returning: predictions)
+                }
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
     }
 
     /// Generates an image classification prediction for a photo.

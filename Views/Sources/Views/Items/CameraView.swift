@@ -17,9 +17,10 @@ struct CameraView: UIViewControllerRepresentable {
         imagePickerVC.delegate = context.coordinator
         imagePickerVC.mediaTypes = [UTType.image.identifier]
         imagePickerVC.sourceType = .camera
+        imagePickerVC.cameraCaptureMode = .photo
+        imagePickerVC.showsCameraControls = true
         imagePickerVC.allowsEditing = true
         return imagePickerVC
-
     }
 
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
