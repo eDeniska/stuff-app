@@ -92,6 +92,9 @@ public struct ItemListView: View {
         .tabItem {
             Label("Items", systemImage: "menucard")
         }
+        .onAppear {
+            print(FileStorageManager.shared.urls(withPrefix: "S"))
+        }
     }
 
     @State private var lastCategory: ItemCategory?

@@ -12,7 +12,6 @@ import PhotosUI
 struct PhotoPicker: UIViewControllerRepresentable {
     @Binding var images: [UIImage]
 
-
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var configuration = PHPickerConfiguration()
         configuration.selection = .ordered

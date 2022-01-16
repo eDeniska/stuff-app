@@ -17,7 +17,6 @@ let package = Package(
             targets: ["ImageRecognizer"]),
     ],
     dependencies: [
-        .package(name: "DataModel", path: "../DataModel"),
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -26,7 +25,6 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "ImageRecognizer",
-            dependencies: ["DataModel"],
             resources: [.process("MobileNetV2.mlmodelc")]),
         .testTarget(
             name: "ImageRecognizerTests",

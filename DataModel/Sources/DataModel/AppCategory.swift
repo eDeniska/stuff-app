@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum AppCategory: String {
+public enum AppCategory: String, CaseIterable {
     case pets
     case clothers
     case shoes
@@ -22,4 +22,8 @@ public enum AppCategory: String {
     case tools
     case music
     case other
+
+    public var iconName: String {
+        "tshirt"
+    }
 }

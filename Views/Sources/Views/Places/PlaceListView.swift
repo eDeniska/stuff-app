@@ -15,9 +15,8 @@ public struct PlaceListView: View {
         sortDescriptors: [
             SortDescriptor(\ItemPlace.title)
                          ],
-        animation: .default)
+        animation: .default) private var places: FetchedResults<ItemPlace>
 
-    private var places: FetchedResults<ItemPlace>
     @State private var searchText: String = ""
 
     public init() {

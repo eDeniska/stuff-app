@@ -7,38 +7,14 @@ Makes predictions from images using the MobileNet model.
 
 import Vision
 import UIKit
-import DataModel
 
 public struct ItemPrediction {
-    public let detectedItem: DetectedItem
     public let classification: String
     public var confidence: Double
 
     public init(classification: String, confidence: Double) {
         self.classification = classification
         self.confidence = confidence
-        detectedItem = DetectedItem(prediction: classification)
-    }
-}
-
-public extension Array where Element == ItemPrediction {
-    func aggregate(minimumConfidence: Double = 0.1) -> [ItemPrediction] {
-        // we're summing up confidence here.
-        // this is not correct, however, I'd like to give boost for those options
-        return reduce([ItemPrediction]()) { predictions, prediction in
-            guard prediction.confidence >= minimumConfidence else {
-                return predictions
-            }
-            var existingPredictions = predictions
-            if let index = existingPredictions.firstIndex(where: { $0.detectedItem == prediction.detectedItem}) {
-                var existingPrediction = existingPredictions[index]
-                existingPrediction.confidence += prediction.confidence
-                existingPredictions[index] = existingPrediction
-            } else {
-                existingPredictions.append(prediction)
-            }
-            return existingPredictions
-        }
     }
 }
 
@@ -90,6 +66,8 @@ public class ImagePredictor {
     /// A dictionary of prediction handler functions, each keyed by its Vision request.
     private var predictionHandlers = [VNRequest: ImagePredictionHandler]()
 
+    private var handlersLock = os_unfair_lock_s()
+
     /// Generates a new request instance that uses the Image Predictor's image classifier model.
     private func createImageClassificationRequest() -> VNImageBasedRequest {
         // Create an image classification request with an image classifier model.
@@ -102,13 +80,15 @@ public class ImagePredictor {
     }
 
     public func makePredictions(for photo: UIImage) async throws -> [ItemPrediction]? {
-        try await withUnsafeThrowingContinuation { continuation in
-            do {
-                try makePredictions(for: photo) { predictions in
-                continuation.resume(returning: predictions)
+        try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try self.makePredictions(for: photo) { predictions in
+                        continuation.resume(returning: predictions)
+                    }
+                } catch {
+                    continuation.resume(throwing: error)
                 }
-            } catch {
-                continuation.resume(throwing: error)
             }
         }
     }
@@ -124,7 +104,9 @@ public class ImagePredictor {
         }
 
         let imageClassificationRequest = createImageClassificationRequest()
+        os_unfair_lock_lock(&handlersLock)
         predictionHandlers[imageClassificationRequest] = completionHandler
+        os_unfair_lock_unlock(&handlersLock)
 
         let handler = VNImageRequestHandler(cgImage: photoImage, orientation: orientation)
         let requests: [VNRequest] = [imageClassificationRequest]
@@ -142,9 +124,11 @@ public class ImagePredictor {
     /// - Tag: visionRequestHandler
     private func visionRequestHandler(_ request: VNRequest, error: Error?) {
         // Remove the caller's handler from the dictionary and keep a reference to it.
+        os_unfair_lock_lock(&handlersLock)
         guard let predictionHandler = predictionHandlers.removeValue(forKey: request) else {
             fatalError("Every request must have a prediction handler.")
         }
+        os_unfair_lock_unlock(&handlersLock)
 
         // Start with a `nil` value in case there's a problem.
         var predictions: [ItemPrediction]? = nil

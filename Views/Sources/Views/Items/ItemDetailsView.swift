@@ -6,48 +6,90 @@
 //
 
 import SwiftUI
+import Combine
 import DataModel
 import CoreData
 import ImageRecognizer
 
+extension AppCategory: Identifiable {
+    public var id: AppCategory {
+        self
+    }
+}
+
 public struct ItemDetailsView: View {
-    private let item: Item
+    @StateObject private var itemDetails: ItemViewModel
 
     @State private var showPhotoPicker = false
     @State private var showTakePhoto = false
-    @State private var selectedImages: [UIImage] = []
     @State private var takenImage: UIImage?
+    @State private var pickedImages: [UIImage] = []
 
     @State private var detectedInformation = ""
+    @State private var isCategoryListExpanded = false
+
+    @Environment(\.editMode) private var editMode
+    @Environment(\.presentationMode) private var presentationMode
 
     private let imagePredictor = ImagePredictor()
 
-    public init(item: Item) {
-        self.item = item
+    public init(item: Item?) {
+        _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item))
     }
 
     public var body: some View {
-        VStack{
-            Text(item.title ?? "Unnamed item")
-            ScrollView(.vertical, showsIndicators: true) {
+        Form {
+            Section {
+                if editMode?.wrappedValue.isEditing ?? false {
+                    TextField("Item title", text: $itemDetails.title)
+                } else {
+                    Text(itemDetails.title)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            } header: {
+                Text("Item")
+            }
+            if editMode?.wrappedValue.isEditing ?? false {
+                CategoryPickerView(category: $itemDetails.category)
+            } else {
+                Section {
+                    Text(itemDetails.category.title)
+                } header: {
+                    Text("Category")
+                }
+            }
+
+            Section {
+                if editMode?.wrappedValue.isEditing ?? false {
+                    TextEditor(text: $itemDetails.details)
+                } else {
+                    Text(itemDetails.details)
+                }
+            } header: {
+                Text("Details")
+            }
+            Section {
                 Text(detectedInformation)
             }
-            Spacer()
-            if !selectedImages.isEmpty {
-                GroupBox {
-                    VStack{
-                        Text("Images")
-                        ScrollView(.horizontal, showsIndicators: true) {
-                            HStack(alignment: .center) {
-                                ForEach(selectedImages) { image in
-                                    Image(uiImage: image)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 200, height: 200)
-                                        .clipped()
+
+            Section {
+                if !itemDetails.images.isEmpty {
+                    GroupBox {
+                        VStack{
+                            ScrollView(.horizontal, showsIndicators: true) {
+                                HStack(alignment: .center) {
+                                    ForEach(itemDetails.images) { image in
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 200, height: 200)
+                                            .clipped()
+                                    }
                                 }
                             }
                         }
+                    } label: {
+                        Text("Images")
                     }
                 }
             }
@@ -63,45 +105,43 @@ public struct ItemDetailsView: View {
                     Label("Add Photo", systemImage: "plus")
                 }
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Label("Save", systemImage: "checkmark")
+                }
+            }
         }
         .fullScreenCover(isPresented: $showTakePhoto) {
             CameraView(image: $takenImage)
         }
         .popover(isPresented: $showPhotoPicker) {
-            PhotoPicker(images: $selectedImages)
+            PhotoPicker(images: $pickedImages)
+        }
+        .onAppear {
+            print(FileStorageManager.shared.urls(withPrefix: "S"))
         }
         .onChange(of: takenImage) { image in
             guard let image = image else {
                 return
             }
-            selectedImages.insert(image, at: 0)
+            itemDetails.addImage(image)
         }
-        .onChange(of: selectedImages) { images in
+        .onChange(of: pickedImages) { images in
+            itemDetails.addImages(images)
+        }
+        .onChange(of: itemDetails.images) { _ in
             Task {
-                var filteredPredictions: [ItemPrediction] = []
-                var predictedText = ""
-                for image in images {
-                    let predictions = try? await imagePredictor.makePredictions(for: image)
-                    filteredPredictions.append(contentsOf: predictions ?? [])
-
-                }
-
-                predictedText.append(contentsOf: "raw results:\n")
-                for prediction in filteredPredictions {
-                    predictedText.append("\(prediction.detectedItem.description) [[ \(prediction.classification) ]] (\(prediction.confidence))\n")
-                }
-
-                predictedText.append(contentsOf: "filtered results:\n")
-                for prediction in filteredPredictions.aggregate() where prediction.confidence > 0.15 {
-                    predictedText.append("\(prediction.detectedItem.description) [[ \(prediction.classification) ]] (\(prediction.confidence))\n")
-                }
-                self.detectedInformation = predictedText
+                await itemDetails.predict()
             }
         }
     }
+
     private func takePhoto() {
         showTakePhoto = true
     }
+    
     private func addPhoto() {
         showPhotoPicker = true
     }
