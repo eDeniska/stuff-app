@@ -62,7 +62,7 @@ public struct CategoryPickerView: View {
                 }
                 .buttonStyle(.plain)
             }
-            ForEach(AppCategory.allCases) { appCategory in
+            ForEach(AppCategory.allCases, id: \.self) { appCategory in
                 Button {
                     category = .predefined(appCategory)
                 } label: {

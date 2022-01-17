@@ -7,10 +7,11 @@
 
 import SwiftUI
 import PhotosUI
-
+import Logger
 
 struct PhotoPicker: UIViewControllerRepresentable {
     @Binding var images: [UIImage]
+    @Binding var isFetchingImages: Bool
 
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var configuration = PHPickerConfiguration()
@@ -44,29 +45,31 @@ extension PhotoPicker.Coordinator: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController,
                 didFinishPicking results: [PHPickerResult]) {
         picker.presentingViewController?.dismiss(animated: true)
+        photoPicker.isFetchingImages = !results.isEmpty
 
         var images: [UIImage] = []
         let group = DispatchGroup()
         for result in results where result.itemProvider.canLoadObject(ofClass: UIImage.self) {
             group.enter()
-            print("PHOTO PICKER: item \(result.itemProvider)")
+            Logger.default.log(.info, "PHOTO PICKER: item \(result.itemProvider)")
             result.itemProvider.loadObject(ofClass: UIImage.self) { (imageObject, error) in
                 if let error = error {
-                    print("PHOTO PICKER: error \(error)")
+                    Logger.default.log(.error, "PHOTO PICKER: error \(error)")
                 }
                 guard let image = imageObject as? UIImage else {
                     group.leave()
                     return
                 }
-                print("PHOTO PICKER: image \(image)")
+                Logger.default.log(.info, "PHOTO PICKER: image \(image)")
                 DispatchQueue.main.async {
                     images.append(image)
                     group.leave()
                 }
             }
-            group.notify(queue: .main) {
-                self.photoPicker.images = images
-            }
+        }
+        group.notify(queue: .main) {
+            self.photoPicker.images = images
+            self.photoPicker.isFetchingImages = false
         }
     }
 

@@ -143,6 +143,10 @@ public enum DetectedItem: String, CustomStringConvertible {
         "\(rawValue) (\(category.rawValue))"
     }
 
+    public var localizedTitle: String {
+        rawValue // TODO: replace with localization
+    }
+
     public init(prediction: String) {
         switch prediction {
         case

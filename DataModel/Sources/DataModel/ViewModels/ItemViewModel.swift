@@ -28,6 +28,7 @@ public class ItemViewModel: ObservableObject {
                         rebuiltImages.append(image)
                     }
                 }
+                showDeletePicker = Array(repeating: false, count: imageRecords.count)
                 images = rebuiltImages
             }
         }
@@ -36,6 +37,8 @@ public class ItemViewModel: ObservableObject {
     @Published public var title: String
     @Published public var details: String
     @Published public var category: DisplayedCategory
+    @Published public var place: ItemPlace?
+    @Published public var showDeletePicker: [Bool]
 
     private let imagePredictor = ImagePredictor()
 
@@ -52,7 +55,9 @@ public class ItemViewModel: ObservableObject {
         } else {
             category = .predefined(.other)
         }
+        place = item?.place
         images = []
+        showDeletePicker = []
         imageRecords = []
         if let identifier = item?.identifier {
             Task {
@@ -67,6 +72,17 @@ public class ItemViewModel: ObservableObject {
                     }
                 }
                 imageRecords = loadedImages
+                showDeletePicker = Array(repeating: false, count: imageRecords.count)
+                Task {
+                    var rebuiltImages: [UIImage] = []
+                    for imageRecord in imageRecords {
+                        if let image = await imageRecord.image() {
+                            rebuiltImages.append(image)
+                        }
+                    }
+                    images = rebuiltImages
+                }
+
             }
 
         }
