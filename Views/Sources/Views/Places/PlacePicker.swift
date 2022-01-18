@@ -25,22 +25,45 @@ struct PlacePicker: View {
     @Binding var place: ItemPlace?
     
     var body: some View {
-        List {
-            ForEach(places) { placeElement in
-                Button {
-                    place = placeElement
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    HStack {
-                        PlaceListElement(place: placeElement)
-                        Spacer()
-                        if placeElement == place {
-                            Image(systemName: "checkmark")
+        NavigationView {
+            List {
+                ForEach(places) { placeElement in
+                    Button {
+                        place = placeElement
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        HStack {
+                            PlaceListElement(place: placeElement)
+                            Spacer()
+                            if placeElement == place {
+                                Image(systemName: "checkmark")
+                            }
                         }
+                    }
+                }
+                .onDelete { indexSet in
+                    indexSet.map { places[$0] }.forEach(viewContext.delete)
+
+                    do {
+                        try viewContext.save()
+                    } catch {
+                        let nsError = error as NSError
+                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                    }
+                }
+            }
+            .searchable(text: $searchText, prompt: Text("Search for items..."))
+            .navigationTitle("Places")
+            .navigationBarTitleDisplayMode(.automatic)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(role: .cancel) {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Text("Cancel")
                     }
                 }
             }
         }
-        .searchable(text: $searchText, prompt: Text("Search for items..."))
-        .navigationTitle("Places")    }
+    }
 }

@@ -38,7 +38,9 @@ public class ItemViewModel: ObservableObject {
     @Published public var details: String
     @Published public var category: DisplayedCategory
     @Published public var place: ItemPlace?
+    @Published public var condition: ItemCondition
     @Published public var showDeletePicker: [Bool]
+    @Published public var isLost: Bool
 
     private let imagePredictor = ImagePredictor()
 
@@ -55,7 +57,13 @@ public class ItemViewModel: ObservableObject {
         } else {
             category = .predefined(.other)
         }
+        if let conditionString = item?.condition, let itemCondition = ItemCondition(rawValue: conditionString) {
+            condition = itemCondition
+        } else {
+            condition = .unknown
+        }
         place = item?.place
+        isLost = item?.isLost ?? false
         images = []
         showDeletePicker = []
         imageRecords = []
@@ -147,18 +155,17 @@ public class ItemViewModel: ObservableObject {
             identifier = UUID()
             newItem = Item(context: context)
         }
+        newItem.lastModified = .now
         newItem.identifier = identifier
         newItem.title = title
         newItem.details = details
         newItem.category = category.itemCategory(in: context)
+        newItem.condition = condition.rawValue
+        newItem.isLost = isLost
+        newItem.place = place
 
-        // TODO: will need to save condition, color, isLosd properly
-        newItem.condition = ""
+        // TODO: will need to save color properly
         newItem.color = ""
-        newItem.isLost = false
-        newItem.lastModified = .now
-
-        // TODO: need to save/show place
 
         fileStorageManager.removeItems(withPrefix: identifier.uuidString)
         for (index, image) in imageRecords.enumerated() {

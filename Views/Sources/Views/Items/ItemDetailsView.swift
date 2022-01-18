@@ -17,23 +17,32 @@ extension Int: Identifiable {
 }
 
 public struct ItemDetailsView: View {
+
+    private enum FocusedField {
+        case title
+        case details
+    }
+
     @StateObject private var itemDetails: ItemViewModel
 
     @State private var showPhotoPicker = false
     @State private var showTakePhoto = false
     @State private var showPhotoSourcePikcer = false
+    @State private var showCategoryPicker = false
+    @State private var showPlacePicker = false
+    @State private var showConditionPicker = false
+
     @State private var takenImage: UIImage?
     @State private var pickedImages: [UIImage] = []
 
-    @State private var detectedInformation = ""
-    @State private var isCategoryListExpanded = false
     @State private var isPredicting = false
     @State private var isFetchingImages = false
 
+    @FocusState private var focusedField: FocusedField?
+
     @Environment(\.editMode) private var editMode
     @Environment(\.presentationMode) private var presentationMode
-
-    private let imagePredictor = ImagePredictor()
+    @Environment(\.managedObjectContext) private var viewContext
 
     public init(item: Item?) {
         _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item))
@@ -44,6 +53,7 @@ public struct ItemDetailsView: View {
             Section {
                 if isEditing {
                     TextField("Item title", text: $itemDetails.title)
+                        .focused($focusedField, equals: .title)
                         .id("title")
                 } else {
                     Text(itemDetails.title)
@@ -56,12 +66,21 @@ public struct ItemDetailsView: View {
 
             Section {
                 if isEditing {
-                    NavigationLink {
-                        CategoryPickerView(category: $itemDetails.category)
+                    Button {
+                        showCategoryPicker = true
                     } label: {
-                        Text(itemDetails.category.title)
+                        HStack {
+                            Text(itemDetails.category.title)
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                     .id("categoryTitle")
+                    .popover(isPresented: $showCategoryPicker) {
+                        CategoryPickerView(category: $itemDetails.category)
+                            .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
+                    }
                 } else {
                     Text(itemDetails.category.title)
                         .id("categoryTitle")
@@ -69,12 +88,13 @@ public struct ItemDetailsView: View {
             } header: {
                 Text("Category")
             }
-            .id("category")
 
             Section {
                 if isEditing {
-                    TextEditor(text: $itemDetails.details)
+                    TextField("Item details", text: $itemDetails.details)
+                        .focused($focusedField, equals: .details)
                         .id("details")
+
                 } else {
                     Text(itemDetails.details)
                         .id("details")
@@ -90,19 +110,47 @@ public struct ItemDetailsView: View {
             }
 
             Section {
-                Text("Not implemented yet :(")
+                if isEditing {
+                    Button {
+                        showConditionPicker = true
+                    } label: {
+                        HStack {
+                            Text(itemDetails.condition.localizedTitle)
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .id("conditionTitle")
+                    .popover(isPresented: $showConditionPicker) {
+                        ConditionPicker(itemCondition: $itemDetails.condition)
+                            .frame(minWidth: 300, minHeight: 400)
+                    }
+                } else {
+                    Text(itemDetails.condition.localizedTitle)
+                        .id("conditionTitle")
+                }
             } header: {
                 Text("Condition")
             }
 
             Section {
                 if isEditing {
-                    NavigationLink {
-                        PlacePicker(place: $itemDetails.place)
+                    Button {
+                        showPlacePicker = true
                     } label: {
-                        Text(itemDetails.place?.title ?? "<Place not set>")
+                        HStack {
+                            Text(itemDetails.place?.title ?? "<Place not set>")
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
                     .id("placeTitle")
+                    .popover(isPresented: $showPlacePicker) {
+                        PlacePicker(place: $itemDetails.place)
+                        .frame(minWidth: 300, minHeight: 400)
+                    }
                 } else {
                     Text(itemDetails.place?.title ?? "<Place not set>")
                         .id("placeTitle")
@@ -110,7 +158,7 @@ public struct ItemDetailsView: View {
             } header: {
                 Text("Place")
             }
-            .id("place")
+
             if !itemDetails.images.isEmpty || isEditing {
                 Section {
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -186,6 +234,12 @@ public struct ItemDetailsView: View {
                 }
             }
         }
+        .simultaneousGesture(DragGesture().onChanged { _ in
+            focusedField = nil
+        })
+//        .simultaneousGesture(TapGesture().onEnded { _ in
+//            focusedField = nil
+//        })
         .disabled(isPredicting || isFetchingImages)
         .overlay(ZStack(alignment: .center) {
             if isPredicting || isFetchingImages {
@@ -199,30 +253,18 @@ public struct ItemDetailsView: View {
             }
         })
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if isEditing {
-                    Button(action: takePhoto) {
-                        Label("Take Photo", systemImage: "camera")
-                    }
-                } else {
-                    EmptyView()
-                }
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if isEditing {
-                    Button(action: addPhoto) {
-                        Label("Add Photo", systemImage: "plus")
-                    }
-                } else {
-                    EmptyView()
-                }
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
                 if isEditing {
                     Button {
-                        presentationMode.wrappedValue.dismiss()
+                        itemDetails.save(in: viewContext)
+                        do {
+                            try viewContext.save()
+                        } catch {
+                            Logger.default.log(.error, "Could not save context: \(error)")
+                        }
+                        editMode?.wrappedValue = .inactive
                     } label: {
-                        Label("Save", systemImage: "checkmark")
+                        Text("Save")
                     }
                 } else {
                     EditButton()
