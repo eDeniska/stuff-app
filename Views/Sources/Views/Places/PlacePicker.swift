@@ -25,7 +25,7 @@ struct PlacePicker: View {
     @Binding var place: ItemPlace?
     
     var body: some View {
-//        NavigationView {
+        PhoneNavigationView {
             List {
                 ForEach(places) { placeElement in
                     Button {
@@ -49,7 +49,6 @@ struct PlacePicker: View {
             }
             .searchable(text: $searchText, prompt: Text("Search for items..."))
             .navigationTitle("Places")
-            .navigationBarTitleDisplayMode(.automatic)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
@@ -58,7 +57,7 @@ struct PlacePicker: View {
                         Text("Cancel")
                     }
                 }
-//            }
+            }
         }
     }
 }

@@ -46,6 +46,7 @@ public struct PlaceListView: View {
                     EditButton()
                 }
             }
+            PlaceDetailsWelcomeView()
         }
         .tabItem {
             Label("Places", systemImage: "building.2")

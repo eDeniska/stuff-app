@@ -57,73 +57,85 @@ public struct CategoryPickerView: View {
     }
 
     public var body: some View {
-        Form {
-            Section {
-                TextField("Category", text: $text)
-                if isNewCategory() {
-                    Button {
-                        // creating category object before saving context
-                        _ = category.itemCategory(in: viewContext)
-                        presentationMode.wrappedValue.dismiss()
-                        Logger.default.info("create new and dismiss")
-                    } label: {
-                        Text("Create category '\(text.trimmingCharacters(in: .whitespacesAndNewlines))'")
+        PhoneNavigationView {
+            Form {
+                Section {
+                    TextField("Category", text: $text)
+                    if isNewCategory() {
+                        Button {
+                            // creating category object before saving context
+                            _ = category.itemCategory(in: viewContext)
+                            presentationMode.wrappedValue.dismiss()
+                            Logger.default.info("create new and dismiss")
+                        } label: {
+                            Text("Create category '\(text.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                        }
                     }
                 }
-            }
-
-            Section {
-                ForEach(customCategories) { customCategory in
-                    Button {
-                        category = .custom(customCategory.title ?? "")
+                
+                Section {
+                    ForEach(customCategories) { customCategory in
+                        Button {
+                            category = .custom(customCategory.title ?? "")
+                            viewContext.saveOrRollback()
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            HStack {
+                                Text(customCategory.title ?? "")
+                                Spacer()
+                                if case let .custom(categoryTitle) = category, categoryTitle == customCategory.title {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                            .contentShape(Rectangle())
+                        }
+                    }
+                    .onDelete { indexSet in
+                        indexSet.map { customCategories[$0] }.forEach(viewContext.delete)
                         viewContext.saveOrRollback()
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        HStack {
-                            Text(customCategory.title ?? "")
-                            Spacer()
-                            if case let .custom(categoryTitle) = category, categoryTitle == customCategory.title {
-                                Image(systemName: "checkmark")
+                    }
+                    ForEach(AppCategory.allCases, id: \.self) { appCategory in
+                        Button {
+                            category = .predefined(appCategory)
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            HStack {
+                                Label(appCategory.localizedTitle, systemImage: appCategory.iconName)
+                                Spacer()
+                                if case let .predefined(selectedCategory) = category, appCategory == selectedCategory {
+                                    Image(systemName: "checkmark")
+                                }
                             }
+                            .contentShape(Rectangle())
                         }
-                        .contentShape(Rectangle())
+                        .buttonStyle(.plain)
                     }
                 }
-                .onDelete { indexSet in
-                    indexSet.map { customCategories[$0] }.forEach(viewContext.delete)
-                    viewContext.saveOrRollback()
-                }
-                ForEach(AppCategory.allCases, id: \.self) { appCategory in
-                    Button {
-                        category = .predefined(appCategory)
+            }
+            .navigationTitle("Category")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        HStack {
-                            Label(appCategory.localizedTitle, systemImage: appCategory.iconName)
-                            Spacer()
-                            if case let .predefined(selectedCategory) = category, appCategory == selectedCategory {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-                        .contentShape(Rectangle())
+                        Text("Cancel")
                     }
-                    .buttonStyle(.plain)
                 }
             }
-        }
-        .onChange(of: text) { [text] newValue in
-            let newTitle = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard newTitle != text else {
-                return
+            .onChange(of: text) { [text] newValue in
+                let newTitle = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard newTitle != text else {
+                    return
+                }
+                if let appCategory = AppCategory.allCases.first(where: { $0.localizedTitle == newTitle }) {
+                    category = .predefined(appCategory)
+                } else {
+                    category = .custom(newTitle)
+                }
             }
-            if let appCategory = AppCategory.allCases.first(where: { $0.localizedTitle == newTitle }) {
-                category = .predefined(appCategory)
-            } else {
-                category = .custom(newTitle)
+            .onChange(of: category) { newValue in
+                text = newValue.title
             }
-        }
-        .onChange(of: category) { newValue in
-            text = newValue.title
         }
     }
 }

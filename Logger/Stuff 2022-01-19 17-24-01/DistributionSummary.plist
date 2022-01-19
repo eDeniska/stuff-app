@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Stuff.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>2</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>C745540DCD4797DA80D8B1CA5BFA18B362ECE838</string>
+				<key>dateExpires</key>
+				<string>19.01.2023</string>
+				<key>type</key>
+				<string>Cloud Managed Apple Distribution</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>4E63BYV878.com.tazetdinov.opensource.Stuff</string>
+				<key>aps-environment</key>
+				<string>production</string>
+				<key>com.apple.developer.icloud-container-environment</key>
+				<string>Production</string>
+				<key>com.apple.developer.icloud-container-identifiers</key>
+				<array>
+					<string>iCloud.com.tazedinov.samples.stuff-container</string>
+				</array>
+				<key>com.apple.developer.icloud-services</key>
+				<array>
+					<string>CloudKit</string>
+					<string>CloudDocuments</string>
+				</array>
+				<key>com.apple.developer.team-identifier</key>
+				<string>4E63BYV878</string>
+				<key>com.apple.developer.ubiquity-container-identifiers</key>
+				<array>
+					<string>iCloud.com.tazedinov.samples.stuff-container</string>
+				</array>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>Stuff.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>7696658d-2eea-4a78-b6bb-4fd828c2b158</string>
+				<key>dateExpires</key>
+				<string>19.01.2023</string>
+				<key>name</key>
+				<string>iOS Team Ad Hoc Provisioning Profile: com.tazetdinov.opensource.Stuff</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>4E63BYV878</string>
+				<key>name</key>
+				<string>Danis Tazetdinov</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>

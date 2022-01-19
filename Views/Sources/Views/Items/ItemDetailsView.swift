@@ -99,6 +99,7 @@ public struct ItemDetailsView: View {
                 Text("Category")
             }
 
+
             Section {
                 if isEditing {
                     TextField("Item details", text: $itemDetails.details)
@@ -113,11 +114,11 @@ public struct ItemDetailsView: View {
                 Text("Details")
             }
 
-            Section {
-                Text("Not implemented yet :(")
-            } header: {
-                Text("Color")
-            }
+//            Section {
+//                Text("Not implemented yet :(")
+//            } header: {
+//                Text("Color")
+//            }
 
             Section {
                 if isEditing {
@@ -133,14 +134,8 @@ public struct ItemDetailsView: View {
                     .buttonStyle(.plain)
                     .id("conditionTitle")
                     .popover(isPresented: $showConditionPicker) {
-                        if UIDevice.current.userInterfaceIdiom == .phone {
-                            NavigationView {
-                                ConditionPicker(itemCondition: $itemDetails.condition)
-                            }
-                        } else {
-                            ConditionPicker(itemCondition: $itemDetails.condition)
-                                .frame(minWidth: 300, minHeight: 400)
-                        }
+                        ConditionPicker(itemCondition: $itemDetails.condition)
+                            .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
                     }
                 } else {
                     Text(itemDetails.condition.localizedTitle)
@@ -150,6 +145,7 @@ public struct ItemDetailsView: View {
                 Text("Condition")
             }
 
+            // TODO: cannot clean place
             Section {
                 if isEditing {
                     Button {
@@ -164,14 +160,8 @@ public struct ItemDetailsView: View {
                     .buttonStyle(.plain)
                     .id("placeTitle")
                     .popover(isPresented: $showPlacePicker) {
-                        if UIDevice.current.userInterfaceIdiom == .phone {
-                            NavigationView {
-                                PlacePicker(place: $itemDetails.place)
-                            }
-                        } else {
-                            PlacePicker(place: $itemDetails.place)
-                                .frame(minWidth: 300, minHeight: 400)
-                        }
+                        PlacePicker(place: $itemDetails.place)
+                            .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
                     }
                 } else {
                     Text(itemDetails.place?.title ?? "<Place not set>")
@@ -276,7 +266,11 @@ public struct ItemDetailsView: View {
                     Button {
                         itemDetails.save(in: viewContext)
                         viewContext.saveOrRollback()
-                        isEditing.toggle()
+                        if isNew {
+                            presentationMode.wrappedValue.dismiss()
+                        } else {
+                            isEditing.toggle()
+                        }
                     } label: {
                         Text("Save")
                             .bold()

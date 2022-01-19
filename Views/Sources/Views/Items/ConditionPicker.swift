@@ -13,7 +13,7 @@ struct ConditionPicker: View {
     @Environment(\.presentationMode) private var presentationMode
 
     var body: some View  {
-//        NavigationView {
+        PhoneNavigationView {
             List {
                 Section {
                     ForEach(ItemCondition.allCases, id: \.self) { condition in
@@ -34,8 +34,7 @@ struct ConditionPicker: View {
                     }
                 }
             }
-            .navigationBarTitleDisplayMode(.automatic)
-            .navigationBarTitle("Item Condition")
+            .navigationBarTitle("Condition")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
@@ -45,6 +44,6 @@ struct ConditionPicker: View {
                     }
                 }
             }
-//        }
+        }
     }
 }

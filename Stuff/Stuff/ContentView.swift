@@ -16,12 +16,16 @@ struct ContentView: View {
         TabView {
             ItemListView()
             PlaceListView()
-            NavigationView {
-                Text("Settings")
-                    .navigationTitle("Settings")
-            }
-            .tabItem {
-                Label("Settings", systemImage: "gear")
+            // TODO: consider dropping TabView altogether
+            // TODO: consider removing settings altogether
+            if !UIDevice.current.isMac {
+                NavigationView {
+                    Text("Settings")
+                        .navigationTitle("Settings")
+                }
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
+                }
             }
         }
     }
