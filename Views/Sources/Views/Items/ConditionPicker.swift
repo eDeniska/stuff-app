@@ -13,8 +13,8 @@ struct ConditionPicker: View {
     @Environment(\.presentationMode) private var presentationMode
 
     var body: some View  {
-        NavigationView {
-            Form {
+//        NavigationView {
+            List {
                 Section {
                     ForEach(ItemCondition.allCases, id: \.self) { condition in
                         Button {
@@ -45,6 +45,6 @@ struct ConditionPicker: View {
                     }
                 }
             }
-        }
+//        }
     }
 }

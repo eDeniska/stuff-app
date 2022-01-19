@@ -18,17 +18,17 @@ public class FileStorageManager {
     private init() {
         storageURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         if FileManager.default.ubiquityIdentityToken != nil {
-            Logger.default.log(.info, "iCloud integration is enabled, querying URL...")
+            Logger.default.info("iCloud integration is enabled, querying URL...")
             // blocking operation, so using DispatchQueue...
             DispatchQueue.global(qos: .userInitiated).async {
                 if let url = FileManager.default.url(forUbiquityContainerIdentifier: nil) {
                     DispatchQueue.main.async {
-                        Logger.default.log(.info, "iCloud storage URL: \(url)")
+                        Logger.default.info("iCloud storage URL: \(url)")
                         self.storageURL = url
                         self.requiresCoordination = true
                     }
                 } else {
-                    Logger.default.log(.error, "Could not get iCloud storage URL!")
+                    Logger.default.error("Could not get iCloud storage URL!")
                 }
             }
         }
@@ -39,7 +39,7 @@ public class FileStorageManager {
             let allURLs = try FileManager.default.contentsOfDirectory(at: storageURL, includingPropertiesForKeys: [.nameKey], options: [.skipsHiddenFiles])
             return allURLs.filter { $0.lastPathComponent.hasPrefix(filePrefix) }
         } catch {
-            Logger.default.log(.error, "Error enumerating files in \(storageURL): \(error)")
+            Logger.default.error("Error enumerating files in \(storageURL): \(error)")
             return []
         }
     }
@@ -51,7 +51,7 @@ public class FileStorageManager {
                 try FileManager.default.removeItem(at: $0)
             }
         } catch {
-            Logger.default.log(.error, "failed to remove items with prefix \(filePrefix): \(error)")
+            Logger.default.error("failed to remove items with prefix \(filePrefix): \(error)")
         }
     }
 
@@ -64,7 +64,7 @@ public class FileStorageManager {
                 try FileManager.default.moveItem(at: url, to: resultURL)
             }
         } catch {
-            Logger.default.log(.error, "Error saving file to \(resultURL): \(error)")
+            Logger.default.error("Error saving file to \(resultURL): \(error)")
         }
     }
 
@@ -75,7 +75,7 @@ public class FileStorageManager {
                 try data.write(to: tempURL)
                 self.saveFile(at: tempURL)
             } catch {
-                Logger.default.log(.error, "Error saving data to \(tempURL): \(error)")
+                Logger.default.error("Error saving data to \(tempURL): \(error)")
             }
         }
     }

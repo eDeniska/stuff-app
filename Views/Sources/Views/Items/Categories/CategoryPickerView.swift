@@ -65,7 +65,7 @@ public struct CategoryPickerView: View {
                         // creating category object before saving context
                         _ = category.itemCategory(in: viewContext)
                         presentationMode.wrappedValue.dismiss()
-                        Logger.default.log(.info, "create new and dismiss")
+                        Logger.default.info("create new and dismiss")
                     } label: {
                         Text("Create category '\(text.trimmingCharacters(in: .whitespacesAndNewlines))'")
                     }
@@ -76,12 +76,7 @@ public struct CategoryPickerView: View {
                 ForEach(customCategories) { customCategory in
                     Button {
                         category = .custom(customCategory.title ?? "")
-                        do {
-                            try viewContext.save()
-                        } catch {
-                            let nsError = error as NSError
-                            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                        }
+                        viewContext.saveOrRollback()
                         presentationMode.wrappedValue.dismiss()
                     } label: {
                         HStack {
@@ -96,13 +91,7 @@ public struct CategoryPickerView: View {
                 }
                 .onDelete { indexSet in
                     indexSet.map { customCategories[$0] }.forEach(viewContext.delete)
-
-                    do {
-                        try viewContext.save()
-                    } catch {
-                        let nsError = error as NSError
-                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                    }
+                    viewContext.saveOrRollback()
                 }
                 ForEach(AppCategory.allCases, id: \.self) { appCategory in
                     Button {

@@ -25,7 +25,7 @@ struct PlacePicker: View {
     @Binding var place: ItemPlace?
     
     var body: some View {
-        NavigationView {
+//        NavigationView {
             List {
                 ForEach(places) { placeElement in
                     Button {
@@ -40,16 +40,11 @@ struct PlacePicker: View {
                             }
                         }
                     }
+                    .buttonStyle(.plain)
                 }
                 .onDelete { indexSet in
                     indexSet.map { places[$0] }.forEach(viewContext.delete)
-
-                    do {
-                        try viewContext.save()
-                    } catch {
-                        let nsError = error as NSError
-                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                    }
+                    viewContext.saveOrRollback()
                 }
             }
             .searchable(text: $searchText, prompt: Text("Search for items..."))
@@ -63,7 +58,7 @@ struct PlacePicker: View {
                         Text("Cancel")
                     }
                 }
-            }
+//            }
         }
     }
 }

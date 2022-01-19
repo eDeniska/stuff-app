@@ -1371,7 +1371,7 @@ public enum DetectedItem: String, CustomStringConvertible {
 
         default:
             self = .other
-            Logger.default.log(.warning, "Did not recognize category \(prediction)")
+            Logger.default.warning("Did not recognize category \(prediction)")
         }
     }
 }

@@ -133,4 +133,68 @@ public extension LoggerProtocol {
     func shouldLog(level: LoggerLevel) -> Bool {
         isEnabled && outputLevel <= level
     }
+
+    /// Log info level message.
+    ///
+    /// - Parameters:
+    ///     - functionName: Normally omitted **Default:** *#function*.
+    ///     - fileName:     Normally omitted **Default:** *#file*.
+    ///     - lineNumber:   Normally omitted **Default:** *#line*.
+    ///     - message:      A closure that returns the object to be logged.
+    func info(
+        fileName: StaticString = #file,
+        functionName: StaticString = #function,
+        lineNumber: Int = #line,
+        _ message: @autoclosure () -> Any?
+    ) {
+        log(.info, functionName: functionName, fileName: fileName, lineNumber: lineNumber, message: message)
+    }
+
+    /// Log error level message.
+    ///
+    /// - Parameters:
+    ///     - functionName: Normally omitted **Default:** *#function*.
+    ///     - fileName:     Normally omitted **Default:** *#file*.
+    ///     - lineNumber:   Normally omitted **Default:** *#line*.
+    ///     - message:      A closure that returns the object to be logged.
+    func error(
+        fileName: StaticString = #file,
+        functionName: StaticString = #function,
+        lineNumber: Int = #line,
+        _ message: @autoclosure () -> Any?
+    ) {
+        log(.error, functionName: functionName, fileName: fileName, lineNumber: lineNumber, message: message)
+    }
+
+    /// Log debug level message.
+    ///
+    /// - Parameters:
+    ///     - functionName: Normally omitted **Default:** *#function*.
+    ///     - fileName:     Normally omitted **Default:** *#file*.
+    ///     - lineNumber:   Normally omitted **Default:** *#line*.
+    ///     - message:      A closure that returns the object to be logged.
+    func debug(
+        fileName: StaticString = #file,
+        functionName: StaticString = #function,
+        lineNumber: Int = #line,
+        _ message: @autoclosure () -> Any?
+    ) {
+        log(.debug, functionName: functionName, fileName: fileName, lineNumber: lineNumber, message: message)
+    }
+
+    /// Log warning level message.
+    ///
+    /// - Parameters:
+    ///     - functionName: Normally omitted **Default:** *#function*.
+    ///     - fileName:     Normally omitted **Default:** *#file*.
+    ///     - lineNumber:   Normally omitted **Default:** *#line*.
+    ///     - message:      A closure that returns the object to be logged.
+    func warning(
+        fileName: StaticString = #file,
+        functionName: StaticString = #function,
+        lineNumber: Int = #line,
+        _ message: @autoclosure () -> Any?
+    ) {
+        log(.warning, functionName: functionName, fileName: fileName, lineNumber: lineNumber, message: message)
+    }
 }

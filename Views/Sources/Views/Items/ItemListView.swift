@@ -21,6 +21,7 @@ public struct ItemListView: View {
         animation: .default)
     private var items: SectionedFetchResults<String, Item>
     @State private var searchText: String = ""
+    @State private var showNewItemForm = false
 
     public init() {
     }
@@ -48,15 +49,7 @@ public struct ItemListView: View {
                         .onDelete { indexSets in
                             withAnimation {
                                 indexSets.map { section[$0] }.forEach(viewContext.delete)
-
-                                do {
-                                    try viewContext.save()
-                                } catch {
-                                    // Replace this implementation with code to handle the error appropriately.
-                                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                                    let nsError = error as NSError
-                                    fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                                }
+                                viewContext.saveOrRollback()
                             }
 
                         }
@@ -83,10 +76,15 @@ public struct ItemListView: View {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addItem) {
+                    Button {
+                        showNewItemForm = true
+                    } label: {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
+            }
+            ItemDetailsWelcomeView {
+                showNewItemForm = true
             }
         }
         .tabItem {
@@ -95,49 +93,10 @@ public struct ItemListView: View {
         .onAppear {
             print(FileStorageManager.shared.urls(withPrefix: "S"))
         }
-    }
-
-    @State private var lastCategory: ItemCategory?
-    @State private var lastPlace: ItemPlace?
-
-    private func category() -> ItemCategory? {
-        guard (0..<5).randomElement() == 0 else {
-            return lastCategory
-        }
-        let newItem = ItemCategory(context: viewContext)
-        newItem.identifier = UUID()
-        newItem.title = "\(newItem.identifier!.uuidString)"
-        lastCategory = newItem
-        return newItem
-    }
-
-    private func place() -> ItemPlace? {
-        guard (0..<5).randomElement() == 0 else {
-            return lastPlace
-        }
-        let newItem = ItemPlace(context: viewContext)
-        newItem.identifier = UUID()
-        newItem.title = "\(newItem.identifier!.uuidString)"
-        lastPlace = newItem
-        return newItem
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.identifier = UUID()
-            newItem.title = "\(newItem.identifier!.uuidString)"
-            newItem.lastModified = Date()
-            newItem.category = category()
-            newItem.place = place()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        .navigationViewStyle(.columns)
+        .sheet(isPresented: $showNewItemForm) {
+            NavigationView {
+                ItemDetailsView(item: nil)
             }
         }
     }

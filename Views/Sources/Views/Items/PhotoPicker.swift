@@ -51,16 +51,16 @@ extension PhotoPicker.Coordinator: PHPickerViewControllerDelegate {
         let group = DispatchGroup()
         for result in results where result.itemProvider.canLoadObject(ofClass: UIImage.self) {
             group.enter()
-            Logger.default.log(.info, "PHOTO PICKER: item \(result.itemProvider)")
+            Logger.default.info("PHOTO PICKER: item \(result.itemProvider)")
             result.itemProvider.loadObject(ofClass: UIImage.self) { (imageObject, error) in
                 if let error = error {
-                    Logger.default.log(.error, "PHOTO PICKER: error \(error)")
+                    Logger.default.error("PHOTO PICKER: error \(error)")
                 }
                 guard let image = imageObject as? UIImage else {
                     group.leave()
                     return
                 }
-                Logger.default.log(.info, "PHOTO PICKER: image \(image)")
+                Logger.default.info("PHOTO PICKER: image \(image)")
                 DispatchQueue.main.async {
                     images.append(image)
                     group.leave()

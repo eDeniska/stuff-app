@@ -40,12 +40,22 @@ public struct ItemDetailsView: View {
 
     @FocusState private var focusedField: FocusedField?
 
-    @Environment(\.editMode) private var editMode
     @Environment(\.presentationMode) private var presentationMode
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    @State private var isEditing: Bool
+
+    private let isNew: Bool
+
+    private var title: String {
+        itemDetails.title.isEmpty ? "New item" : itemDetails.title
+    }
 
     public init(item: Item?) {
         _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item))
+        _isEditing = State(wrappedValue: item == nil)
+        isNew = item == nil
     }
 
     public var body: some View {
@@ -123,8 +133,14 @@ public struct ItemDetailsView: View {
                     .buttonStyle(.plain)
                     .id("conditionTitle")
                     .popover(isPresented: $showConditionPicker) {
-                        ConditionPicker(itemCondition: $itemDetails.condition)
-                            .frame(minWidth: 300, minHeight: 400)
+                        if UIDevice.current.userInterfaceIdiom == .phone {
+                            NavigationView {
+                                ConditionPicker(itemCondition: $itemDetails.condition)
+                            }
+                        } else {
+                            ConditionPicker(itemCondition: $itemDetails.condition)
+                                .frame(minWidth: 300, minHeight: 400)
+                        }
                     }
                 } else {
                     Text(itemDetails.condition.localizedTitle)
@@ -148,8 +164,14 @@ public struct ItemDetailsView: View {
                     .buttonStyle(.plain)
                     .id("placeTitle")
                     .popover(isPresented: $showPlacePicker) {
-                        PlacePicker(place: $itemDetails.place)
-                        .frame(minWidth: 300, minHeight: 400)
+                        if UIDevice.current.userInterfaceIdiom == .phone {
+                            NavigationView {
+                                PlacePicker(place: $itemDetails.place)
+                            }
+                        } else {
+                            PlacePicker(place: $itemDetails.place)
+                                .frame(minWidth: 300, minHeight: 400)
+                        }
                     }
                 } else {
                     Text(itemDetails.place?.title ?? "<Place not set>")
@@ -237,10 +259,6 @@ public struct ItemDetailsView: View {
         .simultaneousGesture(DragGesture().onChanged { _ in
             focusedField = nil
         })
-//        .simultaneousGesture(TapGesture().onEnded { _ in
-//            focusedField = nil
-//        })
-        .disabled(isPredicting || isFetchingImages)
         .overlay(ZStack(alignment: .center) {
             if isPredicting || isFetchingImages {
                 VStack {
@@ -257,20 +275,36 @@ public struct ItemDetailsView: View {
                 if isEditing {
                     Button {
                         itemDetails.save(in: viewContext)
-                        do {
-                            try viewContext.save()
-                        } catch {
-                            Logger.default.log(.error, "Could not save context: \(error)")
-                        }
-                        editMode?.wrappedValue = .inactive
+                        viewContext.saveOrRollback()
+                        isEditing.toggle()
                     } label: {
                         Text("Save")
+                            .bold()
                     }
                 } else {
-                    EditButton()
+                    Button {
+                        isEditing.toggle()
+                    } label: {
+                        Text("Edit")
+                    }
+                }
+            }
+            ToolbarItem(placement: .cancellationAction) {
+                if isEditing && (horizontalSizeClass != .compact || isNew) {
+                    Button(role: .cancel) {
+                        if isNew {
+                            presentationMode.wrappedValue.dismiss()
+                        } else {
+                            itemDetails.reset()
+                            isEditing.toggle()
+                        }
+                    } label: {
+                        Text("Cancel")
+                    }
                 }
             }
         }
+        .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .fullScreenCover(isPresented: $showTakePhoto) {
             CameraView(image: $takenImage)
@@ -278,6 +312,7 @@ public struct ItemDetailsView: View {
         .sheet(isPresented: $showPhotoPicker) {
             PhotoPicker(images: $pickedImages, isFetchingImages: $isFetchingImages)
         }
+        .disabled(isPredicting || isFetchingImages)
         .onAppear {
             print(FileStorageManager.shared.urls(withPrefix: "S"))
         }
@@ -302,24 +337,11 @@ public struct ItemDetailsView: View {
         }
     }
 
-    private var isEditing: Bool {
-        editMode?.wrappedValue.isEditing ?? false
-    }
-
     private func takePhoto() {
         showTakePhoto = true
     }
     
     private func addPhoto() {
         showPhotoPicker = true
-    }
-}
-
-extension Optional {
-    func asBoolBinding() -> Binding<Bool> {
-        Binding {
-            self != nil
-        } set: { _ in
-        }
     }
 }
