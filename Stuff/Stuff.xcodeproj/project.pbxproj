@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D37950E279DA40100E63290 /* StuffMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D37950D279DA40100E63290 /* StuffMacApp.swift */; };
+		0D379510279DA40100E63290 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D37950F279DA40100E63290 /* ContentView.swift */; };
+		0D379512279DA40300E63290 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D379511279DA40300E63290 /* Assets.xcassets */; };
+		0D379515279DA40300E63290 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D379514279DA40300E63290 /* Preview Assets.xcassets */; };
+		0D379520279DA42E00E63290 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D37951F279DA42E00E63290 /* CloudKit.framework */; };
+		0D379522279DA45800E63290 /* DataModel in Frameworks */ = {isa = PBXBuildFile; productRef = 0D379521279DA45800E63290 /* DataModel */; };
+		0D379524279DA45800E63290 /* Logger in Frameworks */ = {isa = PBXBuildFile; productRef = 0D379523279DA45800E63290 /* Logger */; };
+		0D379526279DA45800E63290 /* Views in Frameworks */ = {isa = PBXBuildFile; productRef = 0D379525279DA45800E63290 /* Views */; };
 		0DB6D1AA2760E3E40068F985 /* DataModel in Frameworks */ = {isa = PBXBuildFile; productRef = 0DB6D1A92760E3E40068F985 /* DataModel */; };
 		0DB6D1AC2760FB460068F985 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB6D1AB2760FB460068F985 /* CloudKit.framework */; };
 		0DCC175C2760D7CC00E0322F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0DCC175A2760D7CC00E0322F /* README.md */; };
@@ -20,6 +28,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D37950B279DA40100E63290 /* StuffMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StuffMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D37950D279DA40100E63290 /* StuffMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuffMacApp.swift; sourceTree = "<group>"; };
+		0D37950F279DA40100E63290 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0D379511279DA40300E63290 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0D379514279DA40300E63290 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0D37951B279DA40300E63290 /* StuffMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StuffMac.entitlements; sourceTree = "<group>"; };
+		0D37951F279DA42E00E63290 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		0D4C94662798449200E59D09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0D8EAE1C276A21DE00B39E9D /* Logger */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Logger; path = ../Logger; sourceTree = "<group>"; };
 		0DB6D1AB2760FB460068F985 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -37,6 +52,17 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0D379508279DA40100E63290 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D379524279DA45800E63290 /* Logger in Frameworks */,
+				0D379522279DA45800E63290 /* DataModel in Frameworks */,
+				0D379520279DA42E00E63290 /* CloudKit.framework in Frameworks */,
+				0D379526279DA45800E63290 /* Views in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0DFD4D12275F944000088631 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -51,6 +77,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D37950C279DA40100E63290 /* StuffMac */ = {
+			isa = PBXGroup;
+			children = (
+				0D37950D279DA40100E63290 /* StuffMacApp.swift */,
+				0D37950F279DA40100E63290 /* ContentView.swift */,
+				0D379511279DA40300E63290 /* Assets.xcassets */,
+				0D37951B279DA40300E63290 /* StuffMac.entitlements */,
+				0D379513279DA40300E63290 /* Preview Content */,
+			);
+			path = StuffMac;
+			sourceTree = "<group>";
+		};
+		0D379513279DA40300E63290 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				0D379514279DA40300E63290 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		0DFD4D0C275F943F00088631 = {
 			isa = PBXGroup;
 			children = (
@@ -58,6 +104,7 @@
 				0DCC175A2760D7CC00E0322F /* README.md */,
 				0DFD4D33275FAD9500088631 /* Packages */,
 				0DFD4D17275F944000088631 /* Stuff */,
+				0D37950C279DA40100E63290 /* StuffMac */,
 				0DFD4D16275F944000088631 /* Products */,
 				0DFD4D2D275FACC000088631 /* Frameworks */,
 			);
@@ -67,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				0DFD4D15275F944000088631 /* Stuff.app */,
+				0D37950B279DA40100E63290 /* StuffMac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +143,7 @@
 		0DFD4D2D275FACC000088631 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0D37951F279DA42E00E63290 /* CloudKit.framework */,
 				0DB6D1AB2760FB460068F985 /* CloudKit.framework */,
 			);
 			name = Frameworks;
@@ -114,6 +163,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0D37950A279DA40100E63290 /* StuffMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0D37951E279DA40300E63290 /* Build configuration list for PBXNativeTarget "StuffMac" */;
+			buildPhases = (
+				0D379507279DA40100E63290 /* Sources */,
+				0D379508279DA40100E63290 /* Frameworks */,
+				0D379509279DA40100E63290 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StuffMac;
+			packageProductDependencies = (
+				0D379521279DA45800E63290 /* DataModel */,
+				0D379523279DA45800E63290 /* Logger */,
+				0D379525279DA45800E63290 /* Views */,
+			);
+			productName = StuffMac;
+			productReference = 0D37950B279DA40100E63290 /* StuffMac.app */;
+			productType = "com.apple.product-type.application";
+		};
 		0DFD4D14275F944000088631 /* Stuff */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0DFD4D28275F944200088631 /* Build configuration list for PBXNativeTarget "Stuff" */;
@@ -143,9 +214,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1310;
+				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
+					0D37950A279DA40100E63290 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
 					0DFD4D14275F944000088631 = {
 						CreatedOnToolsVersion = 13.1;
 					};
@@ -165,11 +239,21 @@
 			projectRoot = "";
 			targets = (
 				0DFD4D14275F944000088631 /* Stuff */,
+				0D37950A279DA40100E63290 /* StuffMac */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0D379509279DA40100E63290 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D379515279DA40300E63290 /* Preview Assets.xcassets in Resources */,
+				0D379512279DA40300E63290 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0DFD4D13275F944000088631 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -184,6 +268,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0D379507279DA40100E63290 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D379510279DA40100E63290 /* ContentView.swift in Sources */,
+				0D37950E279DA40100E63290 /* StuffMacApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0DFD4D11275F944000088631 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -196,6 +289,64 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		0D37951C279DA40300E63290 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = StuffMac/StuffMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"StuffMac/Preview Content\"";
+				DEVELOPMENT_TEAM = 4E63BYV878;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tazetdinov.sample.StuffMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		0D37951D279DA40300E63290 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = StuffMac/StuffMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"StuffMac/Preview Content\"";
+				DEVELOPMENT_TEAM = 4E63BYV878;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tazetdinov.sample.StuffMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		0DFD4D26275F944200088631 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -387,6 +538,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0D37951E279DA40300E63290 /* Build configuration list for PBXNativeTarget "StuffMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0D37951C279DA40300E63290 /* Debug */,
+				0D37951D279DA40300E63290 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		0DFD4D10275F943F00088631 /* Build configuration list for PBXProject "Stuff" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -408,6 +568,18 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0D379521279DA45800E63290 /* DataModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DataModel;
+		};
+		0D379523279DA45800E63290 /* Logger */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Logger;
+		};
+		0D379525279DA45800E63290 /* Views */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Views;
+		};
 		0DB6D1A92760E3E40068F985 /* DataModel */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DataModel;

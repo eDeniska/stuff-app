@@ -9,7 +9,7 @@ import SwiftUI
 import DataModel
 
 struct PlaceListElement: View {
-    private let place: ItemPlace
+    @ObservedObject private var place: ItemPlace
 
     public init(place: ItemPlace) {
         self.place = place

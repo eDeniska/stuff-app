@@ -13,7 +13,7 @@ public struct ItemListElement: View {
     @ObservedObject private var item: Item
 
     public init(item: Item) {
-        self._item = ObservedObject(wrappedValue: item)
+        self.item = item
     }
 
     public var body: some View {
