@@ -7,12 +7,13 @@
 
 import SwiftUI
 import DataModel
+import Combine
 
 public struct ItemListElement: View {
-    private let item: Item
+    @ObservedObject private var item: Item
 
     public init(item: Item) {
-        self.item = item
+        self._item = ObservedObject(wrappedValue: item)
     }
 
     public var body: some View {

@@ -27,6 +27,7 @@ struct PlacePicker: View {
     var body: some View {
         PhoneNavigationView {
             List {
+                Section {
                 ForEach(places) { placeElement in
                     Button {
                         place = placeElement
@@ -46,7 +47,24 @@ struct PlacePicker: View {
                     indexSet.map { places[$0] }.forEach(viewContext.delete)
                     viewContext.saveOrRollback()
                 }
+                }
+                Section {
+                Button {
+                    place = nil
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    HStack {
+                        Text("No place assigned")
+                        Spacer()
+                        if place == nil {
+                            Image(systemName: "checkmark")
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+                }
             }
+            .listStyle(.insetGrouped)
             .searchable(text: $searchText, prompt: Text("Search for items..."))
             .navigationTitle("Places")
             .toolbar {

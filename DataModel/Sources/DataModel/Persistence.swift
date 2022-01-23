@@ -32,7 +32,7 @@ public struct PersistenceController {
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
-        container.loadPersistentStores { (storeDescription, error) in
+        container.loadPersistentStores { [container] (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -46,6 +46,9 @@ public struct PersistenceController {
                 Check the error message to determine what the actual problem was.
                 */
                 fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+            DispatchQueue.main.async {
+                container.viewContext.automaticallyMergesChangesFromParent = true
             }
         }
     }
