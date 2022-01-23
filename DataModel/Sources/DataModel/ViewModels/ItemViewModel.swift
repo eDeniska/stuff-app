@@ -16,7 +16,6 @@ import ImageRecognizer
 public class ItemViewModel: ObservableObject {
     private let item: Item?
     private let fileStorageManager = FileStorageManager.shared
-    private let metadataMonitor: CloudMetadataMonitor? = CloudMetadataMonitor()
 
     @Published public private(set) var images: [UIImage]
 
@@ -94,7 +93,7 @@ public class ItemViewModel: ObservableObject {
                     images = rebuiltImages
                 }
             }
-            monitorCancellable = metadataMonitor?.$items.receive(on: DispatchQueue.main).sink { [weak self] urls in
+            monitorCancellable = fileStorageManager.$items.receive(on: DispatchQueue.main).sink { [weak self] urls in
                 guard let self = self else {
                     return
                 }
@@ -192,6 +191,7 @@ public class ItemViewModel: ObservableObject {
 
         fileStorageManager.removeItems(withPrefix: identifier.uuidString)
         for (index, image) in imageRecords.enumerated() {
+            // TODO: fully replace this logic! it is incorrect
             let indexString = "\(index)"
             let padded = indexString.padding(toLength: 10 - indexString.count, withPad: "0", startingAt: 0)
             fileStorageManager.save(data: image.imageData, with: "\(identifier.uuidString)-\(padded).jpg")
@@ -220,29 +220,7 @@ public class ItemViewModel: ObservableObject {
         showDeletePicker = []
         imageRecords = []
         if let identifier = item?.identifier {
-            Task {
-                let urls = fileStorageManager.urls(withPrefix: identifier.uuidString).sorted { $0.absoluteString < $1.absoluteString }
-
-                var loadedImages: [ImageData] = []
-                for url in urls {
-                    do {
-                        loadedImages.append(ImageData(imageData: try await fileStorageManager.loadFile(at: url)))
-                    } catch {
-                        Logger.default.error("could not load image: \(error)")
-                    }
-                }
-                imageRecords = loadedImages
-                showDeletePicker = Array(repeating: false, count: imageRecords.count)
-                Task {
-                    var rebuiltImages: [UIImage] = []
-                    for imageRecord in imageRecords {
-                        if let image = await imageRecord.image() {
-                            rebuiltImages.append(image)
-                        }
-                    }
-                    images = rebuiltImages
-                }
-            }
+            reloadImages(from: fileStorageManager.items, for: identifier)
         }
     }
 }

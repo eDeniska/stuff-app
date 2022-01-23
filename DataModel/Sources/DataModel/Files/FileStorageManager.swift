@@ -7,13 +7,19 @@
 
 import Foundation
 import Logger
+import Combine
 
-public class FileStorageManager {
+public class FileStorageManager: ObservableObject {
 
     private var storageURL: URL
     private var requiresCoordination = false
 
     public static let shared = FileStorageManager()
+
+    @Published public var items: [URL] = []
+
+    private let metadataQuery = NSMetadataQuery()
+    private var querySubscriber: AnyCancellable?
 
     private init() {
         storageURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -32,6 +38,28 @@ public class FileStorageManager {
                 }
             }
         }
+
+
+        let names: [NSNotification.Name] = [.NSMetadataQueryDidFinishGathering, .NSMetadataQueryDidUpdate]
+        let publishers = names.map { NotificationCenter.default.publisher(for: $0) }
+        querySubscriber = Publishers.MergeMany(publishers).receive(on: DispatchQueue.main).sink { [weak self] notification in
+            guard let self = self, notification.object as? NSMetadataQuery === self.metadataQuery else { return }
+            self.items = self.readMetadataResults()
+        }
+
+        // Set up a metadata query to gather document changes in the iCloud container.
+        //
+        metadataQuery.notificationBatchingInterval = 1
+        metadataQuery.searchScopes = [NSMetadataQueryUbiquitousDataScope, NSMetadataQueryUbiquitousDocumentsScope]
+        metadataQuery.predicate = NSPredicate(format: "%K LIKE %@", NSMetadataItemFSNameKey, "*.*")
+        metadataQuery.sortDescriptors = [NSSortDescriptor(key: NSMetadataItemFSNameKey, ascending: true)]
+        metadataQuery.start()
+        
+    }
+
+    deinit {
+        guard metadataQuery.isStarted else { return }
+        metadataQuery.stop()
     }
 
     public func urls(withPrefix filePrefix: String) -> [URL] {
@@ -100,5 +128,29 @@ public class FileStorageManager {
                 }
             }
         }
+    }
+}
+
+extension FileStorageManager {
+
+    private func urls(from nsMetataItems: [NSMetadataItem]) -> [URL] {
+        let validItems = nsMetataItems.filter { item in
+            guard let _ = item.value(forAttribute: NSMetadataItemURLKey) as? URL,
+                  item.value(forAttribute: NSMetadataItemFSNameKey) != nil else { return false }
+
+            return true
+        }
+
+        return validItems.compactMap { $0.value(forAttribute: NSMetadataItemURLKey) as? URL }
+    }
+
+    private func readMetadataResults() -> [URL] {
+        var result = [URL]()
+        metadataQuery.disableUpdates()
+        if let metadatItems = metadataQuery.results as? [NSMetadataItem] {
+            result = urls(from: metadatItems)
+        }
+        metadataQuery.enableUpdates()
+        return result
     }
 }
