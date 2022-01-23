@@ -16,6 +16,7 @@ import ImageRecognizer
 public class ItemViewModel: ObservableObject {
     private let item: Item?
     private let fileStorageManager = FileStorageManager.shared
+    private let metadataMonitor: CloudMetadataMonitor? = CloudMetadataMonitor()
 
     @Published public private(set) var images: [UIImage]
 
@@ -28,7 +29,7 @@ public class ItemViewModel: ObservableObject {
                         rebuiltImages.append(image)
                     }
                 }
-                showDeletePicker = Array(repeating: false, count: imageRecords.count)
+                showDeletePicker = Array(repeating: false, count: max(imageRecords.count, showDeletePicker.count))
                 images = rebuiltImages
             }
         }
@@ -43,6 +44,8 @@ public class ItemViewModel: ObservableObject {
     @Published public var isLost: Bool
 
     private let imagePredictor = ImagePredictor()
+
+    private var monitorCancellable: AnyCancellable?
 
     public init(item: Item?) {
         self.item = item
@@ -90,9 +93,29 @@ public class ItemViewModel: ObservableObject {
                     }
                     images = rebuiltImages
                 }
-
             }
+            monitorCancellable = metadataMonitor?.$items.receive(on: DispatchQueue.main).sink { [weak self] urls in
+                guard let self = self else {
+                    return
+                }
+                self.reloadImages(from: urls, for: identifier)
+            }
+        }
+    }
 
+    private func reloadImages(from urls: [URL], for identifier: UUID) {
+        let filtered = urls.filter { $0.lastPathComponent.hasPrefix(identifier.uuidString) }.sorted { $0.absoluteString < $1.absoluteString }
+
+        Task {
+            var loadedImages: [ImageData] = []
+            for url in filtered {
+                do {
+                    loadedImages.append(ImageData(imageData: try await fileStorageManager.loadFile(at: url)))
+                } catch {
+                    Logger.default.error("could not load image: \(error)")
+                }
+            }
+            imageRecords = loadedImages
         }
     }
 
