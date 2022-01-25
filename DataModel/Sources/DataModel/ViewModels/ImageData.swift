@@ -9,12 +9,14 @@ import Foundation
 import UIKit
 
 public struct ImageData: Identifiable {
-    public let id: UUID
+    public let id: String
     let imageData: Data
+    let url: URL?
 
-    init(imageData: Data) {
+    init(imageData: Data, url: URL? = nil) {
         self.imageData = imageData
-        id = UUID()
+        self.url = url
+        id = url?.absoluteString ?? UUID().uuidString
     }
 
     public func image() async -> UIImage? {

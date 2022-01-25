@@ -28,7 +28,6 @@ public class ItemViewModel: ObservableObject {
                         rebuiltImages.append(image)
                     }
                 }
-                showDeletePicker = Array(repeating: false, count: max(imageRecords.count, showDeletePicker.count))
                 images = rebuiltImages
             }
         }
@@ -39,7 +38,6 @@ public class ItemViewModel: ObservableObject {
     @Published public var category: DisplayedCategory
     @Published public var place: ItemPlace?
     @Published public var condition: ItemCondition
-    @Published public var showDeletePicker: [Bool]
     @Published public var isLost: Bool
 
     private let imagePredictor = ImagePredictor()
@@ -67,49 +65,27 @@ public class ItemViewModel: ObservableObject {
         place = item?.place
         isLost = item?.isLost ?? false
         images = []
-        showDeletePicker = []
         imageRecords = []
         if let identifier = item?.identifier {
-            Task {
-                let urls = fileStorageManager.urls(withPrefix: identifier.uuidString).sorted { $0.absoluteString < $1.absoluteString }
+            reloadImages(for: identifier)
 
-                var loadedImages: [ImageData] = []
-                for url in urls {
-                    do {
-                        loadedImages.append(ImageData(imageData: try await fileStorageManager.loadFile(at: url)))
-                    } catch {
-                        Logger.default.error("could not load image: \(error)")
-                    }
-                }
-                imageRecords = loadedImages
-                showDeletePicker = Array(repeating: false, count: imageRecords.count)
-                Task {
-                    var rebuiltImages: [UIImage] = []
-                    for imageRecord in imageRecords {
-                        if let image = await imageRecord.image() {
-                            rebuiltImages.append(image)
-                        }
-                    }
-                    images = rebuiltImages
-                }
-            }
             monitorCancellable = fileStorageManager.$items.receive(on: DispatchQueue.main).sink { [weak self] urls in
                 guard let self = self else {
                     return
                 }
-                self.reloadImages(from: urls, for: identifier)
+                self.reloadImages(for: identifier)
             }
         }
     }
 
-    private func reloadImages(from urls: [URL], for identifier: UUID) {
-        let filtered = urls.filter { $0.lastPathComponent.hasPrefix(identifier.uuidString) }.sorted { $0.absoluteString < $1.absoluteString }
+    private func reloadImages(for identifier: UUID) {
+        let filtered = fileStorageManager.urls(withPrefix: identifier.uuidString)
 
         Task {
             var loadedImages: [ImageData] = []
             for url in filtered {
                 do {
-                    loadedImages.append(ImageData(imageData: try await fileStorageManager.loadFile(at: url)))
+                    loadedImages.append(ImageData(imageData: try await fileStorageManager.loadFile(at: url), url: url))
                 } catch {
                     Logger.default.error("could not load image: \(error)")
                 }
@@ -163,7 +139,7 @@ public class ItemViewModel: ObservableObject {
     public func addImages(_ images: [UIImage]) {
         imageRecords.append(contentsOf: images
                                 .compactMap { $0.jpegData(compressionQuality: 0.9) }
-                                .map(ImageData.init(imageData:)))
+                                .map { ImageData(imageData: $0, url: nil) })
     }
 
     public func save(in context: NSManagedObjectContext) {
@@ -189,12 +165,25 @@ public class ItemViewModel: ObservableObject {
         // TODO: will need to save color properly
         newItem.color = ""
 
+        // find images that need deletion
+        let existingImages = Set(fileStorageManager.urls(withPrefix: identifier.uuidString))
+        let updatedImages = Set(imageRecords.compactMap(\.url))
+        existingImages.subtracting(updatedImages).forEach { fileStorageManager.removeItem(at: $0) }
+
         fileStorageManager.removeItems(withPrefix: identifier.uuidString)
         for (index, image) in imageRecords.enumerated() {
-            // TODO: fully replace this logic! it is incorrect
             let indexString = "\(index)"
-            let padded = indexString.padding(toLength: 10 - indexString.count, withPad: "0", startingAt: 0)
-            fileStorageManager.save(data: image.imageData, with: "\(identifier.uuidString)-\(padded).jpg")
+            let fileName = String(repeating: "0", count: 10 - indexString.count) + indexString
+            // we can only remove existing files and can't reorder them
+            // therefore we will never overwrite existing images with new data
+            // if we are to support reordering, this approach should be revised - could use two-pass on array
+            if let url = image.url {
+                if url.lastPathComponent != fileName {
+                    fileStorageManager.rename(at: url, to: fileName)
+                }
+            } else {
+                fileStorageManager.save(data: image.imageData, with: fileName)
+            }
         }
     }
 
@@ -217,10 +206,9 @@ public class ItemViewModel: ObservableObject {
         place = item?.place
         isLost = item?.isLost ?? false
         images = []
-        showDeletePicker = []
         imageRecords = []
         if let identifier = item?.identifier {
-            reloadImages(from: fileStorageManager.items, for: identifier)
+            reloadImages(for: identifier)
         }
     }
 }

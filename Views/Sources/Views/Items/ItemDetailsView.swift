@@ -37,6 +37,7 @@ public struct ItemDetailsView: View {
 
     @State private var isPredicting = false
     @State private var isFetchingImages = false
+    @State private var removingImageIndex: Int? = nil
 
     @FocusState private var focusedField: FocusedField?
 
@@ -135,7 +136,7 @@ public struct ItemDetailsView: View {
                     .id("conditionTitle")
                     .popover(isPresented: $showConditionPicker) {
                         ConditionPicker(itemCondition: $itemDetails.condition)
-                            .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
+                            .frame(minWidth: 300, idealWidth: 400, minHeight: 300, idealHeight: 400)
                     }
                 } else {
                     Text(itemDetails.condition.localizedTitle)
@@ -185,7 +186,7 @@ public struct ItemDetailsView: View {
                                     .overlay(alignment: .topTrailing) {
                                         if isEditing {
                                             Button(role: .destructive) {
-                                                itemDetails.showDeletePicker[index] = true
+                                                removingImageIndex = index
                                             } label: {
                                                 Image(systemName: "xmark.circle")
                                                     .font(.largeTitle)
@@ -199,7 +200,13 @@ public struct ItemDetailsView: View {
                                             EmptyView()
                                         }
                                     }
-                                    .confirmationDialog("Remove the image?", isPresented: $itemDetails.showDeletePicker[index], titleVisibility: .visible) {
+                                    .confirmationDialog("Remove the image?", isPresented: Binding {
+                                        removingImageIndex == index
+                                    } set: { newValue in
+                                        if !newValue {
+                                            removingImageIndex = nil
+                                        }
+                                    }, titleVisibility: .visible) {
                                         Button(role: .destructive) {
                                             itemDetails.removeImage(at: index)
                                         } label: {

@@ -18,6 +18,9 @@ public struct PlaceListView: View {
         animation: .default) private var places: FetchedResults<ItemPlace>
 
     @State private var searchText: String = ""
+    @State private var shouldAddNew = false
+
+    @State private var newPlaceTitle = ""
 
     public init() {
     }
@@ -27,7 +30,7 @@ public struct PlaceListView: View {
             List {
                 ForEach(places) { place in
                     NavigationLink {
-                        PlaceListElement(place: place)
+                        PlaceDetailsView(place: place)
                     } label: {
                         PlaceListElement(place: place)
                     }
@@ -39,14 +42,48 @@ public struct PlaceListView: View {
                     }
                 }
             }
+            .sheet(isPresented: $shouldAddNew) {
+                NavigationView {
+                    Form {
+                        TextField("New place title", text: $newPlaceTitle)
+                            .navigationTitle("New place")
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button(role: .cancel) {
+                                shouldAddNew = false
+                            } label: {
+                                Text("Cancel")
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button {
+                                shouldAddNew = false
+                            } label: {
+                                Text("Save")
+                                    .bold()
+                            }
+                        }
+                    }
+                }
+            }
             .searchable(text: $searchText, prompt: Text("Search for items..."))
             .navigationTitle("Places")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
+                ToolbarItem {
+                    Button {
+                        shouldAddNew = true
+                    } label: {
+                        Label("Add Place", systemImage: "plus")
+                    }
+                }
             }
-            PlaceDetailsWelcomeView()
+            PlaceDetailsWelcomeView {
+                shouldAddNew = true
+            }
         }
         .tabItem {
             Label("Places", systemImage: "building.2")

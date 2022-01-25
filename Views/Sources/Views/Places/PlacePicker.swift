@@ -14,11 +14,8 @@ struct PlacePicker: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
 
-    @FetchRequest(
-        sortDescriptors: [
-            SortDescriptor(\ItemPlace.title)
-                         ],
-        animation: .default) private var places: FetchedResults<ItemPlace>
+    @FetchRequest(sortDescriptors: [SortDescriptor(\ItemPlace.title)],animation: .default)
+    private var places: FetchedResults<ItemPlace>
 
     @State private var searchText: String = ""
 

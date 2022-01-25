@@ -10,6 +10,12 @@ import CoreData
 import Views
 import DataModel
 
+// TODO: add "lists" feature - compose lists of existing items (prepare to pack things for trip, for example)
+// TODO: add checked status for list item
+// TODO: add option to export data
+// TODO: add option to share lists
+// TODO: add option to make reminders out of lists
+
 struct ContentView: View {
 
     var body: some View {
