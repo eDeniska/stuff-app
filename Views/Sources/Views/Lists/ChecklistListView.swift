@@ -1,21 +1,22 @@
 //
-//  PlaceListView.swift
+//  ChecklistListView.swift
 //  
 //
-//  Created by Danis Tazetdinov on 08.12.2021.
+//  Created by Danis Tazetdinov on 02.02.2022.
 //
 
 import SwiftUI
 import DataModel
+import CoreData
 
-public struct PlaceListView: View {
+public struct ChecklistListView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
         sortDescriptors: [
-            SortDescriptor(\ItemPlace.title)
+            SortDescriptor(\Checklist.title)
                          ],
-        animation: .default) private var places: FetchedResults<ItemPlace>
+        animation: .default) private var lists: FetchedResults<Checklist>
 
     @State private var searchText: String = ""
     @State private var shouldAddNew = false
@@ -26,28 +27,28 @@ public struct PlaceListView: View {
     public var body: some View {
         NavigationView {
             List {
-                ForEach(places) { place in
+                ForEach(lists) { list in
                     NavigationLink {
-                        PlaceDetailsView(place: place)
+                        Text(list.title ?? "")
                     } label: {
-                        PlaceListElement(place: place)
+                        ChecklistListElement(checklist: list)
                     }
                 }
                 .onDelete { indexSets in
                     withAnimation {
-                        indexSets.map { places[$0] }.forEach(viewContext.delete)
+                        indexSets.map { lists[$0] }.forEach(viewContext.delete)
                         viewContext.saveOrRollback()
                     }
                 }
             }
             .sheet(isPresented: $shouldAddNew) {
-                NewPlaceView()
+                NewChecklistView()
                     .onDisappear {
                         shouldAddNew = false
                     }
             }
-            .searchable(text: $searchText, prompt: Text("Search for items..."))
-            .navigationTitle("Places")
+            .searchable(text: $searchText, prompt: Text("Search for checklists..."))
+            .navigationTitle("Checklists")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -56,7 +57,7 @@ public struct PlaceListView: View {
                     Button {
                         shouldAddNew = true
                     } label: {
-                        Label("Add Place", systemImage: "plus")
+                        Label("Add Checklist", systemImage: "plus")
                     }
                 }
             }
@@ -65,7 +66,7 @@ public struct PlaceListView: View {
             }
         }
         .tabItem {
-            Label("Places", systemImage: "building.2")
+            Label("Checklists", systemImage: "list.bullet")
         }
     }
 }

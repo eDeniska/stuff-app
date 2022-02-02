@@ -9,6 +9,8 @@ import SwiftUI
 import CoreData
 import DataModel
 
+// TODO: need proper emtpy list view for items and places
+
 public struct ItemListView: View {
     @Environment(\.managedObjectContext) private var viewContext
 

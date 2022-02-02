@@ -162,7 +162,6 @@ public class ImagePredictor {
 
         // Create a prediction array from the observations.
         predictions = observations.map { observation in
-            // Convert each observation into an `ImagePredictor.Prediction` instance.
             ItemPrediction(classification: observation.identifier,
                            confidence: Double(observation.confidence))
         }

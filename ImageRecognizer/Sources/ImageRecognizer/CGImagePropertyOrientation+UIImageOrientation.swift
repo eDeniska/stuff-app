@@ -8,7 +8,7 @@ Core Graphics utility extension that creates CGImagePropertyOrientation from a U
 import UIKit
 import ImageIO
 
-extension CGImagePropertyOrientation {
+public extension CGImagePropertyOrientation {
     /// Converts an image orientation to a Core Graphics image property orientation.
     /// - Parameter orientation: A `UIImage.Orientation` instance.
     ///

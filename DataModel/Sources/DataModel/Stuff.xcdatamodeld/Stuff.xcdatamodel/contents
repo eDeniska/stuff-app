@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D49" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="Checklist" representedClassName="Checklist" syncable="YES" codeGenerationType="class">
+        <attribute name="details" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
+        <attribute name="icon" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
+        <attribute name="lastModified" attributeType="Date" defaultDateTimeInterval="33600" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
+        <attribute name="title" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+        <relationship name="entries" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ChecklistEntry" inverseName="checklist" inverseEntity="ChecklistEntry"/>
+    </entity>
+    <entity name="ChecklistEntry" representedClassName="ChecklistEntry" syncable="YES" codeGenerationType="class">
+        <attribute name="icon" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
+        <attribute name="isChecked" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="order" attributeType="Integer 64" defaultValueString="0" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+        <relationship name="checklist" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Checklist" inverseName="entries" inverseEntity="Checklist"/>
+        <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="checklistEntries" inverseEntity="Item"/>
+    </entity>
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="color" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
         <attribute name="condition" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
         <attribute name="details" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
-        <attribute name="identifier" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="identifier" optional="YES" attributeType="UUID" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
         <attribute name="isLost" attributeType="Boolean" defaultValueString="NO" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
         <attribute name="lastModified" attributeType="Date" defaultDateTimeInterval="-10800" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
+        <attribute name="thumbnailData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="title" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ItemCategory" inverseName="items" inverseEntity="ItemCategory"/>
+        <relationship name="checklistEntries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ChecklistEntry" inverseName="item" inverseEntity="ChecklistEntry"/>
         <relationship name="place" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ItemPlace" inverseName="items" inverseEntity="ItemPlace"/>
     </entity>
     <entity name="ItemCategory" representedClassName="ItemCategory" syncable="YES" codeGenerationType="class">
@@ -25,7 +42,9 @@
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="place" inverseEntity="Item"/>
     </entity>
     <elements>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="164"/>
+        <element name="Checklist" positionX="-45" positionY="72" width="128" height="104"/>
+        <element name="ChecklistEntry" positionX="-54" positionY="63" width="128" height="119"/>
+        <element name="Item" positionX="-63" positionY="-18" width="128" height="194"/>
         <element name="ItemCategory" positionX="-54" positionY="0" width="128" height="104"/>
         <element name="ItemPlace" positionX="-63" positionY="-9" width="128" height="89"/>
     </elements>

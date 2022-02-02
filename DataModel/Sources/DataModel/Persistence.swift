@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import Logger
 
 public struct PersistenceController {
     public static let shared = PersistenceController()
@@ -47,6 +48,11 @@ public struct PersistenceController {
                 */
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
+//            do {
+//                try container.initializeCloudKitSchema(options: [.printSchema])
+//            } catch {
+//                Logger.default.error("failed to initialize CloudKit schema: \(error)")
+//            }
             DispatchQueue.main.async {
                 container.viewContext.automaticallyMergesChangesFromParent = true
             }

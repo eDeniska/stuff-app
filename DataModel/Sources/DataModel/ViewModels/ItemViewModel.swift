@@ -40,6 +40,10 @@ public class ItemViewModel: ObservableObject {
     @Published public var condition: ItemCondition
     @Published public var isLost: Bool
 
+    public var thumbnail: UIImage? {
+        item?.thumbnail
+    }
+
     private let imagePredictor = ImagePredictor()
 
     private var monitorCancellable: AnyCancellable?
@@ -129,7 +133,7 @@ public class ItemViewModel: ObservableObject {
     }
 
     public func addImage(_ image: UIImage) {
-        guard let data = image.jpegData(compressionQuality: 0.9) else {
+        guard let data = image.heicData(compressionQuality: 0.9) ?? image.jpegData(compressionQuality: 0.9) else {
             Logger.default.error("could not get data for image image: \(image)")
             return
         }
@@ -138,7 +142,7 @@ public class ItemViewModel: ObservableObject {
 
     public func addImages(_ images: [UIImage]) {
         imageRecords.append(contentsOf: images
-                                .compactMap { $0.jpegData(compressionQuality: 0.9) }
+                                .compactMap { $0.heicData(compressionQuality: 0.9) ?? $0.jpegData(compressionQuality: 0.9) }
                                 .map { ImageData(imageData: $0, url: nil) })
     }
 
@@ -161,6 +165,7 @@ public class ItemViewModel: ObservableObject {
         newItem.condition = condition.rawValue
         newItem.isLost = isLost
         newItem.place = place
+        newItem.thumbnailData = thumbnailData()
 
         // TODO: will need to save color properly
         newItem.color = ""
@@ -173,7 +178,7 @@ public class ItemViewModel: ObservableObject {
         fileStorageManager.removeItems(withPrefix: identifier.uuidString)
         for (index, image) in imageRecords.enumerated() {
             let indexString = "\(index)"
-            let fileName = String(repeating: "0", count: 10 - indexString.count) + indexString
+            let fileName = identifier.uuidString + "-" + String(repeating: "0", count: 10 - indexString.count) + indexString
             // we can only remove existing files and can't reorder them
             // therefore we will never overwrite existing images with new data
             // if we are to support reordering, this approach should be revised - could use two-pass on array
@@ -211,4 +216,12 @@ public class ItemViewModel: ObservableObject {
             reloadImages(for: identifier)
         }
     }
+
+    private func thumbnailData() -> Data? {
+        guard let image = images.first?.resizeToFill(size: CGSize(width: 300, height: 300)) else {
+            return nil
+        }
+        return image.heicData(compressionQuality: 0.9) ?? image.jpegData(compressionQuality: 0.9)
+    }
 }
+
