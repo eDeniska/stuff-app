@@ -25,4 +25,24 @@ public extension Item {
         managedObjectContext?.delete(self)
         managedObjectContext?.saveOrRollback()
     }
+
+    func isListed(in checklist: Checklist) -> Bool {
+        checklist.entries?.compactMap { ($0 as? ChecklistEntry)?.item }.contains(self) ?? false
+    }
+
+    func add(to checklist: Checklist) {
+        guard !isListed(in: checklist), let context = managedObjectContext else {
+            return
+        }
+        let entry = ChecklistEntry(context: context)
+        entry.title = title ?? ""
+        if let appCategoryString = category?.appCategory, let appCategory = AppCategory(rawValue: appCategoryString) {
+            entry.icon = appCategory.iconName
+        } else {
+            entry.icon = checklist.icon
+        }
+        entry.item = self
+        entry.checklist = checklist
+        entry.updateSortOrder()
+    }
 }

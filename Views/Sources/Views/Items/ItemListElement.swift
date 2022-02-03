@@ -13,9 +13,11 @@ import Logger
 
 public struct ItemListElement: View {
     @ObservedObject private var item: Item
+    private let displayCategory: Bool
 
-    public init(item: Item) {
+    public init(item: Item, displayCategory: Bool = false) {
         self.item = item
+        self.displayCategory = displayCategory
     }
 
     public var body: some View {
@@ -38,8 +40,9 @@ public struct ItemListElement: View {
                     .truncationMode(.tail)
                     .lineLimit(1)
                     .font(.body)
-                if let place = item.place?.title {
-                    Text(place)
+
+                if let detailsLine = detailsLine() {
+                    Text(detailsLine)
                         .truncationMode(.tail)
                         .lineLimit(1)
                         .font(.caption)
@@ -47,6 +50,24 @@ public struct ItemListElement: View {
                 }
             }
         }
+    }
+
+    private func detailsLine() -> String? {
+        var components: [String] = []
+
+        if displayCategory {
+            components.append(item.categoryTitle)
+        }
+
+        if let place = item.place?.title {
+            components.append(place)
+        }
+
+        guard !components.isEmpty else {
+            return nil
+        }
+
+        return components.joined(separator: ", ")
     }
 
     private func iconName() -> String {

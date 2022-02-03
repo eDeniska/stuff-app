@@ -46,7 +46,7 @@ public struct PlaceListView: View {
                         shouldAddNew = false
                     }
             }
-            .searchable(text: $searchText, prompt: Text("Search for items..."))
+            .searchable(text: $searchText, prompt: Text("Search for places..."))
             .navigationTitle("Places")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -63,9 +63,10 @@ public struct PlaceListView: View {
             PlaceDetailsWelcomeView {
                 shouldAddNew = true
             }
+            // TODO: add actual search for places
         }
         .tabItem {
-            Label("Places", systemImage: "building.2")
+            Label("Places", systemImage: "house")
         }
     }
 }

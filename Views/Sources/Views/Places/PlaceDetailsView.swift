@@ -15,18 +15,18 @@ struct PlaceDetailsView: View {
     @ObservedObject var place: ItemPlace
     @Environment(\.managedObjectContext) private var viewContext
 
-    @SectionedFetchRequest(
-        sectionIdentifier: \Item.categoryTitle,
-        sortDescriptors: [
-            SortDescriptor(\Item.category?.title),
-            SortDescriptor(\Item.lastModified)
-                         ],
-        animation: .default)
-    private var items: SectionedFetchResults<String, Item>
-    @State private var readyForDisplay = false
+    private var items: SectionedFetchResults<String, Item> { itemsRequest.wrappedValue }
+    private var itemsRequest: SectionedFetchRequest<String, Item>
 
     public init(place: ItemPlace) {
         self.place = place
+
+        itemsRequest = SectionedFetchRequest(entity: Item.entity(),
+                                             sectionIdentifier: \Item.categoryTitle,
+                                             sortDescriptors: [NSSortDescriptor(key: #keyPath(Item.category.title), ascending: true),
+                                                               NSSortDescriptor(key: #keyPath(Item.lastModified), ascending: true)],
+                                             predicate: NSPredicate(format: "\(#keyPath(Item.place)) == %@", place),
+                                             animation: .default)
     }
 
 
@@ -39,44 +39,37 @@ struct PlaceDetailsView: View {
     }
 
     public var body: some View {
-        if readyForDisplay {
-            List {
-                ForEach(items) { section in
-                    Section(header: Text(title(for: section.id))) {
-                        ForEach(section) { item in
-                            Button {
+        List {
+            ForEach(items) { section in
+                Section(header: Text(title(for: section.id))) {
+                    ForEach(section) { item in
+                        Button {
 
-                            } label: {
-                                ItemListElement(item: item)
-                            }
-                            // TODO: present item details
-                            // ItemDetailsView(item: item)
+                        } label: {
+                            ItemListElement(item: item)
                         }
-                        .onDelete { indexSets in
-                            withAnimation {
-                                indexSets.map { section[$0] }.forEach(viewContext.delete)
-                                viewContext.saveOrRollback()
-                            }
+                        .buttonStyle(.plain)
+                        // TODO: present item details
+                        // ItemDetailsView(item: item)
+                    }
+                    .onDelete { indexSets in
+                        withAnimation {
+                            indexSets.map { section[$0] }.forEach(viewContext.delete)
+                            viewContext.saveOrRollback()
+                        }
 
-                        }
                     }
                 }
             }
-            .navigationTitle(place.title ?? "Unnamed")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
+        }
+        .navigationTitle(place.title ?? "Unnamed")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                EditButton()
             }
-            .onAppear {
-                print(FileStorageManager.shared.urls(withPrefix: "S"))
-            }
-        } else {
-            Color.clear
-                .onAppear {
-                    items.nsPredicate = NSPredicate(format: "\(#keyPath(Item.place)) == %@", place)
-                    readyForDisplay = true
-                }
+        }
+        .onAppear {
+            print(FileStorageManager.shared.urls(withPrefix: "S"))
         }
     }
 }

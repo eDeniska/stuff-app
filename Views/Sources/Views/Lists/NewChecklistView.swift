@@ -16,7 +16,7 @@ struct NewChecklistView: View {
     @State private var newListTitle = ""
     @State private var selectedIcon = ChecklistIcon.allCases.first?.rawValue ?? ""
 
-    private var gridItemLayout = [GridItem(.adaptive(minimum: 80))]
+    private let gridItemLayout = [GridItem(.adaptive(minimum: 80))]
 
 
     var body: some View {

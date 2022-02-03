@@ -16,7 +16,7 @@ struct NewPlaceView: View {
     @State private var newPlaceTitle = ""
     @State private var selectedIcon = PlaceIcon.allCases.first?.rawValue ?? ""
 
-    private var gridItemLayout = [GridItem(.adaptive(minimum: 80))]
+    private let gridItemLayout = [GridItem(.adaptive(minimum: 80))]
 
     var body: some View {
         NavigationView {

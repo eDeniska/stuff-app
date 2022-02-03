@@ -59,16 +59,17 @@ public struct ItemListView: View {
                 }
             }
             .onChange(of: searchText) { newValue in
-                if newValue.isEmpty {
+                let text = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                if text.isEmpty {
                     items.nsPredicate = nil
-
                 } else {
-                    let titlePredicate = NSPredicate(format: "title contains[cd] %@", newValue)
-                    let detailsPredicate = NSPredicate(format: "details contains[cd] %@", newValue)
-                    let categoryPredicate = NSPredicate(format: "category.title contains[cd] %@", newValue)
-                    let placePredicate = NSPredicate(format: "place.title contains[cd] %@", newValue)
-
-                    items.nsPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [titlePredicate, detailsPredicate, categoryPredicate, placePredicate])
+                    items.nsPredicate = NSCompoundPredicate(orPredicateWithSubpredicates:
+                                                                [#keyPath(Item.title),
+                                                                 #keyPath(Item.details),
+                                                                 #keyPath(Item.place.title),
+                                                                 #keyPath(Item.category.title)].map { keyPath in
+                        NSPredicate(format: "%K CONTAINS[cd] %@", keyPath, text)
+                    })
                 }
             }
             .searchable(text: $searchText, prompt: Text("Search for items..."))
@@ -90,7 +91,7 @@ public struct ItemListView: View {
             }
         }
         .tabItem {
-            Label("Items", systemImage: "menucard")
+            Label("Items", systemImage: "tag")
         }
         .onAppear {
             print(FileStorageManager.shared.urls(withPrefix: "S"))

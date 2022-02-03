@@ -161,7 +161,7 @@ public struct ItemDetailsView: View {
                     .buttonStyle(.plain)
                     .id("placeTitle")
                     .popover(isPresented: $showPlacePicker) {
-                        PlacePicker(place: $itemDetails.place)
+                        PlacePickerView(place: $itemDetails.place)
                             .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
                     }
                 } else {

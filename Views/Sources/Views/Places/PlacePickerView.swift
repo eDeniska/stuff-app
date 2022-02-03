@@ -1,5 +1,5 @@
 //
-//  PlacePicker.swift
+//  PlacePickerView.swift
 //  
 //
 //  Created by Danis Tazetdinov on 17.01.2022.
@@ -10,7 +10,7 @@ import DataModel
 import Logger
 import CoreData
 
-struct PlacePicker: View {
+struct PlacePickerView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
 
@@ -62,7 +62,7 @@ struct PlacePicker: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .searchable(text: $searchText, prompt: Text("Search for items..."))
+            .searchable(text: $searchText, prompt: Text("Search for places..."))
             .navigationTitle("Places")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -73,6 +73,7 @@ struct PlacePicker: View {
                     }
                 }
             }
+            // TODO: add actual search
         }
     }
 }

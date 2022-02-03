@@ -29,7 +29,7 @@ public struct ChecklistListView: View {
             List {
                 ForEach(lists) { list in
                     NavigationLink {
-                        Text(list.title ?? "")
+                        ChecklistEntryListView(checklist: list)
                     } label: {
                         ChecklistListElement(checklist: list)
                     }
@@ -64,9 +64,10 @@ public struct ChecklistListView: View {
             PlaceDetailsWelcomeView {
                 shouldAddNew = true
             }
+            // TODO: add search of checklists (include entries)
         }
         .tabItem {
-            Label("Checklists", systemImage: "list.bullet")
+            Label("Checklists", systemImage: "list.bullet.rectangle")
         }
     }
 }
