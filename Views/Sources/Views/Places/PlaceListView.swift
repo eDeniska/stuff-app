@@ -47,6 +47,17 @@ public struct PlaceListView: View {
                     }
             }
             .searchable(text: $searchText, prompt: Text("Search for places..."))
+            .onChange(of: searchText) { newValue in
+                let text = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                if text.isEmpty {
+                    places.nsPredicate = nil
+                } else {
+                    places.nsPredicate = NSCompoundPredicate(orPredicateWithSubpredicates:
+                                                                [#keyPath(ItemPlace.title)].map { keyPath in
+                        NSPredicate(format: "%K CONTAINS[cd] %@", keyPath, text)
+                    })
+                }
+            }
             .navigationTitle("Places")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -63,7 +74,6 @@ public struct PlaceListView: View {
             PlaceDetailsWelcomeView {
                 shouldAddNew = true
             }
-            // TODO: add actual search for places
         }
         .tabItem {
             Label("Places", systemImage: "house")

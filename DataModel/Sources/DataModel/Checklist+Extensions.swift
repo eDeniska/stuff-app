@@ -18,4 +18,14 @@ public extension Checklist {
         return entry
     }
 
+    static func available(for item: Item) -> [Checklist] {
+        guard let context = item.managedObjectContext else {
+            return []
+        }
+        let request = Checklist.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.lastModified), ascending: false)]
+        request.predicate = NSPredicate(format: "SUBQUERY(\(#keyPath(Checklist.entries)), $e, $e.item == %@).@count == 0", item)
+        return (try? context.fetch(request)) ?? []
+    }
+
 }

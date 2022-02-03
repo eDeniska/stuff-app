@@ -140,10 +140,6 @@ public struct CategoryPickerView: View {
     }
 }
 
-extension String: Identifiable {
-    public var id: String { self }
-}
-
 struct CategoryPickerView_Previews: PreviewProvider {
     static var previews: some View {
         CategoryPickerView(category: .constant(.predefined(.other)))

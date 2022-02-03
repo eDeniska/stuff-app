@@ -18,13 +18,25 @@ struct NewChecklistView: View {
 
     private let gridItemLayout = [GridItem(.adaptive(minimum: 80))]
 
+    private var trimmedTitle: String {
+        newListTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func submit() {
+        guard !trimmedTitle.isEmpty else {
+            return
+        }
+        Checklist.checklist(title: trimmedTitle, icon: selectedIcon, in: viewContext)
+        viewContext.saveOrRollback()
+        presentationMode.wrappedValue.dismiss()
+    }
 
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     TextField("New checklist title", text: $newListTitle)
-                        .navigationTitle("New checklist")
+                        .onSubmit(submit)
                 } header: {
                     Text("Title")
                 }
@@ -49,6 +61,7 @@ struct NewChecklistView: View {
                     Text("Icon")
                 }
             }
+            .navigationTitle("New checklist")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
@@ -58,18 +71,11 @@ struct NewChecklistView: View {
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button {
-                        guard !newListTitle.isEmpty else {
-                            return
-                        }
-                        Checklist.checklist(title: newListTitle, icon: selectedIcon, in: viewContext)
-                        viewContext.saveOrRollback()
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
+                    Button(action: submit) {
                         Text("Save")
                             .bold()
                     }
-                    .disabled(newListTitle.isEmpty)
+                    .disabled(trimmedTitle.isEmpty)
                 }
             }
         }

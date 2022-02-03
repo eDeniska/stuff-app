@@ -18,12 +18,25 @@ struct NewPlaceView: View {
 
     private let gridItemLayout = [GridItem(.adaptive(minimum: 80))]
 
+    private var trimmedTitle: String {
+        newPlaceTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func submit() {
+        guard !trimmedTitle.isEmpty else {
+            return
+        }
+        ItemPlace.place(title: trimmedTitle, icon: selectedIcon, in: viewContext)
+        viewContext.saveOrRollback()
+        presentationMode.wrappedValue.dismiss()
+    }
+
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     TextField("New place title", text: $newPlaceTitle)
-                        .navigationTitle("New place")
+                        .onSubmit(submit)
                 } header: {
                     Text("Title")
                 }
@@ -48,6 +61,7 @@ struct NewPlaceView: View {
                     Text("Icon")
                 }
             }
+            .navigationTitle("New place")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
@@ -57,18 +71,11 @@ struct NewPlaceView: View {
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button {
-                        guard !newPlaceTitle.isEmpty else {
-                            return
-                        }
-                        ItemPlace.place(title: newPlaceTitle, icon: selectedIcon, in: viewContext)
-                        viewContext.saveOrRollback()
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
+                    Button(action: submit) {
                         Text("Save")
                             .bold()
                     }
-                    .disabled(newPlaceTitle.isEmpty)
+                    .disabled(trimmedTitle.isEmpty)
                 }
             }
         }

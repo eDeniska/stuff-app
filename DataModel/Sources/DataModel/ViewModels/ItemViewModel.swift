@@ -39,6 +39,7 @@ public class ItemViewModel: ObservableObject {
     @Published public var place: ItemPlace?
     @Published public var condition: ItemCondition
     @Published public var isLost: Bool
+    @Published public var checklists: [Checklist]
 
     public var thumbnail: UIImage? {
         item?.thumbnail
@@ -53,6 +54,13 @@ public class ItemViewModel: ObservableObject {
 
         title = item?.title ?? ""
         details = item?.details ?? ""
+
+        if let item = item {
+            checklists = Checklist.available(for: item)
+        } else {
+            checklists = []
+        }
+
 
         if let appCategoryString = item?.category?.appCategory, let appCategory = AppCategory(rawValue: appCategoryString) {
             category = .predefined(appCategory)
@@ -144,6 +152,11 @@ public class ItemViewModel: ObservableObject {
         imageRecords.append(contentsOf: images
                                 .compactMap { $0.heicData(compressionQuality: 0.9) ?? $0.jpegData(compressionQuality: 0.9) }
                                 .map { ImageData(imageData: $0, url: nil) })
+    }
+
+    public func add(to checklist: Checklist) {
+        item?.add(to: checklist)
+        item?.managedObjectContext?.saveOrRollback()
     }
 
     public func save(in context: NSManagedObjectContext) {

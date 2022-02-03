@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 import DataModel
 
-// TODO: add simple way of adding items to the list without separate form
+// TODO: add simple way of adding items to the list without separate form (but - suggestions?)
 
 struct ChecklistEntryListView: View {
 

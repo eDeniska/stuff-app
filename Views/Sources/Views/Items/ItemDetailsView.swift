@@ -12,9 +12,7 @@ import CoreData
 import ImageRecognizer
 import Logger
 
-extension Int: Identifiable {
-    public var id: Int { self }
-}
+// TODO: add appropriate swipe actions to items
 
 public struct ItemDetailsView: View {
 
@@ -304,6 +302,23 @@ public struct ItemDetailsView: View {
                     }
                 }
             }
+            ToolbarItem {
+                if !itemDetails.checklists.isEmpty && !isEditing {
+                    Menu {
+                        ForEach(itemDetails.checklists) { checklist in
+                            Button {
+                                itemDetails.add(to: checklist)
+                            } label: {
+                                Label(checklist.title ?? "", systemImage: checklist.icon ?? "list.bullet.rectangle")
+                            }
+                        }
+                    } label: {
+                        Label("Add to checklist", systemImage: "text.badge.plus")
+                    }
+                    .menuStyle(.borderlessButton)
+                }
+            }
+
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)

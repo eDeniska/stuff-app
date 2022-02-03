@@ -67,8 +67,22 @@ public struct NewChecklistEntryView: View {
         viewContext.saveOrRollback()
     }
 
-    private var isTitleValid: Bool {
-        !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    private var trimmedTitle: String {
+        title.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    enum FocusedField: Hashable {
+        case title
+    }
+
+    @FocusState private var focusedField: FocusedField?
+
+    private func submit() {
+        guard !trimmedTitle.isEmpty else {
+            return
+        }
+        save(title: trimmedTitle)
+        presentationMode.wrappedValue.dismiss()
     }
 
     public var body: some View {
@@ -76,6 +90,8 @@ public struct NewChecklistEntryView: View {
             Form {
                 Section {
                     TextField("Title", text: $title)
+                        .focused($focusedField, equals: .title)
+                        .onSubmit(submit)
                 } header: {
                     Text("Title")
                 }
@@ -128,15 +144,16 @@ public struct NewChecklistEntryView: View {
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button {
-                        save(title: title.trimmingCharacters(in: .whitespacesAndNewlines))
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
+                    Button(action: submit) {
                         Text("Save")
                             .bold()
                     }
-                    .disabled(!isTitleValid)
+                    .disabled(trimmedTitle.isEmpty)
                 }
+            }
+            .task {
+                try? await Task.sleep(nanoseconds: 590000000)
+                focusedField = .title
             }
             .onChange(of: title) { newValue in
                 updatePredicate(with: newValue.trimmingCharacters(in: .whitespacesAndNewlines))
