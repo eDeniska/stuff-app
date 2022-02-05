@@ -49,6 +49,7 @@ public struct ItemListElement: View {
                         .foregroundColor(.secondary)
                 }
             }
+            Spacer()
         }
     }
 

@@ -22,6 +22,7 @@ public struct ItemDetailsView: View {
     }
 
     @StateObject private var itemDetails: ItemViewModel
+    private let item: Item?
 
     @State private var showPhotoPicker = false
     @State private var showTakePhoto = false
@@ -43,6 +44,13 @@ public struct ItemDetailsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
+    @FetchRequest(
+        sortDescriptors: [
+            SortDescriptor(\Checklist.title)
+                         ],
+        animation: .default)
+    private var checklists: FetchedResults<Checklist>
+
     @State private var isEditing: Bool
 
     private let isNew: Bool
@@ -52,6 +60,7 @@ public struct ItemDetailsView: View {
     }
 
     public init(item: Item?) {
+        self.item = item
         _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item))
         _isEditing = State(wrappedValue: item == nil)
         isNew = item == nil
@@ -305,12 +314,13 @@ public struct ItemDetailsView: View {
             ToolbarItem {
                 if !itemDetails.checklists.isEmpty && !isEditing {
                     Menu {
-                        ForEach(itemDetails.checklists) { checklist in
+                        ForEach(checklists) { checklist in
                             Button {
                                 itemDetails.add(to: checklist)
                             } label: {
                                 Label(checklist.title ?? "", systemImage: checklist.icon ?? "list.bullet.rectangle")
                             }
+                            .disabled(checklist.entries?.compactMap { ($0 as? ChecklistEntry)?.item }.contains(item) ?? false)
                         }
                     } label: {
                         Label("Add to checklist", systemImage: "text.badge.plus")

@@ -13,52 +13,53 @@ import CoreData
 struct PlacePickerView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
-
+    
     @FetchRequest(sortDescriptors: [SortDescriptor(\ItemPlace.title)],animation: .default)
     private var places: FetchedResults<ItemPlace>
-
+    
     @State private var searchText: String = ""
-
+    
     @Binding var place: ItemPlace?
     
     var body: some View {
         PhoneNavigationView {
             List {
                 Section {
-                ForEach(places) { placeElement in
+                    ForEach(places) { placeElement in
+                        Button {
+                            place = placeElement
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            HStack {
+                                PlaceListElement(place: placeElement)
+                                Spacer()
+                                if placeElement == place {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .onDelete { indexSet in
+                        indexSet.map { places[$0] }.forEach(viewContext.delete)
+                        viewContext.saveOrRollback()
+                    }
+                }
+                Section {
                     Button {
-                        place = placeElement
+                        place = nil
                         presentationMode.wrappedValue.dismiss()
                     } label: {
                         HStack {
-                            PlaceListElement(place: placeElement)
+                            Text("No place assigned")
                             Spacer()
-                            if placeElement == place {
+                            if place == nil {
                                 Image(systemName: "checkmark")
                             }
                         }
                     }
                     .buttonStyle(.plain)
-                }
-                .onDelete { indexSet in
-                    indexSet.map { places[$0] }.forEach(viewContext.delete)
-                    viewContext.saveOrRollback()
-                }
-                }
-                Section {
-                Button {
-                    place = nil
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    HStack {
-                        Text("No place assigned")
-                        Spacer()
-                        if place == nil {
-                            Image(systemName: "checkmark")
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
                 }
             }
             .listStyle(.insetGrouped)
