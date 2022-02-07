@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum AppCategory: String, CaseIterable {
+public enum AppCategory: String, CaseIterable, Identifiable {
     case pets
     case clothers
     case shoes
@@ -66,11 +66,15 @@ public enum AppCategory: String, CaseIterable {
             return "guitars"
 
         case .other:
-            return "tray.full"
+            return "tag"
         }
     }
 
     public var localizedTitle: String {
         rawValue // TODO: replace with localization
+    }
+
+    public var id: String {
+        rawValue
     }
 }

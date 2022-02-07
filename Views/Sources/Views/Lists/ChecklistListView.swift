@@ -9,6 +9,47 @@ import SwiftUI
 import DataModel
 import CoreData
 
+struct CheclistListRow: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    @ObservedObject var checklist: Checklist
+
+    @State private var showDeleteConfirmation = false
+
+    var body: some View {
+        NavigationLink {
+            ChecklistEntryListView(checklist: checklist)
+        } label: {
+            ChecklistListElement(checklist: checklist)
+        }
+        .contextMenu {
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete...", systemImage: "trash")
+            }
+        }
+        .swipeActions {
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+        .confirmationDialog("Delete \(checklist.title ?? "Unnamed checklist")?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+            Button(role: .destructive) {
+                viewContext.delete(checklist)
+                viewContext.saveOrRollback()
+            } label: {
+                Text("Delete")
+            }
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
+        }
+    }
+}
+
 public struct ChecklistListView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
@@ -28,11 +69,7 @@ public struct ChecklistListView: View {
         NavigationView {
             List {
                 ForEach(lists) { list in
-                    NavigationLink {
-                        ChecklistEntryListView(checklist: list)
-                    } label: {
-                        ChecklistListElement(checklist: list)
-                    }
+                    CheclistListRow(checklist: list)
                 }
                 .onDelete { indexSets in
                     withAnimation {

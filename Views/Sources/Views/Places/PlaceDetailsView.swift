@@ -68,8 +68,5 @@ struct PlaceDetailsView: View {
                 EditButton()
             }
         }
-        .onAppear {
-            print(FileStorageManager.shared.urls(withPrefix: "S"))
-        }
     }
 }

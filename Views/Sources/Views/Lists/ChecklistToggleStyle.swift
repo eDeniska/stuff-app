@@ -1,5 +1,5 @@
 //
-//  CheckboxToggleStyle.swift
+//  ChecklistToggleStyle.swift
 //  
 //
 //  Created by Danis Tazetdinov on 02.02.2022.

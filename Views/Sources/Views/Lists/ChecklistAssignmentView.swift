@@ -1,5 +1,5 @@
 //
-//  ChecklistPickerView.swift
+//  ChecklistAssignmentView.swift
 //  
 //
 //  Created by Danis Tazetdinov on 05.02.2022.
@@ -10,7 +10,7 @@ import DataModel
 import CoreData
 import Combine
 
-struct ChecklistPickerView: View {
+struct ChecklistAssignmentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
 
@@ -19,12 +19,13 @@ struct ChecklistPickerView: View {
 
     @State private var searchText: String = ""
 
-    @Binding private var checklist: Checklist?
     @ObservedObject private var item: Item
 
-    init(checklist: Binding<Checklist?>, for item: Item) {
-        self._checklist = checklist
+    @State private var checked: Set<Checklist>
+
+    init(item: Item) {
         self.item = item
+        _checked = State(wrappedValue: Set(Checklist.checkilists(for: item)))
     }
 
     var body: some View {
@@ -33,40 +34,27 @@ struct ChecklistPickerView: View {
                 Section {
                     ForEach(checklists) { checklistElement in
                         Button {
-                            checklist = checklistElement
-                            presentationMode.wrappedValue.dismiss()
+                            if checked.contains(checklistElement) {
+                                checked.remove(checklistElement)
+                            } else {
+                                checked.insert(checklistElement)
+                            }
                         } label: {
                             HStack {
                                 ChecklistListElement(checklist: checklistElement)
                                 Spacer()
-                                if checklistElement == checklist {
+                                if checked.contains(checklistElement) {
                                     Image(systemName: "checkmark")
                                 }
                             }
                             .contentShape(Rectangle())
                         }
-                        .disabled(checklistElement.entries?.compactMap { ($0 as? ChecklistEntry)?.item }.contains(item) ?? false )
                         .buttonStyle(.plain)
                     }
                     .onDelete { indexSet in
                         indexSet.map { checklists[$0] }.forEach(viewContext.delete)
                         viewContext.saveOrRollback()
                     }
-                }
-                Section {
-                    Button {
-                        checklist = nil
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        HStack {
-                            Text("No checklist selected")
-                            Spacer()
-                            if checklist == nil {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-                    }
-                    .buttonStyle(.plain)
                 }
             }
             .listStyle(.insetGrouped)
@@ -86,13 +74,23 @@ struct ChecklistPickerView: View {
                     ])
                 }
             }
-            .navigationTitle("Checklists")
+            .navigationTitle("Add \(item.title ?? "Unnamed item") to checklists")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
                         Text("Cancel")
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        item.updateChecklists(checked)
+                        viewContext.saveOrRollback()
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Text("Save")
+                            .bold()
                     }
                 }
             }

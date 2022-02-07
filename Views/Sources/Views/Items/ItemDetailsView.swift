@@ -339,9 +339,6 @@ public struct ItemDetailsView: View {
             PhotoPicker(images: $pickedImages, isFetchingImages: $isFetchingImages)
         }
         .disabled(isPredicting || isFetchingImages)
-        .onAppear {
-            print(FileStorageManager.shared.urls(withPrefix: "S"))
-        }
         .onChange(of: takenImage) { image in
             guard let image = image else {
                 return

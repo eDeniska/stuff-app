@@ -30,6 +30,10 @@ public extension Item {
         checklist.entries?.compactMap { ($0 as? ChecklistEntry)?.item }.contains(self) ?? false
     }
 
+    func checklists() -> [Checklist] {
+        Checklist.checkilists(for: self)
+    }
+
     func add(to checklist: Checklist) {
         guard !isListed(in: checklist), let context = managedObjectContext else {
             return
@@ -44,5 +48,26 @@ public extension Item {
         entry.item = self
         entry.checklist = checklist
         entry.updateSortOrder()
+    }
+
+    func updateChecklists(_ checklists: Set<Checklist>) {
+        guard let context = managedObjectContext else {
+            return
+        }
+        var pendingChecklists = checklists
+        // remove missing checklists
+        for existing in checklistEntries ?? [] {
+            guard let existing = existing as? ChecklistEntry, let existingChecklist = existing.checklist else {
+                continue
+            }
+            if pendingChecklists.contains(existingChecklist) {
+                pendingChecklists.remove(existingChecklist)
+            } else {
+                context.delete(existing)
+            }
+        }
+        for added in pendingChecklists {
+            add(to: added)
+        }
     }
 }

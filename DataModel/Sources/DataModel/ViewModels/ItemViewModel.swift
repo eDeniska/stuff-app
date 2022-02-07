@@ -188,7 +188,6 @@ public class ItemViewModel: ObservableObject {
         let updatedImages = Set(imageRecords.compactMap(\.url))
         existingImages.subtracting(updatedImages).forEach { fileStorageManager.removeItem(at: $0) }
 
-        fileStorageManager.removeItems(withPrefix: identifier.uuidString)
         for (index, image) in imageRecords.enumerated() {
             let indexString = "\(index)"
             let fileName = identifier.uuidString + "-" + String(repeating: "0", count: 10 - indexString.count) + indexString

@@ -11,50 +11,46 @@ import Combine
 
 public class FileStorageManager: ObservableObject {
 
-    private var storageURL: URL
-    private var requiresCoordination = false
+    private lazy var storageURL: URL = {
+        Logger.default.info("iCloud integration is \(requiresCoordination), querying URL...")
+        if requiresCoordination, let url = FileManager.default.url(forUbiquityContainerIdentifier: nil) {
+            Logger.default.info("iCloud storage URL: \(url)")
+            return url
+        } else {
+            Logger.default.error("Could not get iCloud storage URL or coordination is disabled!")
+            requiresCoordination = false
+            return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        }
+    }()
+
+    private var requiresCoordination: Bool
 
     public static let shared = FileStorageManager()
 
     @Published public var items: [URL] = []
 
-    private let metadataQuery = NSMetadataQuery()
+    private let metadataQuery: NSMetadataQuery
     private var querySubscriber: AnyCancellable?
 
     private init() {
-        storageURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        if FileManager.default.ubiquityIdentityToken != nil {
-            Logger.default.info("iCloud integration is enabled, querying URL...")
-            // blocking operation, so using DispatchQueue...
-            DispatchQueue.global(qos: .userInitiated).async {
-                if let url = FileManager.default.url(forUbiquityContainerIdentifier: nil) {
-                    DispatchQueue.main.async {
-                        Logger.default.info("iCloud storage URL: \(url)")
-                        self.storageURL = url
-                        self.requiresCoordination = true
-                    }
-                } else {
-                    Logger.default.error("Could not get iCloud storage URL!")
-                }
-            }
-        }
+        requiresCoordination = FileManager.default.ubiquityIdentityToken != nil
 
+        metadataQuery = NSMetadataQuery()
 
         let names: [NSNotification.Name] = [.NSMetadataQueryDidFinishGathering, .NSMetadataQueryDidUpdate]
         let publishers = names.map { NotificationCenter.default.publisher(for: $0) }
         querySubscriber = Publishers.MergeMany(publishers).receive(on: DispatchQueue.main).sink { [weak self] notification in
             guard let self = self, notification.object as? NSMetadataQuery === self.metadataQuery else { return }
             self.items = self.readMetadataResults()
+            Logger.default.info("got items: \(self.items)")
         }
 
         // Set up a metadata query to gather document changes in the iCloud container.
-        //
         metadataQuery.notificationBatchingInterval = 1
         metadataQuery.searchScopes = [NSMetadataQueryUbiquitousDataScope, NSMetadataQueryUbiquitousDocumentsScope]
         metadataQuery.predicate = NSPredicate(format: "%K LIKE %@", NSMetadataItemFSNameKey, "*")
         metadataQuery.sortDescriptors = [NSSortDescriptor(key: NSMetadataItemFSNameKey, ascending: true)]
         metadataQuery.start()
-        
     }
 
     deinit {
@@ -86,11 +82,11 @@ public class FileStorageManager: ObservableObject {
     }
 
     public func rename(at url: URL, to fileName: String) {
+        let destinationURL = storageURL.appendingPathComponent(fileName)
         do {
-            let destinationURL = storageURL.appendingPathComponent(fileName)
             try FileManager.default.moveItem(at: url, to: destinationURL)
         } catch {
-            Logger.default.error("failed to remove items at \(url): \(error)")
+            Logger.default.error("failed to move items from \(url) to \(destinationURL): \(error)")
         }
     }
 

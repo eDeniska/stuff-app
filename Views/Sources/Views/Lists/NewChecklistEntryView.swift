@@ -35,10 +35,6 @@ public struct NewChecklistEntryView: View {
     }
 
     private func updatePredicate(with text: String) {
-        guard text != title.trimmingCharacters(in: .whitespacesAndNewlines) else {
-            return
-        }
-
         if text.isEmpty {
             items.nsPredicate = Self.excludePredicate(checklist: checklist)
         } else {
@@ -73,12 +69,6 @@ public struct NewChecklistEntryView: View {
         title.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    enum FocusedField: Hashable {
-        case title
-    }
-
-    @FocusState private var focusedField: FocusedField?
-
     private func submit() {
         guard !trimmedTitle.isEmpty else {
             return
@@ -92,7 +82,6 @@ public struct NewChecklistEntryView: View {
             Form {
                 Section {
                     TextField("Title", text: $title)
-                        .focused($focusedField, equals: .title)
                         .onSubmit(submit)
                 } header: {
                     Text("Title")
@@ -117,19 +106,19 @@ public struct NewChecklistEntryView: View {
 
                 Section {
                     LazyVGrid(columns: gridItemLayout) {
-                        ForEach(ChecklistIcon.allCases) { icon in
+                        ForEach(AppCategory.allCases) { category in
                             Button {
-                                selectedIcon = icon.rawValue
+                                selectedIcon = category.iconName
                             } label: {
-                                Image(systemName: icon.rawValue)
+                                Image(systemName: category.iconName)
                                     .font(.title3)
                                     .padding()
                                     .frame(width: 60, height: 60, alignment: .center)
-                                    .overlay(icon.rawValue == selectedIcon ? RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor) : nil)
+                                    .overlay(category.iconName == selectedIcon ? RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor) : nil)
                                     .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
-                            .id(icon)
+                            .id(category)
                         }
                     }
                 } header: {
@@ -152,10 +141,6 @@ public struct NewChecklistEntryView: View {
                     }
                     .disabled(trimmedTitle.isEmpty)
                 }
-            }
-            .task {
-                try? await Task.sleep(nanoseconds: 590000000)
-                focusedField = .title
             }
             .onChange(of: title) { newValue in
                 updatePredicate(with: newValue.trimmingCharacters(in: .whitespacesAndNewlines))

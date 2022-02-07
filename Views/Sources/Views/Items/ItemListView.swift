@@ -9,18 +9,16 @@ import SwiftUI
 import CoreData
 import DataModel
 
-// TODO: need proper emtpy list view for items and places
+// TODO: need proper empty list view for items and places
 
-struct ItemListChecklists: View {
+struct ItemListRow: View {
 
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var item: Item
 
-    // TODO: this request does not update automatically
-    // TODO: we could display list picker as a sheet
-
     @State private var assignedChecklist: Checklist? = nil
     @State private var showChecklistPicker = false
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
         NavigationLink {
@@ -32,7 +30,37 @@ struct ItemListChecklists: View {
             Button {
                 showChecklistPicker = true
             } label: {
-                Label("Add to checklist...", systemImage: "text.badge.plus")
+                Label("Add to checklists...", systemImage: "text.badge.plus")
+            }
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete...", systemImage: "trash")
+            }
+        }
+        .swipeActions(edge: .trailing) {
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+            Button {
+                showChecklistPicker = true
+            } label: {
+                Label("Add to checklists...", systemImage: "text.badge.plus")
+            }
+            .tint(.indigo)
+        }
+        .confirmationDialog("Delete \(item.title ?? "Unnamed item")?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+            Button(role: .destructive) {
+                viewContext.delete(item)
+                viewContext.saveOrRollback()
+            } label: {
+                Text("Delete")
+            }
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
             }
         }
         .sheet(isPresented: $showChecklistPicker) {
@@ -43,29 +71,14 @@ struct ItemListChecklists: View {
             }
             assignedChecklist = nil
         } content: {
-            ChecklistPickerView(checklist: $assignedChecklist, for: item)
+            ChecklistAssignmentView(item: item)
         }
 
-    }
-}
-
-struct ItemListChecklistRowView: View {
-    @ObservedObject var checklist: Checklist
-    @ObservedObject var item: Item
-
-    var body: some View {
-        Button {
-//            itemDetails.add(to: checklist)
-        } label: {
-            Label(checklist.title ?? "", systemImage: checklist.icon ?? "list.bullet.rectangle")
-        }
-        .disabled(checklist.entries?.compactMap { ($0 as? ChecklistEntry)?.item }.contains(item) ?? false)
     }
 }
 
 public struct ItemListView: View {
     @Environment(\.managedObjectContext) private var viewContext
-
 
     @SectionedFetchRequest(
         sectionIdentifier: \Item.categoryTitle,
@@ -101,25 +114,7 @@ public struct ItemListView: View {
                 ForEach(items) { section in
                     Section(header: Text(title(for: section.id))) {
                         ForEach(section) { item in
-                            ItemListChecklists(item: item)
-////                            .swipeActions(edge: .leading) {
-////                                ItemListChecklists(item: item)
-////                                    .tint(.blue) // TODO: find proper tint
-////                            }
-//                            .swipeActions(edge: .trailing) {
-//                                Button(role: .destructive) {
-//                                    viewContext.delete(item)
-//                                    viewContext.saveOrRollback()
-//                                } label: {
-//                                    Label("Delete", systemImage: "trash")
-//                                }
-//    //                            Button {
-//    //
-//    //                            } label: {
-//    //                                Label("Flag", systemImage: "flag")
-//    //                            }
-//    //                            .tint(Color.accentColor)
-//                            }
+                            ItemListRow(item: item)
                         }
                         .onDelete { indexSets in
                             // this one is used by edit mode seemingly
@@ -128,7 +123,6 @@ public struct ItemListView: View {
                                 viewContext.saveOrRollback()
                             }
                         }
-
                     }
                 }
             }
@@ -166,9 +160,6 @@ public struct ItemListView: View {
         }
         .tabItem {
             Label("Items", systemImage: "tag")
-        }
-        .onAppear {
-            print(FileStorageManager.shared.urls(withPrefix: "S"))
         }
         .navigationViewStyle(.columns)
         .sheet(isPresented: $showNewItemForm) {
