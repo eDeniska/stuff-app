@@ -77,4 +77,14 @@ public enum AppCategory: String, CaseIterable, Identifiable {
     public var id: String {
         rawValue
     }
+
+    public var sortOrder: Int {
+        switch self {
+
+        case .pets, .clothers, .shoes, .gadgets, .tableware, .jewelry, .accessories, .books, .appliances, .furniture, .sports, .tools, .music:
+            return 0
+        case .other:
+            return -999
+        }
+    }
 }

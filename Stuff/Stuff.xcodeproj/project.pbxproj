@@ -17,6 +17,7 @@
 		0D379526279DA45800E63290 /* Views in Frameworks */ = {isa = PBXBuildFile; productRef = 0D379525279DA45800E63290 /* Views */; };
 		0DB6D1AA2760E3E40068F985 /* DataModel in Frameworks */ = {isa = PBXBuildFile; productRef = 0DB6D1A92760E3E40068F985 /* DataModel */; };
 		0DB6D1AC2760FB460068F985 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB6D1AB2760FB460068F985 /* CloudKit.framework */; };
+		0DCBDBB627B2A8CF00A5BEB2 /* MacContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DCBDBB527B2A8CF00A5BEB2 /* MacContentView.swift */; };
 		0DCC175C2760D7CC00E0322F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0DCC175A2760D7CC00E0322F /* README.md */; };
 		0DCC175D2760D7CC00E0322F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 0DCC175B2760D7CC00E0322F /* LICENSE */; };
 		0DCC17602760E34500E0322F /* ImageRecognizer in Frameworks */ = {isa = PBXBuildFile; productRef = 0DCC175F2760E34500E0322F /* ImageRecognizer */; };
@@ -38,6 +39,7 @@
 		0D4C94662798449200E59D09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0D8EAE1C276A21DE00B39E9D /* Logger */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Logger; path = ../Logger; sourceTree = "<group>"; };
 		0DB6D1AB2760FB460068F985 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		0DCBDBB527B2A8CF00A5BEB2 /* MacContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacContentView.swift; sourceTree = "<group>"; };
 		0DCC17592760CCFD00E0322F /* ImageRecognizer */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ImageRecognizer; path = ../ImageRecognizer; sourceTree = "<group>"; };
 		0DCC175A2760D7CC00E0322F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0DCC175B2760D7CC00E0322F /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				0DFD4D2B275F945C00088631 /* Stuff.entitlements */,
 				0DFD4D18275F944000088631 /* StuffApp.swift */,
 				0DFD4D1A275F944000088631 /* ContentView.swift */,
+				0DCBDBB527B2A8CF00A5BEB2 /* MacContentView.swift */,
 				0DFD4D1C275F944200088631 /* Assets.xcassets */,
 				0DFD4D1E275F944200088631 /* Preview Content */,
 			);
@@ -283,6 +286,7 @@
 			files = (
 				0DFD4D1B275F944000088631 /* ContentView.swift in Sources */,
 				0DFD4D19275F944000088631 /* StuffApp.swift in Sources */,
+				0DCBDBB627B2A8CF00A5BEB2 /* MacContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,7 +482,6 @@
 				INFOPLIST_FILE = Stuff/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Take pictures of your things";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -514,7 +517,6 @@
 				INFOPLIST_FILE = Stuff/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Take pictures of your things";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

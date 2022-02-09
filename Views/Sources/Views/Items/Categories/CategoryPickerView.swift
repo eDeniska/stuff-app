@@ -23,8 +23,7 @@ class CategoryDataSource: ObservableObject {
         let customCategories = (try? persistentController.container.viewContext.fetch(fetchRequest)) ?? []
 
         categories = customCategories.compactMap { custom in
-            guard let title = custom.title else { return nil }
-            return .custom(title)
+            return .custom(custom.title)
         }
         categories += AppCategory.allCases.map { .predefined($0) }
     }
@@ -76,12 +75,12 @@ public struct CategoryPickerView: View {
                 Section {
                     ForEach(customCategories) { customCategory in
                         Button {
-                            category = .custom(customCategory.title ?? "")
+                            category = .custom(customCategory.title)
                             viewContext.saveOrRollback()
                             presentationMode.wrappedValue.dismiss()
                         } label: {
                             HStack {
-                                Text(customCategory.title ?? "")
+                                Text(customCategory.title)
                                 Spacer()
                                 if case let .custom(categoryTitle) = category, categoryTitle == customCategory.title {
                                     Image(systemName: "checkmark")

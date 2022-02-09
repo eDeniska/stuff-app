@@ -12,7 +12,7 @@ import CoreData
 import ImageRecognizer
 import Logger
 
-// TODO: add appropriate swipe actions to items
+// TODO: add onSubmit action to save on enter press?
 
 public struct ItemDetailsView: View {
 
@@ -52,18 +52,21 @@ public struct ItemDetailsView: View {
     private var checklists: FetchedResults<Checklist>
 
     @State private var isEditing: Bool
+    @State private var checklistsUnavailable = false
 
     private let isNew: Bool
+    private let allowOpenInSeparateWindow: Bool
 
     private var title: String {
-        itemDetails.title.isEmpty ? "New item" : itemDetails.title
+        itemDetails.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "New item" : itemDetails.title
     }
 
-    public init(item: Item?) {
+    public init(item: Item?, allowOpenInSeparateWindow: Bool = true) {
         self.item = item
         _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item))
         _isEditing = State(wrappedValue: item == nil)
         isNew = item == nil
+        self.allowOpenInSeparateWindow = UIApplication.shared.supportsMultipleScenes && allowOpenInSeparateWindow
     }
 
     public var body: some View {
@@ -90,10 +93,10 @@ public struct ItemDetailsView: View {
                         HStack {
                             Text(itemDetails.category.title)
                             Spacer()
+                            Image(systemName: "chevron.up.chevron.down")
                         }
                         .contentShape(Rectangle())
                     }
-                    .buttonStyle(.plain)
                     .id("categoryTitle")
                     .popover(isPresented: $showCategoryPicker) {
                         CategoryPickerView(category: $itemDetails.category)
@@ -136,10 +139,10 @@ public struct ItemDetailsView: View {
                         HStack {
                             Text(itemDetails.condition.localizedTitle)
                             Spacer()
+                            Image(systemName: "chevron.up.chevron.down")
                         }
                         .contentShape(Rectangle())
                     }
-                    .buttonStyle(.plain)
                     .id("conditionTitle")
                     .popover(isPresented: $showConditionPicker) {
                         ConditionPicker(itemCondition: $itemDetails.condition)
@@ -153,26 +156,25 @@ public struct ItemDetailsView: View {
                 Text("Condition")
             }
 
-            // TODO: cannot clean place
             Section {
                 if isEditing {
                     Button {
                         showPlacePicker = true
                     } label: {
                         HStack {
-                            Text(itemDetails.place?.title ?? "<Place not set>")
+                            Text(itemDetails.place?.title ?? "No place is set")
                             Spacer()
+                            Image(systemName: "chevron.up.chevron.down")
                         }
                         .contentShape(Rectangle())
                     }
-                    .buttonStyle(.plain)
                     .id("placeTitle")
                     .popover(isPresented: $showPlacePicker) {
                         PlacePickerView(place: $itemDetails.place)
                             .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
                     }
                 } else {
-                    Text(itemDetails.place?.title ?? "<Place not set>")
+                    Text(itemDetails.place?.title ?? "No place is set")
                         .id("placeTitle")
                 }
             } header: {
@@ -289,6 +291,7 @@ public struct ItemDetailsView: View {
                         Text("Save")
                             .bold()
                     }
+                    .disabled(itemDetails.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 } else {
                     Button {
                         isEditing.toggle()
@@ -312,26 +315,34 @@ public struct ItemDetailsView: View {
                 }
             }
             ToolbarItem {
-                if !itemDetails.checklists.isEmpty && !isEditing {
+                if !checklistsUnavailable && !isEditing {
                     Menu {
                         ForEach(checklists) { checklist in
                             Button {
                                 itemDetails.add(to: checklist)
                             } label: {
-                                Label(checklist.title ?? "", systemImage: checklist.icon ?? "list.bullet.rectangle")
+                                Label(checklist.title, systemImage: checklist.icon ?? "list.bullet.rectangle")
                             }
-                            .disabled(checklist.entries?.compactMap { ($0 as? ChecklistEntry)?.item }.contains(item) ?? false)
+                            .disabled(isItem(in: checklist))
                         }
                     } label: {
                         Label("Add to checklist", systemImage: "text.badge.plus")
                     }
                     .menuStyle(.borderlessButton)
+                    .disabled(Checklist.isEmpty(in: viewContext))
                 }
             }
-
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if allowOpenInSeparateWindow && !isEditing, let item = item {
+                    Button {
+                        SingleItemDetailsView.activateSession(item: item)
+                    } label: {
+                        Label("Open in separate window", systemImage: "square.on.square")
+                    }
+                }
+            }
         }
         .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
         .fullScreenCover(isPresented: $showTakePhoto) {
             CameraView(image: $takenImage)
         }
@@ -339,6 +350,12 @@ public struct ItemDetailsView: View {
             PhotoPicker(images: $pickedImages, isFetchingImages: $isFetchingImages)
         }
         .disabled(isPredicting || isFetchingImages)
+        .onAppear {
+            checklistsUnavailable = Checklist.isEmpty(in: viewContext)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
+            checklistsUnavailable = Checklist.isEmpty(in: viewContext)
+        }
         .onChange(of: takenImage) { image in
             guard let image = image else {
                 return
@@ -358,6 +375,13 @@ public struct ItemDetailsView: View {
                 isPredicting = false
             }
         }
+    }
+
+    private func isItem(in checklist: Checklist) -> Bool {
+        guard let item = item else {
+            return false
+        }
+        return checklist.entries.compactMap(\.item).contains(item)
     }
 
     private func takePhoto() {

@@ -16,11 +16,12 @@ struct ItemListRow: View {
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var item: Item
 
-    @State private var assignedChecklist: Checklist? = nil
-    @State private var showChecklistPicker = false
+    @State private var showChecklistAssignment = false
     @State private var showDeleteConfirmation = false
 
-    var body: some View {
+    @State private var checklistsUnavailable = false
+
+    private func element() -> some View {
         NavigationLink {
             ItemDetailsView(item: item)
         } label: {
@@ -28,10 +29,11 @@ struct ItemListRow: View {
         }
         .contextMenu {
             Button {
-                showChecklistPicker = true
+                showChecklistAssignment = true
             } label: {
                 Label("Add to checklists...", systemImage: "text.badge.plus")
             }
+            .disabled(checklistsUnavailable)
             Button(role: .destructive) {
                 showDeleteConfirmation = true
             } label: {
@@ -42,16 +44,17 @@ struct ItemListRow: View {
             Button(role: .destructive) {
                 showDeleteConfirmation = true
             } label: {
-                Label("Delete", systemImage: "trash")
+                Label("Delete...", systemImage: "trash")
             }
             Button {
-                showChecklistPicker = true
+                showChecklistAssignment = true
             } label: {
                 Label("Add to checklists...", systemImage: "text.badge.plus")
             }
             .tint(.indigo)
+            .disabled(checklistsUnavailable)
         }
-        .confirmationDialog("Delete \(item.title ?? "Unnamed item")?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+        .confirmationDialog("Delete \(item.title)?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button(role: .destructive) {
                 viewContext.delete(item)
                 viewContext.saveOrRollback()
@@ -63,17 +66,24 @@ struct ItemListRow: View {
                 Text("Cancel")
             }
         }
-        .sheet(isPresented: $showChecklistPicker) {
-            if let assignedChecklist = assignedChecklist {
-                // TODO: assign to item
-                item.add(to: assignedChecklist)
-                viewContext.saveOrRollback()
-            }
-            assignedChecklist = nil
-        } content: {
-            ChecklistAssignmentView(item: item)
+        .sheet(isPresented: $showChecklistAssignment) {
+            ItemChecklistsAssignmentView(item: item)
         }
+        .onAppear {
+            checklistsUnavailable = Checklist.isEmpty(in: viewContext)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
+            checklistsUnavailable = Checklist.isEmpty(in: viewContext)
+        }
+    }
 
+    var body: some View {
+        // due to bug in SwifUI context menu handling, we have to re-create view each time
+        if checklistsUnavailable {
+            element()
+        } else {
+            element()
+        }
     }
 }
 
@@ -83,12 +93,12 @@ public struct ItemListView: View {
     @SectionedFetchRequest(
         sectionIdentifier: \Item.categoryTitle,
         sortDescriptors: [
+            SortDescriptor(\Item.category?.order, order: .reverse),
             SortDescriptor(\Item.category?.title),
             SortDescriptor(\Item.lastModified)
                          ],
         animation: .default)
     private var items: SectionedFetchResults<String, Item>
-
 
     @State private var searchText: String = ""
     @State private var showNewItemForm = false
@@ -96,16 +106,8 @@ public struct ItemListView: View {
     public init() {
     }
 
-    func title(for sectionIdentifier: SectionedFetchResults<String, Item>.Section.ID) -> String {
-        if sectionIdentifier.isEmpty {
-            return "<Unnamed>"
-        } else {
-            return sectionIdentifier
-        }
-    }
-
-    private func availableChecklists(for item: Item, in checklists: FetchedResults<ChecklistEntry>) -> [Checklist] {
-        Checklist.available(for: item)
+    private func title(for sectionIdentifier: SectionedFetchResults<String, Item>.Section.ID) -> String {
+        sectionIdentifier.isEmpty ? "<Unnamed>" : sectionIdentifier
     }
 
     public var body: some View {

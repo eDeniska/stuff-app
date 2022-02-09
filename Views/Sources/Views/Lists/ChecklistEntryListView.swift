@@ -8,8 +8,10 @@
 import SwiftUI
 import CoreData
 import DataModel
+import Logger
 
 // TODO: add simple way of adding items to the list without separate form (but - suggestions?)
+// TODO: need empty list view
 
 struct ChecklistEntryListView: View {
 
@@ -21,7 +23,9 @@ struct ChecklistEntryListView: View {
 
     @State private var addEntry = false
 
-    init(checklist: Checklist) {
+    private let allowOpenInSeparateWindow: Bool
+
+    init(checklist: Checklist, allowOpenInSeparateWindow: Bool = true) {
         self.checklist = checklist
         self.entriesRequest = SectionedFetchRequest(entity: ChecklistEntry.entity(),
                                                     sectionIdentifier: \ChecklistEntry.isChecked,
@@ -31,6 +35,7 @@ struct ChecklistEntryListView: View {
                                                     predicate:
                                                         NSPredicate(format: "\(#keyPath(ChecklistEntry.checklist)) == %@", checklist),
                                                     animation: .default)
+        self.allowOpenInSeparateWindow = UIApplication.shared.supportsMultipleScenes && allowOpenInSeparateWindow
     }
 
     func title(for sectionIdentifier: SectionedFetchResults<Bool, ChecklistEntry>.Section.ID) -> String {
@@ -67,8 +72,17 @@ struct ChecklistEntryListView: View {
                 }
             }
         }
-        .navigationTitle(checklist.title ?? "")
+        .navigationTitle(checklist.title)
         .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if allowOpenInSeparateWindow {
+                    Button {
+                        SingleChecklistView.activateSession(checklist: checklist)
+                    } label: {
+                        Label("Open in separate window", systemImage: "square.on.square")
+                    }
+                }
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()
             }

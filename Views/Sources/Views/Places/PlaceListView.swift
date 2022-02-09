@@ -7,6 +7,84 @@
 
 import SwiftUI
 import DataModel
+import Combine
+import CoreData
+
+// TODO: add option to edit place info?..
+
+struct PlaceListRow: View {
+    @Environment(\.managedObjectContext) private var viewContext
+
+    @ObservedObject var place: ItemPlace
+    @State private var showDeleteConfirmation = false
+    @State private var showItemAssignment = false
+
+    @State private var itemsUnavailable = true
+
+    private func element() -> some View {
+        NavigationLink {
+            PlaceDetailsView(place: place)
+        } label: {
+            PlaceListElement(place: place)
+        }
+        .contextMenu {
+            Button {
+                showItemAssignment = true
+            } label: {
+                Label("Place items...", systemImage: "text.badge.plus") // TODO: consider other icon
+            }
+            .disabled(itemsUnavailable)
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete...", systemImage: "trash")
+            }
+        }
+        .swipeActions {
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete...", systemImage: "trash")
+            }
+            Button {
+                showItemAssignment = true
+            } label: {
+                Label("Place items...", systemImage: "text.badge.plus") // TODO: consider other icon
+            }
+            .tint(.indigo)
+            .disabled(itemsUnavailable)
+        }
+        .confirmationDialog("Delete \(place.title)?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+            Button(role: .destructive) {
+                viewContext.delete(place)
+                viewContext.saveOrRollback()
+            } label: {
+                Text("Delete")
+            }
+            Button(role: .cancel) {
+            } label: {
+                Text("Cancel")
+            }
+        }
+        .sheet(isPresented: $showItemAssignment) {
+            PlaceItemsAssingmentView(place: place)
+        }
+        .onAppear {
+            itemsUnavailable = Item.isEmpty(in: viewContext)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
+            itemsUnavailable = Item.isEmpty(in: viewContext)
+        }
+    }
+
+    var body: some View {
+        if itemsUnavailable {
+            element()
+        } else {
+            element()
+        }
+    }
+}
 
 public struct PlaceListView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -27,11 +105,7 @@ public struct PlaceListView: View {
         NavigationView {
             List {
                 ForEach(places) { place in
-                    NavigationLink {
-                        PlaceDetailsView(place: place)
-                    } label: {
-                        PlaceListElement(place: place)
-                    }
+                    PlaceListRow(place: place)
                 }
                 .onDelete { indexSets in
                     withAnimation {

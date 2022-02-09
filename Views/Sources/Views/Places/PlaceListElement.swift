@@ -17,14 +17,14 @@ struct PlaceListElement: View {
 
     public var body: some View {
         HStack(alignment: .center) {
-            Image(systemName: place.icon ?? "building")
+            Image(systemName: place.icon)
                 .frame(width: 40, height: 40, alignment: .center)
             VStack(alignment: .leading) {
-                Text(place.title ?? "Unnamed")
+                Text(place.title)
                     .truncationMode(.tail)
                     .lineLimit(1)
                     .font(.body)
-                if let count = place.items?.count, count > 0 {
+                if let count = place.items.count, count > 0 {
                     Text("\(count) item(s)")
                         .truncationMode(.tail)
                         .lineLimit(1)

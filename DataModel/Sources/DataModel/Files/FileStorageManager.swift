@@ -139,61 +139,61 @@ public class FileStorageManager: ObservableObject {
 
     // TODO: clear cache locally, clear cache via iCloud
 
-    public func loadCachedFile(with name: String) async throws -> Data? {
-        guard let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent(name) else {
-            return nil
-        }
-        return try await withUnsafeThrowingContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async {
-                continuation.resume(with: Result(catching: { try Data(contentsOf: url) }))
-            }
-        }
-    }
-
-    public func cache(data: Data, with name: String) async throws {
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        guard let resultURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent(name) else {
-            // TODO: should throw here
-            return
-        }
-        try await withUnsafeThrowingContinuation { (continuation: UnsafeContinuation<Void, Error>) in
-            DispatchQueue.global(qos: .userInitiated).async {
-                do {
-                    try data.write(to: tempURL)
-                    try FileManager.default.moveItem(at: tempURL, to: resultURL)
-                    continuation.resume()
-                } catch {
-                    continuation.resume(with: .failure(error))
-                }
-            }
-        }
-    }
-
-    public func cachedContents(for identifier: String, modifyForCache: ((Data) async -> (Data))?) async -> Data? {
-        guard let url = urls(withPrefix: identifier).first else {
-            return nil
-        }
-        do {
-            if let data = try? await loadCachedFile(with: url.lastPathComponent) {
-                Logger.default.info("cache - got cached data")
-                return data
-            }
-            Logger.default.info("cache - no cached data")
-            var data = try await loadFile(at: url)
-            Logger.default.info("cache - loaded regular file")
-            if let modifyForCache = modifyForCache {
-                Logger.default.info("cache - ready to modify")
-                data = await modifyForCache(data)
-            }
-            Logger.default.info("cache - ready to save")
-            try await cache(data: data, with: url.lastPathComponent)
-            Logger.default.info("cache - saved")
-            return data
-        } catch {
-            Logger.default.error("Error loading cached icon for \(identifier): \(error)")
-            return nil
-        }
-    }
+//    public func loadCachedFile(with name: String) async throws -> Data? {
+//        guard let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent(name) else {
+//            return nil
+//        }
+//        return try await withUnsafeThrowingContinuation { continuation in
+//            DispatchQueue.global(qos: .userInitiated).async {
+//                continuation.resume(with: Result(catching: { try Data(contentsOf: url) }))
+//            }
+//        }
+//    }
+//
+//    public func cache(data: Data, with name: String) async throws {
+//        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+//        guard let resultURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?.appendingPathComponent(name) else {
+//            // TODO: should throw here
+//            return
+//        }
+//        try await withUnsafeThrowingContinuation { (continuation: UnsafeContinuation<Void, Error>) in
+//            DispatchQueue.global(qos: .userInitiated).async {
+//                do {
+//                    try data.write(to: tempURL)
+//                    try FileManager.default.moveItem(at: tempURL, to: resultURL)
+//                    continuation.resume()
+//                } catch {
+//                    continuation.resume(with: .failure(error))
+//                }
+//            }
+//        }
+//    }
+//
+//    public func cachedContents(for identifier: String, modifyForCache: ((Data) async -> (Data))?) async -> Data? {
+//        guard let url = urls(withPrefix: identifier).first else {
+//            return nil
+//        }
+//        do {
+//            if let data = try? await loadCachedFile(with: url.lastPathComponent) {
+//                Logger.default.info("cache - got cached data")
+//                return data
+//            }
+//            Logger.default.info("cache - no cached data")
+//            var data = try await loadFile(at: url)
+//            Logger.default.info("cache - loaded regular file")
+//            if let modifyForCache = modifyForCache {
+//                Logger.default.info("cache - ready to modify")
+//                data = await modifyForCache(data)
+//            }
+//            Logger.default.info("cache - ready to save")
+//            try await cache(data: data, with: url.lastPathComponent)
+//            Logger.default.info("cache - saved")
+//            return data
+//        } catch {
+//            Logger.default.error("Error loading cached icon for \(identifier): \(error)")
+//            return nil
+//        }
+//    }
 
 }
 

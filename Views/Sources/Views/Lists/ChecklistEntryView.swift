@@ -33,7 +33,7 @@ struct ChecklistEntryView: View {
                         .frame(width: 40, height: 40, alignment: .center)
                 }
                 VStack(alignment: .leading) {
-                    Text(entry.item?.title ?? entry.title ?? "Unnamed")
+                    Text(entry.item?.title ?? entry.title)
                         .truncationMode(.tail)
                         .lineLimit(1)
                         .font(.body)

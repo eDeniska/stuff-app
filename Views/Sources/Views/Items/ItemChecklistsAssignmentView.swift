@@ -1,5 +1,5 @@
 //
-//  ChecklistAssignmentView.swift
+//  ItemChecklistsAssignmentView.swift
 //  
 //
 //  Created by Danis Tazetdinov on 05.02.2022.
@@ -10,7 +10,7 @@ import DataModel
 import CoreData
 import Combine
 
-struct ChecklistAssignmentView: View {
+struct ItemChecklistsAssignmentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
 
@@ -25,7 +25,7 @@ struct ChecklistAssignmentView: View {
 
     init(item: Item) {
         self.item = item
-        _checked = State(wrappedValue: Set(Checklist.checkilists(for: item)))
+        _checked = State(wrappedValue: Set(Checklist.checklists(for: item)))
     }
 
     var body: some View {
@@ -66,15 +66,15 @@ struct ChecklistAssignmentView: View {
                 } else {
                     checklists.nsPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [
                         NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Checklist.title), text),
-                        NSPredicate(format: "ANY entries.title CONTAINS[cd] %@", text),
-                        NSPredicate(format: "ANY entries.item.title CONTAINS[cd] %@", text),
-                        NSPredicate(format: "ANY entries.item.details CONTAINS[cd] %@", text),
-                        NSPredicate(format: "ANY entries.item.place.title CONTAINS[cd] %@", text),
-                        NSPredicate(format: "ANY entries.item.category.title CONTAINS[cd] %@", text),
+                        NSPredicate(format: "ANY %K CONTAINS[cd] %@", #keyPath(Checklist.entries.title), text),
+                        NSPredicate(format: "ANY %K CONTAINS[cd] %@", #keyPath(Checklist.entries.item.title), text),
+                        NSPredicate(format: "ANY %K CONTAINS[cd] %@", #keyPath(Checklist.entries.item.details), text),
+                        NSPredicate(format: "ANY %K CONTAINS[cd] %@", #keyPath(Checklist.entries.item.place.title), text),
+                        NSPredicate(format: "ANY %K CONTAINS[cd] %@", #keyPath(Checklist.entries.item.category.title), text),
                     ])
                 }
             }
-            .navigationTitle("Add \(item.title ?? "Unnamed item") to checklists")
+            .navigationTitle("Add \(item.title) to checklists")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {

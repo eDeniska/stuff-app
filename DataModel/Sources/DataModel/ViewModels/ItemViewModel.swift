@@ -164,7 +164,7 @@ public class ItemViewModel: ObservableObject {
         let newItem: Item
 
         if let item = item {
-            identifier = item.identifier ?? UUID()
+            identifier = item.identifier
             newItem = item
         } else {
             identifier = UUID()
@@ -172,8 +172,13 @@ public class ItemViewModel: ObservableObject {
         }
         newItem.lastModified = .now
         newItem.identifier = identifier
-        newItem.title = title
-        newItem.details = details
+        let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            newItem.title = "Unnamed item"
+        } else {
+            newItem.title = trimmed
+        }
+        newItem.details = details.trimmingCharacters(in: .whitespacesAndNewlines)
         newItem.category = category.itemCategory(in: context)
         newItem.condition = condition.rawValue
         newItem.isLost = isLost

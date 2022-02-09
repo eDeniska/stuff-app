@@ -21,11 +21,11 @@ struct ChecklistListElement: View {
             Image(systemName: checklist.icon ?? "list.bullet")
                 .frame(width: 40, height: 40, alignment: .center)
             VStack(alignment: .leading) {
-                Text(checklist.title ?? "Unnamed")
+                Text(checklist.title)
                     .truncationMode(.tail)
                     .lineLimit(1)
                     .font(.body)
-                if let count = checklist.entries?.count, count > 0 {
+                if let count = checklist.entries.count, count > 0 {
                     Text("\(count) item(s)")
                         .truncationMode(.tail)
                         .lineLimit(1)

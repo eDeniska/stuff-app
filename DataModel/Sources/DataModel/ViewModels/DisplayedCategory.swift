@@ -9,6 +9,7 @@ import Foundation
 import CoreData
 
 public enum DisplayedCategory: Equatable {
+
     case custom(String)
     case predefined(AppCategory)
 
@@ -45,12 +46,14 @@ public enum DisplayedCategory: Equatable {
             fetchRequest.fetchLimit = 1
             fetchRequest.predicate = NSPredicate(format: "\(#keyPath(ItemCategory.appCategory)) == %@", category.rawValue)
             if let existing = (try? context.fetch(fetchRequest))?.first {
+                existing.order = Int64(category.sortOrder)
                 return existing
             } else {
                 let newCategory = ItemCategory(context: context)
                 newCategory.appCategory = category.rawValue
                 newCategory.title = category.rawValue
                 newCategory.icon = category.iconName
+                newCategory.order = Int64(category.sortOrder)
                 newCategory.identifier = UUID()
                 return newCategory
             }

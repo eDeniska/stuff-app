@@ -8,6 +8,9 @@
 import SwiftUI
 import DataModel
 
+// TODO: add option to edit list info?..
+
+
 struct NewChecklistView: View {
 
     @Environment(\.presentationMode) private var presentationMode

@@ -16,21 +16,29 @@ import DataModel
 
 // TODO: add onSubmit actions for text fields where appropriate
 
+// TODO: add keyboard commands
+
+
+
 struct ContentView: View {
 
     var body: some View {
-        TabView {
-            ItemListView()
-            PlaceListView()
-            ChecklistListView()
-//            // TODO: consider removing settings altogether
-            if !UIDevice.current.isMac {
-                NavigationView {
-                    Text("Settings")
-                        .navigationTitle("Settings")
-                }
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
+        if UIDevice.current.isMac {
+            MacContentView()
+        } else {
+            TabView {
+                ItemListView()
+                PlaceListView()
+                ChecklistListView()
+                //            // TODO: consider removing settings altogether
+                if !UIDevice.current.isMac {
+                    NavigationView {
+                        Text("Settings")
+                            .navigationTitle("Settings")
+                    }
+                    .tabItem {
+                        Label("Settings", systemImage: "gear")
+                    }
                 }
             }
         }

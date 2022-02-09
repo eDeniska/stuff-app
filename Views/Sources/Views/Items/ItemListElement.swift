@@ -13,11 +13,15 @@ import Logger
 
 public struct ItemListElement: View {
     @ObservedObject private var item: Item
+    private let displayPlace: Bool
     private let displayCategory: Bool
+    private let isChecked: Bool
 
-    public init(item: Item, displayCategory: Bool = false) {
+    public init(item: Item, displayPlace: Bool = true, displayCategory: Bool = false, isChecked: Bool = false) {
         self.item = item
+        self.displayPlace = displayPlace
         self.displayCategory = displayCategory
+        self.isChecked = isChecked
     }
 
     public var body: some View {
@@ -36,7 +40,7 @@ public struct ItemListElement: View {
                     .padding(4)
             }
             VStack(alignment: .leading) {
-                Text(item.title ?? "Unnamed")
+                Text(item.title)
                     .truncationMode(.tail)
                     .lineLimit(1)
                     .font(.body)
@@ -50,6 +54,9 @@ public struct ItemListElement: View {
                 }
             }
             Spacer()
+            if isChecked {
+                Image(systemName: "checkmark")
+            }
         }
     }
 
@@ -60,7 +67,7 @@ public struct ItemListElement: View {
             components.append(item.categoryTitle)
         }
 
-        if let place = item.place?.title {
+        if displayPlace, let place = item.place?.title {
             components.append(place)
         }
 
