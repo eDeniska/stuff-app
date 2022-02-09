@@ -10,6 +10,8 @@ import CoreData
 
 public enum DisplayedCategory: Equatable {
 
+    // TODO: ensure category title is not empty
+
     case custom(String)
     case predefined(AppCategory)
 
@@ -32,11 +34,13 @@ public enum DisplayedCategory: Equatable {
             fetchRequest.fetchLimit = 1
             fetchRequest.predicate = NSPredicate(format: "\(#keyPath(ItemCategory.title)) == %@", trimmed)
             if let existing = (try? context.fetch(fetchRequest))?.first {
+                existing.order = 0
                 return existing
             } else {
                 let newCategory = ItemCategory(context: context)
                 newCategory.title = trimmed
                 newCategory.identifier = UUID()
+                newCategory.order = 0
                 newCategory.icon = "list.bullet"
                 return newCategory
             }

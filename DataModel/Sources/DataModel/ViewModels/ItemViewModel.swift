@@ -17,18 +17,12 @@ public class ItemViewModel: ObservableObject {
     private let item: Item?
     private let fileStorageManager = FileStorageManager.shared
 
-    @Published public private(set) var images: [UIImage]
-
-    private var imageRecords: [ImageData] {
+    @Published public private(set) var images: [ImageData] {
         didSet {
             Task {
-                var rebuiltImages: [UIImage] = []
-                for imageRecord in imageRecords {
-                    if let image = await imageRecord.image() {
-                        rebuiltImages.append(image)
-                    }
+                for image in images {
+                    await image.buildImage()
                 }
-                images = rebuiltImages
             }
         }
     }
@@ -77,7 +71,6 @@ public class ItemViewModel: ObservableObject {
         place = item?.place
         isLost = item?.isLost ?? false
         images = []
-        imageRecords = []
         if let identifier = item?.identifier {
             reloadImages(for: identifier)
 
@@ -102,7 +95,7 @@ public class ItemViewModel: ObservableObject {
                     Logger.default.error("could not load image: \(error)")
                 }
             }
-            imageRecords = loadedImages
+            images = loadedImages
         }
     }
 
@@ -112,7 +105,7 @@ public class ItemViewModel: ObservableObject {
         let predictions: [ItemPrediction] = await withTaskGroup(of: [ItemPrediction].self) { group in
             for image in images {
                 group.addTask {
-                    let predictions = try? await self.imagePredictor.makePredictions(for: image)
+                    let predictions = try? await self.imagePredictor.makePredictions(for: image.image)
                     Logger.default.info("got predictions: \(predictions ?? [])...")
                     return predictions ?? []
                 }
@@ -136,8 +129,8 @@ public class ItemViewModel: ObservableObject {
         }
     }
 
-    public func removeImage(at index: Int) {
-        imageRecords.remove(at: index)
+    public func removeImage(with id: String) {
+        images.removeAll { $0.id == id }
     }
 
     public func addImage(_ image: UIImage) {
@@ -145,13 +138,13 @@ public class ItemViewModel: ObservableObject {
             Logger.default.error("could not get data for image image: \(image)")
             return
         }
-        imageRecords.append(ImageData(imageData: data))
+        images.append(ImageData(imageData: data))
     }
 
-    public func addImages(_ images: [UIImage]) {
-        imageRecords.append(contentsOf: images
-                                .compactMap { $0.heicData(compressionQuality: 0.9) ?? $0.jpegData(compressionQuality: 0.9) }
-                                .map { ImageData(imageData: $0, url: nil) })
+    public func addImages(_ addedImages: [UIImage]) {
+        images.append(contentsOf: addedImages
+                        .compactMap { $0.heicData(compressionQuality: 0.9) ?? $0.jpegData(compressionQuality: 0.9) }
+                        .map { ImageData(imageData: $0, url: nil) })
     }
 
     public func add(to checklist: Checklist) {
@@ -190,10 +183,10 @@ public class ItemViewModel: ObservableObject {
 
         // find images that need deletion
         let existingImages = Set(fileStorageManager.urls(withPrefix: identifier.uuidString))
-        let updatedImages = Set(imageRecords.compactMap(\.url))
+        let updatedImages = Set(images.compactMap(\.url))
         existingImages.subtracting(updatedImages).forEach { fileStorageManager.removeItem(at: $0) }
 
-        for (index, image) in imageRecords.enumerated() {
+        for (index, image) in images.enumerated() {
             let indexString = "\(index)"
             let fileName = identifier.uuidString + "-" + String(repeating: "0", count: 10 - indexString.count) + indexString
             // we can only remove existing files and can't reorder them
@@ -228,14 +221,13 @@ public class ItemViewModel: ObservableObject {
         place = item?.place
         isLost = item?.isLost ?? false
         images = []
-        imageRecords = []
         if let identifier = item?.identifier {
             reloadImages(for: identifier)
         }
     }
 
     private func thumbnailData() -> Data? {
-        guard let image = images.first?.resizeToFill(size: CGSize(width: 300, height: 300)) else {
+        guard let image = images.first?.image.resizeToFill(size: CGSize(width: 300, height: 300)) else {
             return nil
         }
         return image.heicData(compressionQuality: 0.9) ?? image.jpegData(compressionQuality: 0.9)

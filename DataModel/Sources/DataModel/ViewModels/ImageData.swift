@@ -8,10 +8,28 @@
 import Foundation
 import UIKit
 
-public struct ImageData: Identifiable {
+public class ImageData: Identifiable, Equatable {
+    public static func == (lhs: ImageData, rhs: ImageData) -> Bool {
+        lhs.id == rhs.id
+    }
+
     public let id: String
     let imageData: Data
     let url: URL?
+
+    private var backingImage: UIImage?
+
+
+    public var suggestedName: String {
+        url?.lastPathComponent ?? id
+    }
+
+    public var image: UIImage {
+        if backingImage == nil {
+            backingImage =  UIImage(data: imageData)?.preparingForDisplay()
+        }
+        return backingImage ?? UIImage()
+    }
 
     init(imageData: Data, url: URL? = nil) {
         self.imageData = imageData
@@ -19,10 +37,14 @@ public struct ImageData: Identifiable {
         id = url?.absoluteString ?? UUID().uuidString
     }
 
-    public func image() async -> UIImage? {
-        await withCheckedContinuation { continuation in
+    @discardableResult
+    public func buildImage() async -> UIImage? {
+        if let backingImage = backingImage {
+            return backingImage
+        }
+        return await withCheckedContinuation { continuation in
             DispatchQueue.global(qos: .userInteractive).async {
-                continuation.resume(returning: UIImage(data: imageData)?.preparingForDisplay())
+                continuation.resume(returning: UIImage(data: self.imageData)?.preparingForDisplay())
             }
         }
     }
@@ -33,7 +55,7 @@ extension Array where Element == ImageData {
         try await withThrowingTaskGroup(of: [UIImage].self) { group in
             for imageData in self {
                 group.addTask {
-                    if let image = await imageData.image() {
+                    if let image = await imageData.buildImage() {
                         return [image]
                     } else {
                         return []
