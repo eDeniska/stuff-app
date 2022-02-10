@@ -40,6 +40,13 @@ public extension Checklist {
         return ((try? context.count(for: request)) ?? 0) == 0
     }
 
+    static func recentChecklists(limit: Int = 10, in context: NSManagedObjectContext) -> [Checklist] {
+        let request = Checklist.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.lastModified), ascending: false)]
+        request.fetchLimit = limit
+        return (try? context.fetch(request)) ?? []
+    }
+
     static func checklists(for item: Item) -> [Checklist] {
         guard let context = item.managedObjectContext else {
             return []

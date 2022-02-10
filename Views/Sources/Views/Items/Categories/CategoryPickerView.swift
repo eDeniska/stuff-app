@@ -11,24 +11,7 @@ import CoreData
 import DataModel
 import Logger
 
-
-class CategoryDataSource: ObservableObject {
-    @Published private(set) var categories: [DisplayedCategory]
-    private let persistentController: PersistenceController
-
-    init(persistentController: PersistenceController) {
-        self.persistentController = persistentController
-        let fetchRequest = ItemCategory.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "\(#keyPath(ItemCategory.appCategory)) == nil")
-        let customCategories = (try? persistentController.container.viewContext.fetch(fetchRequest)) ?? []
-
-        categories = customCategories.compactMap { custom in
-            return .custom(custom.title)
-        }
-        categories += AppCategory.allCases.map { .predefined($0) }
-    }
-
-}
+// TODO: allow setting icon for new categories
 
 public struct CategoryPickerView: View {
 

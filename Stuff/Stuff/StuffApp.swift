@@ -10,20 +10,29 @@ import DataModel
 import Logger
 import Views
 
+// TODO: onboarding
 
 // TODO: add search support
 
 // TODO: check, if handoff works with modal windows opened (consider "didSet" with cancellation)
 
+// TODO: add icon quick actions - "add item", "take photo of item", and latest checklists
+
 // TODO: separate windows have the same title
+
+// TODO: add option to share lists, items, etc.
 
 @main
 struct StuffApp: App {
     let persistenceController = PersistenceController.shared
 
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     @State private var selectedItem: Item?
     @State private var selectedPlace: ItemPlace?
     @State private var selectedChecklist: Checklist?
+
+    @State private var sceneDelegate = SceneDelegate()
 
     var body: some Scene {
         WindowGroup {

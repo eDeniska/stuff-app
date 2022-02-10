@@ -20,6 +20,17 @@
 		<key>UIApplicationSupportsTabbedSceneCollection</key>
 		<false/>
 	</dict>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconSymbolName</key>
+			<string>plus.viewfinder</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Capture an item...</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>action.capture.item</string>
+		</dict>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

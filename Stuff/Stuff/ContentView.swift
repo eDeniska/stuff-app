@@ -16,54 +16,91 @@ import DataModel
 
 // TODO: add onSubmit actions for text fields where appropriate
 
-// TODO: add keyboard commands
+// TODO: add keyboard commands to both iOS/iPadOS and macOS
 
+enum Tab: Int, Codable, Equatable, Hashable {
+    case items = 0
+    case places = 1
+    case checklists = 2
+}
 
-
+@MainActor
 struct ContentView: View {
 
     @Binding var selectedItem: Item?
     @Binding var selectedPlace: ItemPlace?
     @Binding var selectedChecklist: Checklist?
-    @SceneStorage("selectedTab") private var selected = 0
 
-    var body: some View {
+    @SceneStorage("selectedTab") private var selected: Tab = .items
+
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.scenePhase) private var scenePhase
+
+    @State private var showItemCapture = false
+
+    @ViewBuilder private func platformView() -> some View {
         if UIDevice.current.isMac {
             MacContentView(selectedItem: $selectedItem, selectedPlace: $selectedPlace, selectedChecklist: $selectedChecklist)
         } else {
             TabView(selection: $selected) {
                 ItemListView(selectedItem: $selectedItem)
-                    .tag(0)
+                    .tag(Tab.items)
                 PlaceListView(selectedPlace: $selectedPlace)
-                    .tag(1)
+                    .tag(Tab.places)
                 ChecklistListView(selectedChecklist: $selectedChecklist)
-                    .tag(2)
-                //            // TODO: consider removing settings altogether
-                if !UIDevice.current.isMac {
-                    NavigationView {
-                        Text("Settings")
-                            .navigationTitle("Settings")
-                    }
-                    .tabItem {
-                        Label("Settings", systemImage: "gear")
-                    }
+                    .tag(Tab.checklists)
+                // TODO: consider removing settings altogether
+                NavigationView {
+                    Text("Settings")
+                        .navigationTitle("Settings")
+                }
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
                 }
             }
             .onChange(of: selectedItem) { newValue in
                 if newValue != nil {
-                    selected = 0
+                    selected = .items
                 }
             }
             .onChange(of: selectedPlace) { newValue in
                 if newValue != nil {
-                    selected = 1
+                    selected = .places
                 }
             }
             .onChange(of: selectedChecklist) { newValue in
                 if newValue != nil {
-                    selected = 2
+                    selected = .checklists
                 }
             }
         }
+    }
+
+    var body: some View {
+        platformView()
+            .onReceive(NotificationCenter.default.publisher(for: .itemCaptureRequest, object: nil)) { _ in
+                showItemCapture = true
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .checklistSelected, object: nil)) { notification in
+                if let checklistID = notification.userInfo?[ChecklistEntryListView.identifierKey] as? UUID {
+                    selectedChecklist = Checklist.checklist(with: checklistID, in: viewContext)
+                }
+            }
+            .sheet(isPresented: $showItemCapture) {
+                NavigationView {
+                    ItemDetailsView(item: nil, allowOpenInSeparateWindow: false, startWithPhoto: true)
+                }
+            }
+            .onChange(of: scenePhase) { phase in
+                if phase == .background {
+                    UIApplication.shared.shortcutItems = Checklist.recentChecklists(in: viewContext).map { checklist in
+                        UIApplicationShortcutItem(type: QuickAction.checklistSelected.rawValue,
+                                                  localizedTitle: checklist.title,
+                                                  localizedSubtitle: "Open checklist",
+                                                  icon: UIApplicationShortcutIcon(systemImageName: checklist.icon ?? "list.bullet.rectangle"),
+                                                  userInfo: [ChecklistEntryListView.identifierKey: checklist.identifier.uuidString as NSString])
+                    }
+                }
+            }
     }
 }

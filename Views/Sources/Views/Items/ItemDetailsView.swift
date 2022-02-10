@@ -15,6 +15,10 @@ import AVFoundation
 
 // TODO: add onSubmit action to save on enter press?
 
+public extension Notification.Name {
+    static let itemCaptureRequest = Notification.Name("ItemCaptureRequestNotification")
+}
+
 public struct ItemDetailsView: View {
 
     public static let activityIdentifier = "com.tazetdinov.stuff.item.view"
@@ -74,13 +78,16 @@ public struct ItemDetailsView: View {
         AVCaptureDevice.authorizationStatus(for: .video) == .restricted
     }
 
-    public init(item: Item?, allowOpenInSeparateWindow: Bool = true) {
+    public init(item: Item?, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
         self.item = item
         _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item))
         _isEditing = State(wrappedValue: item == nil)
         isNew = item == nil
 
         self.allowOpenInSeparateWindow = UIApplication.shared.supportsMultipleScenes && allowOpenInSeparateWindow
+        if startWithPhoto {
+            _showTakePhoto = State(wrappedValue: true)
+        }
     }
 
     public var body: some View {

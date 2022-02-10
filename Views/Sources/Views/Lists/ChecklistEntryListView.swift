@@ -14,10 +14,15 @@ import Logger
 // TODO: need empty list view
 // TODO: need undo support
 
+public extension Notification.Name {
+    static let checklistSelected = Notification.Name("ChecklistSelectedNotification")
+}
+
+
 public struct ChecklistEntryListView: View {
 
     public static let activityIdentifier = "com.tazetdinov.stuff.checklist.view"
-    public static let identifierKey = "itemID"
+    public static let identifierKey = "checklistID"
 
     @ObservedObject private var checklist: Checklist
     @Environment(\.managedObjectContext) private var viewContext

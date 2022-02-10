@@ -33,7 +33,7 @@ public enum AppCategory: String, CaseIterable, Identifiable {
             return "tshirt"
 
         case .shoes:
-            return "pawprint" // TODO: reconsider other options
+            return "figure.walk" // TODO: reconsider other options
 
         case .gadgets:
             return "laptopcomputer.and.iphone"
@@ -42,7 +42,7 @@ public enum AppCategory: String, CaseIterable, Identifiable {
             return "fork.knife"
 
         case .jewelry:
-            return "aqi.medium" // TODO: maybe - sun.min 
+            return "aqi.medium"
 
         case .accessories:
             return "bag"

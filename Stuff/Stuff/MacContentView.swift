@@ -14,6 +14,7 @@ import CoreData
 @MainActor
 class ToolbarDelegate: NSObject {
     var selectionChanged: ((Int) -> Void)?
+
 #if targetEnvironment(macCatalyst)
     var selectedIndex = 0 {
         didSet {
@@ -43,7 +44,7 @@ extension ToolbarDelegate: NSToolbarDelegate {
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         let identifiers: [NSToolbarItem.Identifier] = [
 //            .toggleSidebar,
-            .flexibleSpace,
+//            .flexibleSpace,
             .activeScreenSelector
         ]
         return identifiers
@@ -99,10 +100,11 @@ extension ToolbarDelegate: NSToolbarDelegate {
 }
 #endif
 
+@MainActor
 struct MacContentView: View {
-    @SceneStorage("selectedTab") private var selected = 0 {
+    @SceneStorage("selectedTab") private var selected = Tab.items {
         didSet {
-            Logger.default.info("[MACTABBAR] selected updated: \(selected)")
+            updateSceneTitle()
         }
     }
 
@@ -113,20 +115,33 @@ struct MacContentView: View {
 
     @State private var toolbarDelegate = ToolbarDelegate()
 
+    @State private var scene: UIWindowScene?
+
     init(selectedItem: Binding<Item?>, selectedPlace: Binding<ItemPlace?>, selectedChecklist: Binding<Checklist?>) {
         _selectedItem = selectedItem
         _selectedPlace = selectedPlace
         _selectedChecklist = selectedChecklist
     }
 
+    private func updateSceneTitle() {
+        switch selected {
+        case .items:
+            scene?.title = "Stuff – Items"
+        case .places:
+            scene?.title = "Stuff – Places"
+        case .checklists:
+            scene?.title = "Stuff – Checklists"
+        }
+    }
+
     var body: some View {
         ZStack {
             ItemListView(selectedItem: $selectedItem)
-                .opacity(selected == 0 ? 1 : 0)
+                .opacity(selected == .items ? 1 : 0)
             PlaceListView(selectedPlace: $selectedPlace)
-                .opacity(selected == 1 ? 1 : 0)
+                .opacity(selected == .places ? 1 : 0)
             ChecklistListView(selectedChecklist: $selectedChecklist)
-                .opacity(selected == 2 ? 1 : 0)
+                .opacity(selected == .checklists ? 1 : 0)
         }
             .withWindow { window in
 #if targetEnvironment(macCatalyst)
@@ -139,44 +154,40 @@ struct MacContentView: View {
                 toolbar.delegate = toolbarDelegate
                 windowScene.titlebar?.toolbar = toolbar
                 windowScene.titlebar?.toolbarStyle = .unified
+                self.scene = windowScene
+                updateSceneTitle()
 #endif
             }
             .onReceive(NotificationCenter.default.publisher(for: .itemsTabSelected, object: nil)) { _ in
-                selected = 0
-                Logger.default.info("[MACTABBAR] notification selected \(selected)")
+                selected = .items
             }
             .onReceive(NotificationCenter.default.publisher(for: .placesTabSelected, object: nil)) { _ in
-                selected = 1
-                Logger.default.info("[MACTABBAR] notification selected \(selected)")
+                selected = .places
             }
             .onReceive(NotificationCenter.default.publisher(for: .checklistsTabSelected, object: nil)) { _ in
-                selected = 2
-                Logger.default.info("[MACTABBAR] notification selected \(selected)")
+                selected = .checklists
             }
             .onChange(of: selectedItem) { newValue in
                 if newValue != nil {
-                    selected = 0
-                    Logger.default.info("[MACTABBAR] selected \(selected)")
-                    toolbarDelegate.selectedIndex = selected
+                    selected = .items
+                    toolbarDelegate.selectedIndex = selected.rawValue
                 }
             }
             .onChange(of: selectedPlace) { newValue in
                 if newValue != nil {
-                    selected = 1
-                    Logger.default.info("[MACTABBAR] selected \(selected)")
-                    toolbarDelegate.selectedIndex = selected
+                    selected = .places
+                    toolbarDelegate.selectedIndex = selected.rawValue
                 }
             }
             .onChange(of: selectedChecklist) { newValue in
                 if newValue != nil {
-                    selected = 2
-                    Logger.default.info("[MACTABBAR] selected \(selected)")
-                    toolbarDelegate.selectedIndex = selected
+                    selected = .checklists
+                    toolbarDelegate.selectedIndex = selected.rawValue
                 }
             }
             .onAppear {
-                Logger.default.info("[MACTABBAR] was selected \(selected)")
-                toolbarDelegate.selectedIndex = selected
+                toolbarDelegate.selectedIndex = selected.rawValue
+                updateSceneTitle()
             }
     }
 }
