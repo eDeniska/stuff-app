@@ -11,59 +11,54 @@ import Logger
 import Views
 
 
-struct SceneWrapper<Content: View>: View {
-    @SceneStorage("context") private var context = ""
+// TODO: add search support
 
-    var content: () -> Content
+// TODO: check, if handoff works with modal windows opened (consider "didSet" with cancellation)
 
-    var body: some View {
-        content()
-            .onAppear {
-                Logger.default.info("[SCENE] scene context (main) = \(context)")
-            }
-    }
-}
-
-struct ThirdScene: View {
-    @SceneStorage("context") private var context = ""
-
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("Scene 3")
-                Text(context)
-            }
-        }
-        .onAppear {
-            Logger.default.info("[SCENE] scene context (second) = \(context)")
-        }
-        .navigationViewStyle(.stack)
-        .onContinueUserActivity("com.tazetdinov.stuff.item.scene") { activity in
-            context = (activity.userInfo?["itemID"] as? URL)?.absoluteString ?? "<not passed>"
-            Logger.default.info("[SCENE] got activity \(activity)")
-            Logger.default.info("[SCENE] got userInfo \(activity.userInfo ?? [:])")
-        }
-        .userActivity("com.tazetdinov.stuff.item.scene") { activity in
-            activity.targetContentIdentifier = "com.tazetdinov.stuff.item.scene"
-            Logger.default.info("[SCENE] advertising activity \(activity)")
-        }
-    }
-}
+// TODO: separate windows have the same title
 
 @main
 struct StuffApp: App {
     let persistenceController = PersistenceController.shared
 
+    @State private var selectedItem: Item?
+    @State private var selectedPlace: ItemPlace?
+    @State private var selectedChecklist: Checklist?
+
     var body: some Scene {
         WindowGroup {
-            SceneWrapper {
-                ContentView()
-                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .onContinueUserActivity("com.tazetdinov.stuff.checklist.scene") { activity in
-                        Logger.default.info("[SCENE] got activity in the wrong place \(activity)")
-                        Logger.default.info("[SCENE] got userInfo \(activity.userInfo ?? [:])")
+            ContentView(selectedItem: $selectedItem, selectedPlace: $selectedPlace, selectedChecklist: $selectedChecklist)
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .onContinueUserActivity(ItemDetailsView.activityIdentifier) { activity in
+                    Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
+                    Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
+                    guard let identifier = activity.userInfo?[ItemDetailsView.identifierKey] as? UUID else {
+                        Logger.default.error("[HANDOFF] could not build the identifier")
+                        return
                     }
-            }
+                    selectedItem = Item.item(with: identifier, in: persistenceController.container.viewContext)
+                    Logger.default.info("[HANDOFF] got item = [\(selectedItem?.title ?? "<>")]")
+                }
+                .onContinueUserActivity(PlaceDetailsView.activityIdentifier) { activity in
+                    Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
+                    Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
+                    guard let identifier = activity.userInfo?[PlaceDetailsView.identifierKey] as? UUID else {
+                        Logger.default.error("[HANDOFF] could not build the identifier")
+                        return
+                    }
+                    selectedPlace = ItemPlace.place(with: identifier, in: persistenceController.container.viewContext)
+                    Logger.default.info("[HANDOFF] got checklist = [\(selectedChecklist?.title ?? "<>")]")
+                }
+                .onContinueUserActivity(ChecklistEntryListView.activityIdentifier) { activity in
+                    Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
+                    Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
+                    guard let identifier = activity.userInfo?[ChecklistEntryListView.identifierKey] as? UUID else {
+                        Logger.default.error("[HANDOFF] could not build the identifier")
+                        return
+                    }
+                    selectedChecklist = Checklist.checklist(with: identifier, in: persistenceController.container.viewContext)
+                    Logger.default.info("[HANDOFF] got checklist = [\(selectedChecklist?.title ?? "<>")]")
+                }
         }
 
         WindowGroup("Item") {

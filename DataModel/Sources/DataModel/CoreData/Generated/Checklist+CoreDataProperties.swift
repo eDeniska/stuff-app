@@ -17,6 +17,7 @@ extension Checklist {
     }
 
     @NSManaged public var details: String?
+    @NSManaged public var identifier: UUID
     @NSManaged public var icon: String?
     @NSManaged public var lastModified: Date
     @NSManaged public var title: String

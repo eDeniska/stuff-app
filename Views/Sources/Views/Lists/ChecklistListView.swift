@@ -18,8 +18,10 @@ struct ChecklistListRow: View {
 
     @State private var itemsUnavailable = false
 
+    @State private var detailsOpen = false
+
     private func element() -> some View {
-        NavigationLink {
+        NavigationLink(isActive: $detailsOpen) {
             ChecklistEntryListView(checklist: checklist)
         } label: {
             ChecklistListElement(checklist: checklist)
@@ -96,7 +98,10 @@ public struct ChecklistListView: View {
     @State private var searchText: String = ""
     @State private var shouldAddNew = false
 
-    public init() {
+    @Binding private var selectedChecklist: Checklist?
+
+    public init(selectedChecklist: Binding<Checklist?>) {
+        _selectedChecklist = selectedChecklist
     }
 
     public var body: some View {
@@ -111,6 +116,18 @@ public struct ChecklistListView: View {
                         viewContext.saveOrRollback()
                     }
                 }
+            }
+            .background {
+                NavigationLink(isActive: Binding { selectedChecklist != nil } set: {
+                    if !$0 { selectedChecklist = nil }
+                }) {
+                    if let selectedChecklist = selectedChecklist {
+                        ChecklistEntryListView(checklist: selectedChecklist)
+                    }
+                } label: {
+                    EmptyView()
+                }
+                .hidden()
             }
             .sheet(isPresented: $shouldAddNew) {
                 NewChecklistView()

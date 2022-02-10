@@ -29,6 +29,13 @@ public extension Item {
         return item
     }
 
+    static func item(with identifier: UUID, in context: NSManagedObjectContext) -> Item? {
+        let request = Item.fetchRequest()
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Item.identifier), identifier as CVarArg)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
+    }
+
     static func isEmpty(in context: NSManagedObjectContext) -> Bool {
         let request = Item.fetchRequest()
         request.fetchLimit = 1

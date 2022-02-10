@@ -21,8 +21,10 @@ struct PlaceListRow: View {
 
     @State private var itemsUnavailable = true
 
+    @State private var detailsOpen = false
+
     private func element() -> some View {
-        NavigationLink {
+        NavigationLink(isActive: $detailsOpen) {
             PlaceDetailsView(place: place)
         } label: {
             PlaceListElement(place: place)
@@ -98,7 +100,10 @@ public struct PlaceListView: View {
     @State private var searchText: String = ""
     @State private var shouldAddNew = false
 
-    public init() {
+    @Binding private var selectedPlace: ItemPlace?
+
+    public init(selectedPlace: Binding<ItemPlace?>) {
+        _selectedPlace = selectedPlace
     }
 
     public var body: some View {
@@ -113,6 +118,18 @@ public struct PlaceListView: View {
                         viewContext.saveOrRollback()
                     }
                 }
+            }
+            .background {
+                NavigationLink(isActive: Binding { selectedPlace != nil } set: {
+                    if !$0 { selectedPlace = nil }
+                }) {
+                    if let selectedPlace = selectedPlace {
+                        PlaceDetailsView(place: selectedPlace)
+                    }
+                } label: {
+                    EmptyView()
+                }
+                .hidden()
             }
             .sheet(isPresented: $shouldAddNew) {
                 NewPlaceView()

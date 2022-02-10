@@ -36,6 +36,13 @@ public extension ItemPlace {
         return place
     }
 
+    static func place(with identifier: UUID, in context: NSManagedObjectContext) -> ItemPlace? {
+        let request = ItemPlace.fetchRequest()
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(ItemPlace.identifier), identifier as CVarArg)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
+    }
+
     func updateItems(_ updatedItems: Set<Item>) {
         var pendingItems = updatedItems
 

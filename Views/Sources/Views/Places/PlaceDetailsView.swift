@@ -12,9 +12,14 @@ import Logger
 
 // TODO: need empty place view
 
-struct PlaceDetailsView: View {
+// TODO: add option to "move" items to the place (maybe, reuse "asssignment" view?)
 
-    @ObservedObject var place: ItemPlace
+public struct PlaceDetailsView: View {
+
+    public static let activityIdentifier = "com.tazetdinov.stuff.place.view"
+    public static let identifierKey = "placeID"
+
+    @ObservedObject private var place: ItemPlace
     @Environment(\.managedObjectContext) private var viewContext
 
     private var items: SectionedFetchResults<String, Item> { itemsRequest.wrappedValue }
@@ -38,7 +43,7 @@ struct PlaceDetailsView: View {
     }
 
 
-    func title(for sectionIdentifier: SectionedFetchResults<String, Item>.Section.ID) -> String {
+    private func title(for sectionIdentifier: SectionedFetchResults<String, Item>.Section.ID) -> String {
         if sectionIdentifier.isEmpty {
             return "<Unnamed>"
         } else {
@@ -71,6 +76,13 @@ struct PlaceDetailsView: View {
             }
         }
         .navigationTitle(place.title)
+        .userActivity(Self.activityIdentifier) { activity in
+            activity.title = place.title
+            // TODO: add more details?
+            activity.userInfo = [Self.identifierKey: place.identifier]
+            activity.isEligibleForHandoff = true
+            activity.isEligibleForPrediction = true
+        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if allowOpenInSeparateWindow {

@@ -21,8 +21,27 @@ struct ItemListRow: View {
 
     @State private var checklistsUnavailable = false
 
+    @State private var detailsOpen = false
+
+//    Binding {
+//        if let selectedItem = selectedItem {
+//            return selectedItem.identifier == item.identifier
+//        } else {
+//            return detailsOpen
+//        }
+//
+//    } set: { newValue in
+//        if newValue {
+//            if selectedItem == nil {
+//                detailsOpen = newValue
+//            }
+//        } else {
+//            selectedItem = nil
+//            detailsOpen = false
+//        }
+//    }
     private func element() -> some View {
-        NavigationLink {
+        NavigationLink(isActive: $detailsOpen) {
             ItemDetailsView(item: item)
         } label: {
             ItemListElement(item: item)
@@ -103,7 +122,10 @@ public struct ItemListView: View {
     @State private var searchText: String = ""
     @State private var showNewItemForm = false
 
-    public init() {
+    @Binding private var selectedItem: Item?
+
+    public init(selectedItem: Binding<Item?>) {
+        _selectedItem = selectedItem
     }
 
     private func title(for sectionIdentifier: SectionedFetchResults<String, Item>.Section.ID) -> String {
@@ -127,6 +149,16 @@ public struct ItemListView: View {
                         }
                     }
                 }
+            }
+            .background {
+                NavigationLink(isActive: Binding { selectedItem != nil } set: {
+                    if !$0 { selectedItem = nil }
+                }) {
+                    ItemDetailsView(item: selectedItem)
+                } label: {
+                    EmptyView()
+                }
+                .hidden()
             }
             .onChange(of: searchText) { newValue in
                 let text = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -169,12 +201,5 @@ public struct ItemListView: View {
                 ItemDetailsView(item: nil)
             }
         }
-    }
-}
-
-struct ItemListView_Previews: PreviewProvider {
-    static var previews: some View {
-        ItemListView()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

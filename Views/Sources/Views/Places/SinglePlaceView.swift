@@ -33,7 +33,7 @@ public struct SinglePlaceView: View {
 
     public var body: some View {
         NavigationView {
-            if let checklistURL = URL(string: placeID), let place = ItemPlace.place(with: checklistURL, in: viewContext) {
+            if let placeURL = URL(string: placeID), let place = ItemPlace.place(with: placeURL, in: viewContext) {
                 PlaceDetailsView(place: place, allowOpenInSeparateWindow: false)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
@@ -50,6 +50,9 @@ public struct SinglePlaceView: View {
                                 Text("Dismiss")
                             }
                         }
+                    }
+                    .withWindow { window in
+                        window?.windowScene?.title = place.title
                     }
             } else {
                 VStack {

@@ -3,6 +3,7 @@
     <entity name="Checklist" representedClassName="Checklist" syncable="YES">
         <attribute name="details" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
         <attribute name="icon" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="UUID" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
         <attribute name="lastModified" attributeType="Date" defaultDateTimeInterval="33600" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
         <relationship name="entries" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ChecklistEntry" inverseName="checklist" inverseEntity="ChecklistEntry"/>
@@ -43,7 +44,7 @@
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="place" inverseEntity="Item"/>
     </entity>
     <elements>
-        <element name="Checklist" positionX="-45" positionY="72" width="128" height="104"/>
+        <element name="Checklist" positionX="-45" positionY="72" width="128" height="119"/>
         <element name="ChecklistEntry" positionX="-54" positionY="63" width="128" height="119"/>
         <element name="Item" positionX="-63" positionY="-18" width="128" height="194"/>
         <element name="ItemCategory" positionX="-54" positionY="0" width="128" height="119"/>

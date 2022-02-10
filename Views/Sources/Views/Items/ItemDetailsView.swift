@@ -17,6 +17,9 @@ import AVFoundation
 
 public struct ItemDetailsView: View {
 
+    public static let activityIdentifier = "com.tazetdinov.stuff.item.view"
+    public static let identifierKey = "itemID"
+
     private enum FocusedField {
         case title
         case details
@@ -83,383 +86,346 @@ public struct ItemDetailsView: View {
     public var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-            GroupBox {
-                if isEditing {
-                    TextField("Item title", text: $itemDetails.title)
-//                        .textFieldStyle(.roundedBorder)
-                        .focused($focusedField, equals: .title)
-                        .font(.title2)
-                        .id("title")
-                        .padding(UIDevice.current.isMac ? 8 : 0)
-                } else {
-                    Text(itemDetails.title)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.title2)
-                        .id("title")
-                        .padding(UIDevice.current.isMac ? 8 : 0)
+                GroupBox {
+                    if isEditing {
+                        TextField("Item title", text: $itemDetails.title)
+                            .focused($focusedField, equals: .title)
+                            .font(.title2)
+                            .id("title")
+                            .padding(UIDevice.current.isMac ? 8 : 0)
+                    } else {
+                        Text(itemDetails.title)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.title2)
+                            .id("title")
+                            .padding(UIDevice.current.isMac ? 8 : 0)
+                    }
+                } label: {
+                    Text("Item")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
-            } label: {
-                Text("Item")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-//            Section {
-//                if isEditing {
-//                    TextField("Item title", text: $itemDetails.title)
-//                        .focused($focusedField, equals: .title)
-//                        .id("title")
-//                } else {
-//                    Text(itemDetails.title)
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .id("title")
-//                }
-//            } header: {
-//                Text("Item")
-//            }
 
-            GroupBox {
-//            Section {
-                if isEditing {
-                    if UIDevice.current.isMac {
-                        HStack {
-                            Text(itemDetails.category.title)
-                                .font(.title2)
-                            Spacer()
+                GroupBox {
+                    if isEditing {
+                        if UIDevice.current.isMac {
+                            HStack {
+                                Text(itemDetails.category.title)
+                                    .font(.title2)
+                                Spacer()
+                                Button {
+                                    showCategoryPicker = true
+                                } label: {
+                                    HStack {
+                                        Text("Choose...")
+                                            .font(.title2)
+                                    }
+                                    .contentShape(Rectangle())
+                                }
+                            }
+                            .padding(8)
+                            .id("categoryTitle")
+                        } else {
                             Button {
                                 showCategoryPicker = true
                             } label: {
                                 HStack {
-                                    Text("Choose...")
+                                    Text(itemDetails.category.title)
                                         .font(.title2)
+                                    Spacer()
                                 }
                                 .contentShape(Rectangle())
                             }
+                            .id("categoryTitle")
                         }
-                        .padding(8)
-                        .id("categoryTitle")
                     } else {
-                        Button {
-                            showCategoryPicker = true
-                        } label: {
+                        Text(itemDetails.category.title)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.title2)
+                            .id("categoryTitle")
+                            .padding(UIDevice.current.isMac ? 8 : 0)
+                    }
+                } label: {
+                    Text("Category")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .popover(isPresented: $showCategoryPicker) {
+                    CategoryPickerView(category: $itemDetails.category)
+                        .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
+                }
+
+                if !itemDetails.details.isEmpty || isEditing {
+                    GroupBox {
+                        if isEditing {
+                            TextField("Item details", text: $itemDetails.details)
+                                .font(.title2)
+                                .focused($focusedField, equals: .details)
+                                .id("details")
+                                .padding(UIDevice.current.isMac ? 8 : 0)
+                        } else {
+                            Text(itemDetails.details)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.title2)
+                                .id("details")
+                                .padding(UIDevice.current.isMac ? 8 : 0)
+                        }
+                    } label: {
+                        Text("Details")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                GroupBox {
+                    if isEditing {
+                        if UIDevice.current.isMac {
                             HStack {
-                                //                            Label(itemDetails.category.title, systemImage: "chevron.up.chevron.down")
-                                Text(itemDetails.category.title)
+                                Text(itemDetails.condition.localizedTitle)
                                     .font(.title2)
                                 Spacer()
-                                //                            Image(systemName: "chevron.up.chevron.down")
+                                Button {
+                                    showConditionPicker = true
+                                } label: {
+                                    HStack {
+                                        Text("Choose...")
+                                            .font(.title2)
+                                    }
+                                    .contentShape(Rectangle())
+                                }
                             }
-                            .contentShape(Rectangle())
-                        }
-                        .id("categoryTitle")
-                    }
-                } else {
-                    Text(itemDetails.category.title)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.title2)
-                        .id("categoryTitle")
-                        .padding(UIDevice.current.isMac ? 8 : 0)
-                }
-//            } header: {
-            } label: {
-                Text("Category")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            .popover(isPresented: $showCategoryPicker) {
-                CategoryPickerView(category: $itemDetails.category)
-                    .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
-            }
-
-
-            if !itemDetails.details.isEmpty || isEditing {
-            GroupBox {
-//            Section {
-                if isEditing {
-                    TextField("Item details", text: $itemDetails.details)
-                        .font(.title2)
-                        .focused($focusedField, equals: .details)
-                        .id("details")
-                        .padding(UIDevice.current.isMac ? 8 : 0)
-                } else {
-                    Text(itemDetails.details)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.title2)
-                        .id("details")
-                        .padding(UIDevice.current.isMac ? 8 : 0)
-                }
-//            } header: {
-            } label: {
-                Text("Details")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            }
-
-//            Section {
-//                Text("Not implemented yet :(")
-//            } header: {
-//                Text("Color")
-//            }
-
-            GroupBox {
-//            Section {
-                if isEditing {
-                    if UIDevice.current.isMac {
-                        HStack {
-                            Text(itemDetails.condition.localizedTitle)
-                                .font(.title2)
-                            Spacer()
+                            .padding(8)
+                            .id("conditionTitle")
+                        } else {
                             Button {
                                 showConditionPicker = true
                             } label: {
                                 HStack {
-                                    Text("Choose...")
+                                    Text(itemDetails.condition.localizedTitle)
                                         .font(.title2)
+                                    Spacer()
                                 }
                                 .contentShape(Rectangle())
                             }
+                            .id("conditionTitle")
                         }
-                        .padding(8)
-                        .id("conditionTitle")
                     } else {
-                    Button {
-                        showConditionPicker = true
-                    } label: {
-                        HStack {
-                            Text(itemDetails.condition.localizedTitle)
-                                .font(.title2)
-                            Spacer()
-//                            Image(systemName: "chevron.up.chevron.down")
-                        }
-                        .contentShape(Rectangle())
+                        Text(itemDetails.condition.localizedTitle)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.title2)
+                            .id("conditionTitle")
+                            .padding(UIDevice.current.isMac ? 8 : 0)
                     }
-                    .id("conditionTitle")
-                    }
-                } else {
-                    Text(itemDetails.condition.localizedTitle)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.title2)
-                        .id("conditionTitle")
-                        .padding(UIDevice.current.isMac ? 8 : 0)
+                } label: {
+                    Text("Condition")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
-//            } header: {
-            } label: {
-                Text("Condition")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            .popover(isPresented: $showConditionPicker) {
-                ConditionPicker(itemCondition: $itemDetails.condition)
-                    .frame(minWidth: 300, idealWidth: 400, minHeight: 300, idealHeight: 400)
-            }
+                .popover(isPresented: $showConditionPicker) {
+                    ConditionPicker(itemCondition: $itemDetails.condition)
+                        .frame(minWidth: 300, idealWidth: 400, minHeight: 300, idealHeight: 400)
+                }
 
-            GroupBox {
-//            Section {
-                if isEditing {
-                    if UIDevice.current.isMac {
-                        HStack {
-                            Text(itemDetails.place?.title ?? "No place is set")
-                                .font(.title2)
-                            Spacer()
+                GroupBox {
+                    if isEditing {
+                        if UIDevice.current.isMac {
+                            HStack {
+                                Text(itemDetails.place?.title ?? "No place is set")
+                                    .font(.title2)
+                                Spacer()
+                                Button {
+                                    showPlacePicker = true
+                                } label: {
+                                    HStack {
+                                        Text("Choose...")
+                                            .font(.title2)
+                                    }
+                                    .contentShape(Rectangle())
+                                }
+                            }
+                            .padding(8)
+                            .id("conditionTitle")
+                        } else {
                             Button {
                                 showPlacePicker = true
                             } label: {
                                 HStack {
-                                    Text("Choose...")
+                                    Text(itemDetails.place?.title ?? "No place is set")
                                         .font(.title2)
+                                    Spacer()
                                 }
                                 .contentShape(Rectangle())
                             }
+                            .id("placeTitle")
                         }
-                        .padding(8)
-                        .id("conditionTitle")
                     } else {
-                    Button {
-                        showPlacePicker = true
-                    } label: {
-                        HStack {
-                            Text(itemDetails.place?.title ?? "No place is set")
-                                .font(.title2)
-                            Spacer()
-//                            Image(systemName: "chevron.up.chevron.down")
-                        }
-                        .contentShape(Rectangle())
+                        Text(itemDetails.place?.title ?? "No place is set")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.title2)
+                            .id("placeTitle")
+                            .padding(UIDevice.current.isMac ? 8 : 0)
                     }
-                    .id("placeTitle")
-                    }
-                } else {
-                    Text(itemDetails.place?.title ?? "No place is set")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.title2)
-                        .id("placeTitle")
-                        .padding(UIDevice.current.isMac ? 8 : 0)
-                }
-//            } header: {
-            } label: {
-                Text("Place")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            .popover(isPresented: $showPlacePicker) {
-                PlacePickerView(place: $itemDetails.place)
-                    .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
-            }
-
-            if !itemDetails.images.isEmpty || isEditing {
-                GroupBox {
-//                Section {
-//                    LazyVGrid(columns: gridItemLayout, alignment: .leading) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack {
-                            ForEach(itemDetails.images) { image in
-                                Image(uiImage: image.image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 200, height: 200)
-                                    .clipped()
-                                    .cornerRadius(8)
-                                    .contentShape(Rectangle())
-                                    .onDrag {
-                                        let itemProvider = NSItemProvider(object: image.image)
-                                        itemProvider.suggestedName = image.suggestedName
-                                        return itemProvider
-//                                    } preview: {
-//                                        Image(uiImage: image.image)
-//                                            .resizable()
-//                                            .aspectRatio(contentMode: .fill)
-//                                            .frame(width: 200, height: 200)
-//                                            .clipped()
-//                                            .cornerRadius(8)
-                                    }
-                                    .overlay(alignment: .topTrailing) {
-                                        if isEditing {
-                                            Button(role: .destructive) {
-                                                removingImageId = image.id
-                                            } label: {
-                                                Image(systemName: "xmark.circle")
-                                                    .foregroundColor(.red)
-                                                    .font(.largeTitle)
-                                                    .shadow(color: .black, radius: 2, x: 0, y: 0)
-                                                    .padding(4)
-                                                    .contentShape(Rectangle())
-                                            }
-
-                                            .buttonStyle(.plain)
-                                            .accessibilityLabel(Text("Remove image?"))
-
-                                        } else {
-                                            EmptyView()
-                                        }
-                                    }
-                                    .confirmationDialog("Remove the image?", isPresented: Binding {
-                                        removingImageId == image.id
-                                    } set: { newValue in
-                                        if !newValue {
-                                            removingImageId = nil
-                                        }
-                                    }, titleVisibility: .visible) {
-                                        Button(role: .destructive) {
-                                            itemDetails.removeImage(with: image.id)
-                                        } label: {
-                                            Text("Remove")
-                                        }
-                                    }
-                            }
-                            if isEditing {
-                                Button {
-                                    showPhotoSourcePikcer = true
-                                } label: {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(Color.secondary)
-                                        .frame(width: 200, height: 200)
-                                        .overlay {
-                                            Image(systemName: "plus.circle.fill")
-                                                .font(.largeTitle)
-                                                .padding(4)
-                                                .foregroundColor(.primary)
-                                        }
-                                        .contentShape(Rectangle())
-                                }
-                                .buttonStyle(.plain)
-                                .frame(width: 200, height: 200)
-                                .accessibilityLabel(Text("Add image"))
-                                .confirmationDialog("Add photos of the item", isPresented: $showPhotoSourcePikcer, titleVisibility: .visible) {
-                                    Button {
-                                        takePhoto()
-                                    } label: {
-                                        Label("Take photo...", systemImage: "camera")
-                                    }
-
-                                    Button {
-                                        addPhoto()
-                                    } label: {
-                                        Label("Choose from library...", systemImage: "photo.on.rectangle.angled")
-                                    }
-                                }
-                                .alert("Camera access is not allowed", isPresented: $showCameraPermissionWarning) {
-                                    Button {
-                                        guard let url = URL(string: UIApplication.openSettingsURLString) else {
-                                            return
-                                        }
-                                        UIApplication.shared.open(url, options: [:]) { success in
-                                            if !success {
-                                                Logger.default.error("could not open settings")
-                                            }
-                                        }
-                                    } label: {
-                                        Label("Open settings", systemImage: "camera")
-                                    }
-                                    Button(role: .cancel) {
-                                        showCameraPermissionWarning = false
-                                    } label: {
-                                        Label("Cancel", systemImage: "camera")
-                                    }
-                                } message: {
-                                    Text("You can open Settings and check your permissions")
-
-                                }
-
-                            }
-                        }
-                        .padding(UIDevice.current.isMac ? 8 : 0)
-                    }
-                    .onDrop(of: [.image], isTargeted: nil) { itemProviders in
-                        guard isEditing else {
-                            return false
-                        }
-                        let knownNames = itemDetails.images.map(\.suggestedName)
-                        Logger.default.info("drop of \(itemProviders)")
-                        for provider in itemProviders {
-                            if provider.canLoadObject(ofClass: UIImage.self) {
-                                if let name = provider.suggestedName, knownNames.contains(name) {
-                                    Logger.default.info("name = \(name) is known, skipping")
-                                    continue
-                                }
-                                provider.loadObject(ofClass: UIImage.self) { image, error in
-                                    if let error = error {
-                                        Logger.default.error("could not load content: \(error)")
-                                    } else if let image = image as? UIImage {
-                                        DispatchQueue.main.async {
-                                            itemDetails.addImage(image)
-                                        }
-                                    } else {
-                                        Logger.default.error("wrong content: \(String(describing: image))")
-                                    }
-                                }
-
-                            }
-                        }
-                        // TODO: check if the image is already in the list somehow
-                        return true
-                    }
-//                } header: {
                 } label: {
-                    Text("Images")
+                    Text("Place")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
+                .popover(isPresented: $showPlacePicker) {
+                    PlacePickerView(place: $itemDetails.place)
+                        .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
+                }
+
+                if !itemDetails.images.isEmpty || isEditing {
+                    GroupBox {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack {
+                                ForEach(itemDetails.images) { image in
+                                    Image(uiImage: image.image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 200, height: 200)
+                                        .clipped()
+                                        .cornerRadius(8)
+                                        .contentShape(Rectangle())
+                                        .onDrag {
+                                            let itemProvider = NSItemProvider(object: image.image)
+                                            itemProvider.suggestedName = image.suggestedName
+                                            return itemProvider
+                                        }
+                                        .overlay(alignment: .topTrailing) {
+                                            if isEditing {
+                                                Button(role: .destructive) {
+                                                    removingImageId = image.id
+                                                } label: {
+                                                    Image(systemName: "xmark.circle")
+                                                        .foregroundColor(.red)
+                                                        .font(.largeTitle)
+                                                        .shadow(color: .black, radius: 2, x: 0, y: 0)
+                                                        .padding(4)
+                                                        .contentShape(Rectangle())
+                                                }
+
+                                                .buttonStyle(.plain)
+                                                .accessibilityLabel(Text("Remove image?"))
+
+                                            } else {
+                                                EmptyView()
+                                            }
+                                        }
+                                        .confirmationDialog("Remove the image?", isPresented: Binding {
+                                            removingImageId == image.id
+                                        } set: { newValue in
+                                            if !newValue {
+                                                removingImageId = nil
+                                            }
+                                        }, titleVisibility: .visible) {
+                                            Button(role: .destructive) {
+                                                itemDetails.removeImage(with: image.id)
+                                            } label: {
+                                                Text("Remove")
+                                            }
+                                        }
+                                }
+                                if isEditing {
+                                    Button {
+                                        showPhotoSourcePikcer = true
+                                    } label: {
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color.secondary)
+                                            .frame(width: 200, height: 200)
+                                            .overlay {
+                                                Image(systemName: "plus.circle.fill")
+                                                    .font(.largeTitle)
+                                                    .padding(4)
+                                                    .foregroundColor(.primary)
+                                            }
+                                            .contentShape(Rectangle())
+                                    }
+                                    .buttonStyle(.plain)
+                                    .frame(width: 200, height: 200)
+                                    .accessibilityLabel(Text("Add image"))
+                                    .confirmationDialog("Add photos of the item", isPresented: $showPhotoSourcePikcer, titleVisibility: .visible) {
+                                        Button {
+                                            takePhoto()
+                                        } label: {
+                                            Label("Take photo...", systemImage: "camera")
+                                        }
+
+                                        Button {
+                                            addPhoto()
+                                        } label: {
+                                            Label("Choose from library...", systemImage: "photo.on.rectangle.angled")
+                                        }
+                                    }
+                                    .alert("Camera access is not allowed", isPresented: $showCameraPermissionWarning) {
+                                        if UIDevice.current.isMac {
+                                            Button(role: .cancel) {
+                                                showCameraPermissionWarning = false
+                                            } label: {
+                                                Text("Dismiss")
+                                            }
+                                        } else {
+                                            Button {
+                                                guard let url = URL(string: UIApplication.openSettingsURLString) else {
+                                                    return
+                                                }
+                                                UIApplication.shared.open(url, options: [:]) { success in
+                                                    if !success {
+                                                        Logger.default.error("could not open settings")
+                                                    }
+                                                }
+                                            } label: {
+                                                Text("Open settings")
+                                            }
+                                            Button(role: .cancel) {
+                                                showCameraPermissionWarning = false
+                                            } label: {
+                                                Text("Cancel")
+                                            }
+                                        }
+                                    } message: {
+                                        Text("You can open Settings and check your permissions.")
+                                    }
+
+                                }
+                            }
+                            .padding(UIDevice.current.isMac ? 8 : 0)
+                        }
+                        .onDrop(of: [.image], isTargeted: nil) { itemProviders in
+                            guard isEditing else {
+                                return false
+                            }
+                            let knownNames = itemDetails.images.map(\.suggestedName)
+                            Logger.default.info("drop of \(itemProviders)")
+                            for provider in itemProviders {
+                                if provider.canLoadObject(ofClass: UIImage.self) {
+                                    if let name = provider.suggestedName, knownNames.contains(name) {
+                                        Logger.default.info("name = \(name) is known, skipping")
+                                        continue
+                                    }
+                                    provider.loadObject(ofClass: UIImage.self) { image, error in
+                                        if let error = error {
+                                            Logger.default.error("could not load content: \(error)")
+                                        } else if let image = image as? UIImage {
+                                            DispatchQueue.main.async {
+                                                itemDetails.addImage(image)
+                                            }
+                                        } else {
+                                            Logger.default.error("wrong content: \(String(describing: image))")
+                                        }
+                                    }
+
+                                }
+                            }
+                            return true
+                        }
+                    } label: {
+                        Text("Images")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                }
             }
-        }
             .padding(.horizontal)
         }
         .simultaneousGesture(DragGesture().onChanged { _ in
@@ -552,6 +518,17 @@ public struct ItemDetailsView: View {
         .disabled(isPredicting || isFetchingImages)
         .onAppear {
             checklistsUnavailable = Checklist.isEmpty(in: viewContext)
+        }
+        .userActivity(Self.activityIdentifier, isActive: item != nil) { activity in
+            guard let item = item else {
+                return
+            }
+
+            activity.title = itemDetails.title
+            // TODO: add more details?
+            activity.userInfo = [Self.identifierKey: item.identifier]
+            activity.isEligibleForHandoff = true
+            activity.isEligibleForPrediction = true
         }
         .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
             checklistsUnavailable = Checklist.isEmpty(in: viewContext)

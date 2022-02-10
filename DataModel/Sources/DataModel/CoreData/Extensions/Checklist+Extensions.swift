@@ -12,6 +12,7 @@ public extension Checklist {
     @discardableResult
     static func checklist(title: String, icon: String, in context: NSManagedObjectContext) -> Checklist {
         let entry = Checklist(context: context)
+        entry.identifier = UUID()
         entry.title = title
         entry.icon = icon
         entry.lastModified = Date()
@@ -24,6 +25,13 @@ public extension Checklist {
             return nil
         }
         return checklist
+    }
+    
+    static func checklist(with identifier: UUID, in context: NSManagedObjectContext) -> Checklist? {
+        let request = Checklist.fetchRequest()
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Checklist.identifier), identifier as CVarArg)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
     }
 
     static func isEmpty(in context: NSManagedObjectContext) -> Bool {

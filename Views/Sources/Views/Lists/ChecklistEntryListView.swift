@@ -12,8 +12,12 @@ import Logger
 
 // TODO: add simple way of adding items to the list without separate form (but - suggestions?)
 // TODO: need empty list view
+// TODO: need undo support
 
-struct ChecklistEntryListView: View {
+public struct ChecklistEntryListView: View {
+
+    public static let activityIdentifier = "com.tazetdinov.stuff.checklist.view"
+    public static let identifierKey = "itemID"
 
     @ObservedObject private var checklist: Checklist
     @Environment(\.managedObjectContext) private var viewContext
@@ -46,7 +50,7 @@ struct ChecklistEntryListView: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         List {
             ForEach(entries) { section in
                 Section(header: Text(title(for: section.id))) {
@@ -73,6 +77,13 @@ struct ChecklistEntryListView: View {
             }
         }
         .navigationTitle(checklist.title)
+        .userActivity(Self.activityIdentifier) { activity in
+            activity.title = checklist.title
+            // TODO: add more details?
+            activity.userInfo = [Self.identifierKey: checklist.identifier]
+            activity.isEligibleForHandoff = true
+            activity.isEligibleForPrediction = true
+        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if allowOpenInSeparateWindow {

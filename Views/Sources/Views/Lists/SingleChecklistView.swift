@@ -51,6 +51,9 @@ public struct SingleChecklistView: View {
                             }
                         }
                     }
+                    .withWindow { window in
+                        window?.windowScene?.title = checklist.title
+                    }
             } else {
                 VStack {
                     Text("Checklist is no longer available")
