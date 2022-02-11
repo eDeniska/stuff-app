@@ -13,6 +13,7 @@ struct ChecklistEntryView: View {
     @ObservedObject private var entry: ChecklistEntry
 
     @State private var isChecked: Bool
+    @State private var itemDetailsPresented = false
 
     init(entry: ChecklistEntry) {
         self.entry = entry
@@ -49,6 +50,35 @@ struct ChecklistEntryView: View {
             }
         }
         .toggleStyle(ChecklistToggleStyle())
+        .contextMenu {
+            if entry.item != nil {
+                Button {
+                    itemDetailsPresented = true
+                } label: {
+                    Label("Item details...", systemImage: "tag")
+                }
+            }
+            if isChecked {
+                Button {
+                    isChecked.toggle()
+                } label: {
+                    Label("Mark as unchecked", systemImage: "circle")
+                }
+            } else {
+                Button {
+                    isChecked.toggle()
+                } label: {
+                    Label("Mark as checked", systemImage: "checkmark.circle")
+                }
+            }
+        }
+        .sheet(isPresented: $itemDetailsPresented) {
+            if let item = entry.item {
+                NavigationView {
+                    ItemDetailsView(item: item, hasDismissButton: true)
+                }
+            }
+        }
         .onChange(of: entry.isChecked) { newValue in
             isChecked = newValue
         }

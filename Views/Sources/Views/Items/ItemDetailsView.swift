@@ -65,6 +65,7 @@ public struct ItemDetailsView: View {
 
     private let isNew: Bool
     private let allowOpenInSeparateWindow: Bool
+    private let hasDismissButton: Bool
 
     private var title: String {
         itemDetails.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "New item" : itemDetails.title
@@ -78,11 +79,12 @@ public struct ItemDetailsView: View {
         AVCaptureDevice.authorizationStatus(for: .video) == .restricted
     }
 
-    public init(item: Item?, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
+    public init(item: Item?, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
         self.item = item
         _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item))
         _isEditing = State(wrappedValue: item == nil)
         isNew = item == nil
+        self.hasDismissButton = hasDismissButton
 
         self.allowOpenInSeparateWindow = UIApplication.shared.supportsMultipleScenes && allowOpenInSeparateWindow
         if startWithPhoto {
@@ -371,6 +373,7 @@ public struct ItemDetailsView: View {
                                             } label: {
                                                 Text("Dismiss")
                                             }
+                                            .keyboardShortcut(.cancelAction)
                                         } else {
                                             Button {
                                                 guard let url = URL(string: UIApplication.openSettingsURLString) else {
@@ -384,11 +387,13 @@ public struct ItemDetailsView: View {
                                             } label: {
                                                 Text("Open settings")
                                             }
+                                            .keyboardShortcut(.defaultAction)
                                             Button(role: .cancel) {
                                                 showCameraPermissionWarning = false
                                             } label: {
                                                 Text("Cancel")
                                             }
+                                            .keyboardShortcut(.cancelAction)
                                         }
                                     } message: {
                                         Text("You can open Settings and check your permissions.")
@@ -464,6 +469,7 @@ public struct ItemDetailsView: View {
                         Text("Save")
                             .bold()
                     }
+                    .keyboardShortcut("S", modifiers: [.command])
                     .disabled(itemDetails.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 } else {
                     Button {
@@ -485,6 +491,14 @@ public struct ItemDetailsView: View {
                     } label: {
                         Text("Cancel")
                     }
+                    .keyboardShortcut(.cancelAction)
+                } else if hasDismissButton {
+                    Button(role: .cancel) {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Text("Dismiss")
+                    }
+                    .keyboardShortcut(.cancelAction)
                 }
             }
             ToolbarItem {
@@ -526,13 +540,12 @@ public struct ItemDetailsView: View {
         .onAppear {
             checklistsUnavailable = Checklist.isEmpty(in: viewContext)
         }
-        .userActivity(Self.activityIdentifier, isActive: item != nil) { activity in
+        .userActivity(Self.activityIdentifier, isActive: !(item?.isFault ?? true)) { activity in
             guard let item = item else {
                 return
             }
 
             activity.title = itemDetails.title
-            // TODO: add more details?
             activity.userInfo = [Self.identifierKey: item.identifier]
             activity.isEligibleForHandoff = true
             activity.isEligibleForPrediction = true

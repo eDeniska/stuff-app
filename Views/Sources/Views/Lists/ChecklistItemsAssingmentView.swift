@@ -91,6 +91,7 @@ struct ChecklistItemsAssingmentView: View {
                     } label: {
                         Text("Cancel")
                     }
+                    .keyboardShortcut(.cancelAction)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
@@ -101,6 +102,7 @@ struct ChecklistItemsAssingmentView: View {
                         Text("Save")
                             .bold()
                     }
+                    .keyboardShortcut("S", modifiers: [.command])
                 }
             }
         }

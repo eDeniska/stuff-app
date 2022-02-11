@@ -42,6 +42,7 @@ struct ConditionPicker: View {
                     } label: {
                         Text("Cancel")
                     }
+                    .keyboardShortcut(.cancelAction)
                 }
             }
         }

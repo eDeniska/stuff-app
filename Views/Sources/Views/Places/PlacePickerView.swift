@@ -83,6 +83,7 @@ struct PlacePickerView: View {
                     } label: {
                         Text("Cancel")
                     }
+                    .keyboardShortcut(.cancelAction)
                 }
             }
         }

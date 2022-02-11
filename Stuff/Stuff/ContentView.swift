@@ -10,19 +10,6 @@ import CoreData
 import Views
 import DataModel
 
-// TODO: add option to export and import data
-// TODO: add option to share checklists
-// TODO: add option to make reminders out of checklists
-
-// TODO: add onSubmit actions for text fields where appropriate
-
-// TODO: add keyboard commands to both iOS/iPadOS and macOS
-
-enum Tab: Int, Codable, Equatable, Hashable {
-    case items = 0
-    case places = 1
-    case checklists = 2
-}
 
 @MainActor
 struct ContentView: View {
@@ -30,6 +17,7 @@ struct ContentView: View {
     @Binding var selectedItem: Item?
     @Binding var selectedPlace: ItemPlace?
     @Binding var selectedChecklist: Checklist?
+    @Binding var requestedTab: Tab?
 
     @SceneStorage("selectedTab") private var selected: Tab = .items
 
@@ -40,7 +28,7 @@ struct ContentView: View {
 
     @ViewBuilder private func platformView() -> some View {
         if UIDevice.current.isMac {
-            MacContentView(selectedItem: $selectedItem, selectedPlace: $selectedPlace, selectedChecklist: $selectedChecklist)
+            MacContentView(selectedItem: $selectedItem, selectedPlace: $selectedPlace, selectedChecklist: $selectedChecklist, requestedTab: $requestedTab)
         } else {
             TabView(selection: $selected) {
                 ItemListView(selectedItem: $selectedItem)
@@ -56,6 +44,11 @@ struct ContentView: View {
                 }
                 .tabItem {
                     Label("Settings", systemImage: "gear")
+                }
+            }
+            .onChange(of: requestedTab) { newValue in
+                if let tab = newValue {
+                    selected = tab
                 }
             }
             .onChange(of: selectedItem) { newValue in

@@ -11,8 +11,9 @@ import DataModel
 import Logger
 
 // TODO: add simple way of adding items to the list without separate form (but - suggestions?)
-// TODO: need empty list view
 // TODO: need undo support
+
+// TODO: fix: first added item is not added (sometimes)!
 
 public extension Notification.Name {
     static let checklistSelected = Notification.Name("ChecklistSelectedNotification")
@@ -81,10 +82,18 @@ public struct ChecklistEntryListView: View {
                 }
             }
         }
+        .overlay {
+            if entries.isEmpty {
+                Text("Checklist is empty")
+                    .font(.title)
+                    .foregroundColor(.secondary)
+            }
+        }
         .navigationTitle(checklist.title)
-        .userActivity(Self.activityIdentifier) { activity in
+        // for some reason, after deleting the item app crashes on identifier access...
+        .userActivity(Self.activityIdentifier, isActive: !checklist.isFault) { activity in
             activity.title = checklist.title
-            // TODO: add more details?
+            Logger.default.info("checklist -> '\(checklist)")
             activity.userInfo = [Self.identifierKey: checklist.identifier]
             activity.isEligibleForHandoff = true
             activity.isEligibleForPrediction = true

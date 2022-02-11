@@ -82,6 +82,7 @@ struct ItemChecklistsAssignmentView: View {
                     } label: {
                         Text("Cancel")
                     }
+                    .keyboardShortcut(.cancelAction)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
@@ -92,6 +93,7 @@ struct ItemChecklistsAssignmentView: View {
                         Text("Save")
                             .bold()
                     }
+                    .keyboardShortcut("S", modifiers: [.command])
                 }
             }
         }

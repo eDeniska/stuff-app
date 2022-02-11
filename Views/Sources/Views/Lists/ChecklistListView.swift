@@ -9,6 +9,8 @@ import SwiftUI
 import DataModel
 import CoreData
 
+// TODO: select list that was just created
+
 struct ChecklistListRow: View {
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var checklist: Checklist
@@ -60,10 +62,12 @@ struct ChecklistListRow: View {
             } label: {
                 Text("Delete")
             }
+            .keyboardShortcut(.defaultAction)
             Button(role: .cancel) {
             } label: {
                 Text("Cancel")
             }
+            .keyboardShortcut(.cancelAction)
         }
         .sheet(isPresented: $showItemAssignment) {
             ChecklistItemsAssingmentView(checklist: checklist)
@@ -164,7 +168,7 @@ public struct ChecklistListView: View {
                     }
                 }
             }
-            PlaceDetailsWelcomeView {
+            ChecklistListWelcomeView {
                 shouldAddNew = true
             }
         }

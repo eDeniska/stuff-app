@@ -11,6 +11,7 @@ import Combine
 import CoreData
 
 // TODO: add option to edit place info?..
+// TODO: select place that was just created
 
 struct PlaceListRow: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -63,10 +64,12 @@ struct PlaceListRow: View {
             } label: {
                 Text("Delete")
             }
+            .keyboardShortcut(.defaultAction)
             Button(role: .cancel) {
             } label: {
                 Text("Cancel")
             }
+            .keyboardShortcut(.cancelAction)
         }
         .sheet(isPresented: $showItemAssignment) {
             PlaceItemsAssingmentView(place: place)

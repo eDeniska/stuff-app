@@ -15,8 +15,6 @@ struct ContentView: View {
         TabView {
             ItemListView()
             PlaceListView()
-            // TODO: consider dropping TabView altogether
-            // TODO: consider removing settings altogether
         }
     }
 }

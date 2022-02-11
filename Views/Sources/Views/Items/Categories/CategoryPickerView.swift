@@ -11,8 +11,6 @@ import CoreData
 import DataModel
 import Logger
 
-// TODO: allow setting icon for new categories
-
 public struct CategoryPickerView: View {
 
     @Binding var category: DisplayedCategory
@@ -28,14 +26,21 @@ public struct CategoryPickerView: View {
         animation: .default)
     private var customCategories: FetchedResults<ItemCategory>
 
+    @State private var selectedIcon = AppCategory.other.iconName
+
+    private let gridItemLayout = [GridItem(.adaptive(minimum: 80))]
+
     @State private var text: String = ""
 
+    private var trimmedTitle: String {
+        text.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     private func isNewCategory() -> Bool {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else {
+        guard !trimmedTitle.isEmpty else {
             return false
         }
-        return !(customCategories.contains { $0.title == trimmed } || AppCategory.allCases.map(\.localizedTitle).contains { $0 == trimmed })
+        return !(customCategories.contains { $0.title == trimmedTitle } || AppCategory.allCases.map(\.localizedTitle).contains { $0 == trimmedTitle })
     }
 
     public var body: some View {
@@ -46,12 +51,35 @@ public struct CategoryPickerView: View {
                     if isNewCategory() {
                         Button {
                             // creating category object before saving context
-                            _ = category.itemCategory(in: viewContext)
+                            let category = category.itemCategory(in: viewContext)
+                            category.icon = selectedIcon
                             presentationMode.wrappedValue.dismiss()
                             Logger.default.info("create new and dismiss")
                         } label: {
-                            Text("Create category '\(text.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                            Text("Create category '\(trimmedTitle)'")
                         }
+                    }
+                }
+                if isNewCategory() {
+                    Section {
+                        LazyVGrid(columns: gridItemLayout) {
+                            ForEach(AppCategory.allCases) { category in
+                                Button {
+                                    selectedIcon = category.iconName
+                                } label: {
+                                    Image(systemName: category.iconName)
+                                        .font(.title3)
+                                        .padding()
+                                        .frame(width: 60, height: 60, alignment: .center)
+                                        .overlay(category.iconName == selectedIcon ? RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor) : nil)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .id(category.iconName)
+                            }
+                        }
+                    } header: {
+                        Text("Custom Icon")
                     }
                 }
                 
@@ -102,6 +130,7 @@ public struct CategoryPickerView: View {
                     } label: {
                         Text("Cancel")
                     }
+                    .keyboardShortcut(.cancelAction)
                 }
             }
             .onChange(of: text) { [text] newValue in

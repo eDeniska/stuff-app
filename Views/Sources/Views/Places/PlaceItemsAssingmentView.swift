@@ -90,6 +90,7 @@ struct PlaceItemsAssingmentView: View {
                     } label: {
                         Text("Cancel")
                     }
+                    .keyboardShortcut(.cancelAction)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
@@ -100,6 +101,7 @@ struct PlaceItemsAssingmentView: View {
                         Text("Save")
                             .bold()
                     }
+                    .keyboardShortcut("S", modifiers: [.command])
                 }
             }
         }

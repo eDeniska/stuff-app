@@ -10,10 +10,6 @@ import DataModel
 import CoreData
 import Logger
 
-// TODO: need empty place view
-
-// TODO: add option to "move" items to the place (maybe, reuse "asssignment" view?)
-
 public struct PlaceDetailsView: View {
 
     public static let activityIdentifier = "com.tazetdinov.stuff.place.view"
@@ -24,6 +20,11 @@ public struct PlaceDetailsView: View {
 
     private var items: SectionedFetchResults<String, Item> { itemsRequest.wrappedValue }
     private var itemsRequest: SectionedFetchRequest<String, Item>
+
+    @State private var presentedItem: Item?
+
+    @State private var showItemAssignment = false
+    @State private var itemsUnavailable = true
 
     private let allowOpenInSeparateWindow: Bool
 
@@ -57,26 +58,45 @@ public struct PlaceDetailsView: View {
                 Section(header: Text(title(for: section.id))) {
                     ForEach(section) { item in
                         Button {
+                            presentedItem = item
 
                         } label: {
-                            ItemListElement(item: item)
+                            HStack {
+                                ItemListElement(item: item)
+                                Spacer()
+                            }
+                            .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        // TODO: present item details
-                        // ItemDetailsView(item: item)
                     }
                     .onDelete { indexSets in
                         withAnimation {
-                            indexSets.map { section[$0] }.forEach(viewContext.delete)
+                            indexSets.map { section[$0] }.forEach { item in
+                                item.place = nil
+                            }
                             viewContext.saveOrRollback()
                         }
-
+                    }
+                    .sheet(item: $presentedItem) { item in
+                        NavigationView {
+                            ItemDetailsView(item: item, hasDismissButton: true)
+                        }
                     }
                 }
             }
         }
+        .overlay {
+            if items.isEmpty {
+                Text("Place is empty")
+                    .font(.title)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .sheet(isPresented: $showItemAssignment) {
+            PlaceItemsAssingmentView(place: place)
+        }
         .navigationTitle(place.title)
-        .userActivity(Self.activityIdentifier) { activity in
+        .userActivity(Self.activityIdentifier, isActive: !place.isFault) { activity in
             activity.title = place.title
             // TODO: add more details?
             activity.userInfo = [Self.identifierKey: place.identifier]
@@ -85,6 +105,12 @@ public struct PlaceDetailsView: View {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showItemAssignment = true
+                } label: {
+                    Label("Place items...", systemImage: "text.badge.plus") // TODO: consider other icon
+                }
+                .disabled(itemsUnavailable)
                 if allowOpenInSeparateWindow {
                     Button {
                         SinglePlaceView.activateSession(place: place)
@@ -96,6 +122,12 @@ public struct PlaceDetailsView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()
             }
+        }
+        .onAppear {
+            itemsUnavailable = Item.isEmpty(in: viewContext)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
+            itemsUnavailable = Item.isEmpty(in: viewContext)
         }
     }
 }

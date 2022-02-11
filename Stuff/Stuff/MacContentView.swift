@@ -18,6 +18,7 @@ class ToolbarDelegate: NSObject {
 #if targetEnvironment(macCatalyst)
     var selectedIndex = 0 {
         didSet {
+            guard oldValue != selectedIndex else { return }
             tabSelector?.setSelected(true, at: selectedIndex)
             Logger.default.info("[MACTABBAR] setting tab to \(selectedIndex)")
         }
@@ -28,11 +29,6 @@ class ToolbarDelegate: NSObject {
 #endif
 }
 
-extension Notification.Name {
-    static let itemsTabSelected = Notification.Name("com.tazetdinov.stuff.toolbar.tab-items")
-    static let placesTabSelected = Notification.Name("com.tazetdinov.stuff.toolbar.tab-places")
-    static let checklistsTabSelected = Notification.Name("com.tazetdinov.stuff.toolbar.tab-checklists")
-}
 
 #if targetEnvironment(macCatalyst)
 extension NSToolbarItem.Identifier {
@@ -84,19 +80,8 @@ extension ToolbarDelegate: NSToolbarDelegate {
 
     @objc private func toolbarSelectionChanged(_ sender: NSToolbarItemGroup) {
         selectedIndex = sender.selectedIndex
-        switch sender.selectedIndex {
-        case 0:
-            NotificationCenter.default.post(name: .itemsTabSelected, object: nil)
-        case 1:
-            NotificationCenter.default.post(name: .placesTabSelected, object: nil)
-        case 2:
-            NotificationCenter.default.post(name: .checklistsTabSelected, object: nil)
-        default:
-            break
-        }
+        selectionChanged?(selectedIndex)
     }
-
-
 }
 #endif
 
@@ -104,23 +89,27 @@ extension ToolbarDelegate: NSToolbarDelegate {
 struct MacContentView: View {
     @SceneStorage("selectedTab") private var selected = Tab.items {
         didSet {
+            guard oldValue != selected else { return }
+            toolbarDelegate.selectedIndex = selected.rawValue
             updateSceneTitle()
         }
     }
 
-    // TODO: selection is not properly updated
     @Binding private var selectedItem: Item?
     @Binding private var selectedPlace: ItemPlace?
     @Binding private var selectedChecklist: Checklist?
+
+    @Binding private var requestedTab: Tab?
 
     @State private var toolbarDelegate = ToolbarDelegate()
 
     @State private var scene: UIWindowScene?
 
-    init(selectedItem: Binding<Item?>, selectedPlace: Binding<ItemPlace?>, selectedChecklist: Binding<Checklist?>) {
+    init(selectedItem: Binding<Item?>, selectedPlace: Binding<ItemPlace?>, selectedChecklist: Binding<Checklist?>, requestedTab: Binding<Tab?>) {
         _selectedItem = selectedItem
         _selectedPlace = selectedPlace
         _selectedChecklist = selectedChecklist
+        _requestedTab = requestedTab
     }
 
     private func updateSceneTitle() {
@@ -148,6 +137,13 @@ struct MacContentView: View {
                 guard let windowScene = window?.windowScene else { return }
                 guard windowScene.titlebar?.toolbar?.delegate !== toolbarDelegate else { return }
 
+                toolbarDelegate.selectionChanged = { index in
+                    guard let tab = Tab(rawValue: index) else {
+                        return
+                    }
+                    selected = tab
+                }
+
                 let toolbar = NSToolbar(identifier: "main")
                 toolbar.displayMode = .iconOnly
                 toolbar.centeredItemIdentifier = .activeScreenSelector
@@ -158,15 +154,6 @@ struct MacContentView: View {
                 updateSceneTitle()
 #endif
             }
-            .onReceive(NotificationCenter.default.publisher(for: .itemsTabSelected, object: nil)) { _ in
-                selected = .items
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .placesTabSelected, object: nil)) { _ in
-                selected = .places
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .checklistsTabSelected, object: nil)) { _ in
-                selected = .checklists
-            }
             .onChange(of: selectedItem) { newValue in
                 if newValue != nil {
                     selected = .items
@@ -176,13 +163,16 @@ struct MacContentView: View {
             .onChange(of: selectedPlace) { newValue in
                 if newValue != nil {
                     selected = .places
-                    toolbarDelegate.selectedIndex = selected.rawValue
                 }
             }
             .onChange(of: selectedChecklist) { newValue in
                 if newValue != nil {
                     selected = .checklists
-                    toolbarDelegate.selectedIndex = selected.rawValue
+                }
+            }
+            .onChange(of: requestedTab) { newValue in
+                if let tab = newValue {
+                    selected = tab
                 }
             }
             .onAppear {

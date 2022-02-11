@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 import DataModel
 
-// TODO: need proper empty list view for items and places
+// TODO: select item that was just created
 
 struct ItemListRow: View {
 
@@ -80,10 +80,12 @@ struct ItemListRow: View {
             } label: {
                 Text("Delete")
             }
+            .keyboardShortcut(.defaultAction)
             Button(role: .cancel) {
             } label: {
                 Text("Cancel")
             }
+            .keyboardShortcut(.cancelAction)
         }
         .sheet(isPresented: $showChecklistAssignment) {
             ItemChecklistsAssignmentView(item: item)

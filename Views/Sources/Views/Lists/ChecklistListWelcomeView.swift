@@ -1,29 +1,30 @@
 //
-//  ItemDetailsWelcomeView.swift
+//  ChecklistListWelcomeView.swift
 //  
 //
-//  Created by Danis Tazetdinov on 19.01.2022.
+//  Created by Danis Tazetdinov on 11.02.2022.
 //
 
 import SwiftUI
 
-struct ItemDetailsWelcomeView: View {
+struct ChecklistListWelcomeView: View {
 
-    var addNewItemAction: (() -> Void)?
+    var addNewChecklistAction: (() -> Void)?
 
     var body: some View {
         VStack(spacing: 20) {
-            Text("Choose existing item")
+            Text("Choose existing checklist")
                 .font(.title3)
             Text("or")
                 .font(.body)
             Button {
-                addNewItemAction?()
+                addNewChecklistAction?()
             } label: {
                 Label("Add new", systemImage: "plus.square.dashed")
             }
             .buttonStyle(.borderedProminent)
-            .font(.title)
+            .font(.title2)
         }
     }
 }
+

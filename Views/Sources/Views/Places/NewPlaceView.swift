@@ -69,12 +69,14 @@ struct NewPlaceView: View {
                     } label: {
                         Text("Cancel")
                     }
+                    .keyboardShortcut(.cancelAction)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: submit) {
                         Text("Save")
                             .bold()
                     }
+                    .keyboardShortcut("S", modifiers: [.command])
                     .disabled(trimmedTitle.isEmpty)
                 }
             }

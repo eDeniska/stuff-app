@@ -10,8 +10,6 @@ import CoreData
 
 public enum DisplayedCategory: Equatable {
 
-    // TODO: ensure category title is not empty
-
     case custom(String)
     case predefined(AppCategory)
 
