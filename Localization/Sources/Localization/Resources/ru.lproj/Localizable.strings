@@ -235,10 +235,9 @@
 "checklist.details.noLongerAvailable" = "Этот список был удален";
 "checklist.details.isEmpty" = "Список пуст";
 "checklist.details.itemDetails.button" = "Информация о вещи...";
-"checklist.details.markAsUnchecked" = "Отметить как неготово";
+"checklist.details.markAsUnchecked" = "Снять отметку";
 "checklist.details.markAsChecked" = "Отметить как готово";
 "checklist.details.section.pending" = "Ожидает";
 "checklist.details.section.checked" = "Готово";
 "checklist.details.addEntry.button" = "Добавить запись";
-
 

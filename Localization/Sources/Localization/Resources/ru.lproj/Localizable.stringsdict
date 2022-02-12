@@ -22,5 +22,25 @@
 			<string>%d записей</string>
 		</dict>
 	</dict>
+	<key>common.numberOfItems</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@items@</string>
+		<key>items</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d вещь</string>
+			<key>few</key>
+			<string>%d вещи</string>
+			<key>many</key>
+			<string>%d вещей</string>
+			<key>other</key>
+			<string>%d вещей</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

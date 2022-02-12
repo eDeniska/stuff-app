@@ -129,11 +129,9 @@ extension L10n {
         case itemDetailsButton = "checklist.details.itemDetails.button" // "Item details..."
         case markAsUnchecked = "checklist.details.markAsUnchecked" // "Mark as unchecked"
         case markAsChecked = "checklist.details.markAsChecked" // "Mark as checked"
-        
         case sectionPending = "checklist.details.section.pending" // "Pending"
         case sectionChecked = "checklist.details.section.checked" // "Checked"
         case addEntryButton = "checklist.details.addEntry.button" // "Add entry"
-
     }
 
 }
