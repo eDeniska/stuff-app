@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreData
 import DataModel
+import Localization
 
 // TODO: select item that was just created
 
@@ -177,7 +178,7 @@ public struct ItemListView: View {
                 }
             }
             .searchable(text: $searchText, prompt: Text("Search for items..."))
-            .navigationTitle("Items")
+            .navigationTitle(L10n.Items.listTitle.localized)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -195,7 +196,7 @@ public struct ItemListView: View {
             }
         }
         .tabItem {
-            Label("Items", systemImage: "tag")
+            Label(L10n.Items.listTitle.localized, systemImage: "tag")
         }
         .navigationViewStyle(.columns)
         .sheet(isPresented: $showNewItemForm) {

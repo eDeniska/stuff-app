@@ -20,6 +20,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(name: "Logger", path: "../Logger"),
+        .package(name: "Localization", path: "../Localization"),
         .package(name: "ImageRecognizer", path: "../ImageRecognizer"),
     ],
     targets: [
@@ -27,7 +28,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "DataModel",
-            dependencies: ["Logger", "ImageRecognizer"]),
+            dependencies: ["Logger", "ImageRecognizer", "Localization"]),
         .testTarget(
             name: "DataModelTests",
             dependencies: ["DataModel"]),
