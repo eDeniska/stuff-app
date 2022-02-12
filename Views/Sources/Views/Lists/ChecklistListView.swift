@@ -9,8 +9,6 @@ import SwiftUI
 import DataModel
 import CoreData
 
-// TODO: select list that was just created
-
 struct ChecklistListRow: View {
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var checklist: Checklist
@@ -78,6 +76,11 @@ struct ChecklistListRow: View {
         .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
             itemsUnavailable = Item.isEmpty(in: viewContext)
         }
+        .onChange(of: checklist) { newValue in
+            if checklist.isFault || checklist.isDeleted {
+                detailsOpen = false
+            }
+        }
     }
 
     var body: some View {
@@ -134,7 +137,7 @@ public struct ChecklistListView: View {
                 .hidden()
             }
             .sheet(isPresented: $shouldAddNew) {
-                NewChecklistView()
+                NewChecklistView(createdChecklist: $selectedChecklist)
                     .onDisappear {
                         shouldAddNew = false
                     }
@@ -154,6 +157,10 @@ public struct ChecklistListView: View {
                     ])
                 }
             }
+            .onReceive(NotificationCenter.default.publisher(for: .newChecklistRequest, object: nil)) { _ in
+                selectedChecklist = nil
+                shouldAddNew = true
+            }
             .searchable(text: $searchText, prompt: Text("Search for checklists..."))
             .navigationTitle("Checklists")
             .toolbar {
@@ -162,15 +169,14 @@ public struct ChecklistListView: View {
                 }
                 ToolbarItem {
                     Button {
+                        selectedChecklist = nil
                         shouldAddNew = true
                     } label: {
                         Label("Add Checklist", systemImage: "plus")
                     }
                 }
             }
-            ChecklistListWelcomeView {
-                shouldAddNew = true
-            }
+            ChecklistListWelcomeView()
         }
         .tabItem {
             Label("Checklists", systemImage: "list.bullet.rectangle")

@@ -135,10 +135,7 @@ public struct PlaceListView: View {
                 .hidden()
             }
             .sheet(isPresented: $shouldAddNew) {
-                NewPlaceView()
-                    .onDisappear {
-                        shouldAddNew = false
-                    }
+                NewPlaceView(createdPlace: $selectedPlace)
             }
             .searchable(text: $searchText, prompt: Text("Search for places..."))
             .onChange(of: searchText) { newValue in
@@ -153,21 +150,24 @@ public struct PlaceListView: View {
                 }
             }
             .navigationTitle("Places")
+            .onReceive(NotificationCenter.default.publisher(for: .newPlaceRequest, object: nil)) { _ in
+                selectedPlace = nil
+                shouldAddNew = true
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
                 ToolbarItem {
                     Button {
+                        selectedPlace = nil
                         shouldAddNew = true
                     } label: {
                         Label("Add Place", systemImage: "plus")
                     }
                 }
             }
-            PlaceDetailsWelcomeView {
-                shouldAddNew = true
-            }
+            PlaceDetailsWelcomeView()
         }
         .tabItem {
             Label("Places", systemImage: "house")

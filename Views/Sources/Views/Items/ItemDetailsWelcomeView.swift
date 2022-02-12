@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+extension Notification.Name {
+    static let newItemRequest = Notification.Name("NewItemRequestNotification")
+}
+
 struct ItemDetailsWelcomeView: View {
 
     var addNewItemAction: (() -> Void)?
@@ -18,7 +22,7 @@ struct ItemDetailsWelcomeView: View {
             Text("or")
                 .font(.body)
             Button {
-                addNewItemAction?()
+                NotificationCenter.default.post(name: .newItemRequest, object: nil)
             } label: {
                 Label("Add new", systemImage: "plus.square.dashed")
             }

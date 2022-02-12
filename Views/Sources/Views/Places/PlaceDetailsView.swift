@@ -27,10 +27,11 @@ public struct PlaceDetailsView: View {
     @State private var itemsUnavailable = true
 
     private let allowOpenInSeparateWindow: Bool
+    private let validObject: Bool
 
     public init(place: ItemPlace, allowOpenInSeparateWindow: Bool = true) {
+        validObject = place.managedObjectContext == nil
         self.place = place
-
         itemsRequest = SectionedFetchRequest(entity: Item.entity(),
                                              sectionIdentifier: \Item.categoryTitle,
                                              sortDescriptors: [
@@ -53,6 +54,7 @@ public struct PlaceDetailsView: View {
     }
 
     public var body: some View {
+        if validObject {
         List {
             ForEach(items) { section in
                 Section(header: Text(title(for: section.id))) {
@@ -128,6 +130,9 @@ public struct PlaceDetailsView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
             itemsUnavailable = Item.isEmpty(in: viewContext)
+        }
+        } else {
+            PlaceDetailsWelcomeView()
         }
     }
 }

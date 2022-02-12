@@ -9,8 +9,6 @@ import SwiftUI
 import CoreData
 import DataModel
 
-// TODO: select item that was just created
-
 struct ItemListRow: View {
 
     @Environment(\.managedObjectContext) private var viewContext
@@ -23,23 +21,6 @@ struct ItemListRow: View {
 
     @State private var detailsOpen = false
 
-//    Binding {
-//        if let selectedItem = selectedItem {
-//            return selectedItem.identifier == item.identifier
-//        } else {
-//            return detailsOpen
-//        }
-//
-//    } set: { newValue in
-//        if newValue {
-//            if selectedItem == nil {
-//                detailsOpen = newValue
-//            }
-//        } else {
-//            selectedItem = nil
-//            detailsOpen = false
-//        }
-//    }
     private func element() -> some View {
         NavigationLink(isActive: $detailsOpen) {
             ItemDetailsView(item: item)
@@ -162,6 +143,10 @@ public struct ItemListView: View {
                 }
                 .hidden()
             }
+            .onReceive(NotificationCenter.default.publisher(for: .newItemRequest, object: nil)) { _ in
+                selectedItem = nil
+                showNewItemForm = true
+            }
             .onChange(of: searchText) { newValue in
                 let text = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 if text.isEmpty {
@@ -178,30 +163,29 @@ public struct ItemListView: View {
             }
             .searchable(text: $searchText, prompt: Text("Search for items..."))
             .navigationTitle("Items")
+            .sheet(isPresented: $showNewItemForm) {
+                NavigationView {
+                    ItemDetailsView(item: $selectedItem)
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
                 ToolbarItem {
                     Button {
+                        selectedItem = nil
                         showNewItemForm = true
                     } label: {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
             }
-            ItemDetailsWelcomeView {
-                showNewItemForm = true
-            }
+            ItemDetailsWelcomeView()
         }
         .tabItem {
             Label("Items", systemImage: "tag")
         }
         .navigationViewStyle(.columns)
-        .sheet(isPresented: $showNewItemForm) {
-            NavigationView {
-                ItemDetailsView(item: nil)
-            }
-        }
     }
 }
