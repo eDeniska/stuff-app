@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DataModel
+import Localization
 
 struct NewPlaceView: View {
 
@@ -37,10 +38,10 @@ struct NewPlaceView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("New place title", text: $newPlaceTitle)
+                    TextField(L10n.NewPlace.titlePlaceholder.localized, text: $newPlaceTitle)
                         .onSubmit(submit)
                 } header: {
-                    Text("Title")
+                    Text(L10n.NewPlace.titleSectionTitle.localized)
                 }
                 Section {
                     LazyVGrid(columns: gridItemLayout) {
@@ -60,22 +61,22 @@ struct NewPlaceView: View {
                         }
                     }
                 } header: {
-                    Text("Icon")
+                    Text(L10n.NewPlace.customIcon.localized)
                 }
             }
-            .navigationTitle("New place")
+            .navigationTitle(L10n.NewPlace.title.localized)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Common.buttonCancel.localized)
                     }
                     .keyboardShortcut(.cancelAction)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: submit) {
-                        Text("Save")
+                        Text(L10n.Common.buttonSave.localized)
                             .bold()
                     }
                     .keyboardShortcut("S", modifiers: [.command])

@@ -9,6 +9,7 @@ import SwiftUI
 import CoreData
 import DataModel
 import Logger
+import Localization
 
 // TODO: add simple way of adding items to the list without separate form (but - suggestions?)
 
@@ -48,9 +49,9 @@ public struct ChecklistEntryListView: View {
 
     func title(for sectionIdentifier: SectionedFetchResults<Bool, ChecklistEntry>.Section.ID) -> String {
         if sectionIdentifier {
-            return "Checked"
+            return L10n.ChecklistDetails.sectionChecked.localized
         } else {
-            return "Pending"
+            return L10n.ChecklistDetails.sectionPending.localized
         }
     }
 
@@ -83,7 +84,7 @@ public struct ChecklistEntryListView: View {
             }
             .overlay {
                 if entries.isEmpty {
-                    Text("Checklist is empty")
+                    Text(L10n.ChecklistDetails.checklistIsEmpty.localized)
                         .font(.title)
                         .foregroundColor(.secondary)
                 }
@@ -103,7 +104,7 @@ public struct ChecklistEntryListView: View {
                         Button {
                             SingleChecklistView.activateSession(checklist: checklist)
                         } label: {
-                            Label("Open in separate window", systemImage: "square.on.square")
+                            Label(L10n.Common.buttonSeparateWindow.localized, systemImage: "square.on.square")
                         }
                     }
                 }
@@ -114,7 +115,7 @@ public struct ChecklistEntryListView: View {
                     Button {
                         addEntry = true
                     } label: {
-                        Label("Add Checklist", systemImage: "plus")
+                        Label(L10n.ChecklistDetails.addEntryButton.localized, systemImage: "plus")
                     }
                 }
             }

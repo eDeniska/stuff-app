@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 import Views
 import DataModel
-
+import Localization
 
 @MainActor
 struct ContentView: View {
@@ -38,13 +38,13 @@ struct ContentView: View {
                 ChecklistListView(selectedChecklist: $selectedChecklist)
                     .tag(Tab.checklists)
                 // TODO: consider removing settings altogether
-                NavigationView {
-                    Text("Settings")
-                        .navigationTitle("Settings")
-                }
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
-                }
+//                NavigationView {
+//                    Text("Settings")
+//                        .navigationTitle("Settings")
+//                }
+//                .tabItem {
+//                    Label("Settings", systemImage: "gear")
+//                }
             }
             .onChange(of: requestedTab) { newValue in
                 if let tab = newValue {
@@ -89,7 +89,7 @@ struct ContentView: View {
                     UIApplication.shared.shortcutItems = Checklist.recentChecklists(in: viewContext).map { checklist in
                         UIApplicationShortcutItem(type: QuickAction.checklistSelected.rawValue,
                                                   localizedTitle: checklist.title,
-                                                  localizedSubtitle: "Open checklist",
+                                                  localizedSubtitle: L10n.App.quickActionChecklist.localized,
                                                   icon: UIApplicationShortcutIcon(systemImageName: checklist.icon ?? "list.bullet.rectangle"),
                                                   userInfo: [ChecklistEntryListView.identifierKey: checklist.identifier.uuidString as NSString])
                     }

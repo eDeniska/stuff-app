@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Localization
 
 extension Notification.Name {
     static let newItemRequest = Notification.Name("NewItemRequestNotification")
@@ -17,17 +18,17 @@ struct ItemDetailsWelcomeView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Text("Choose existing item")
+            Text(L10n.ItemWelcome.chooseExisting.localized)
                 .font(.title3)
-            Text("or")
+            Text(L10n.ItemWelcome.orLabel.localized)
                 .font(.body)
             Button {
                 NotificationCenter.default.post(name: .newItemRequest, object: nil)
             } label: {
-                Label("Add new", systemImage: "plus.square.dashed")
+                Label(L10n.ItemWelcome.createNewButton.localized, systemImage: "plus.square.dashed")
             }
             .buttonStyle(.borderedProminent)
-            .font(.title)
+            .font(.title2)
         }
     }
 }

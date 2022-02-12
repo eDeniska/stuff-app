@@ -11,6 +11,7 @@ import CoreData
 import UIKit
 import Logger
 import ImageRecognizer
+import Localization
 
 @MainActor
 public class ItemViewModel: ObservableObject {
@@ -124,7 +125,7 @@ public class ItemViewModel: ObservableObject {
         Logger.default.info("got predicted:\n\(predictedText)")
 
         if let predicted = aggregated.first, title.isEmpty {
-            title = predicted.detectedItem.rawValue
+            title = predicted.detectedItem.localizedTitle
             category = .predefined(predicted.detectedItem.category)
         }
     }
@@ -167,7 +168,7 @@ public class ItemViewModel: ObservableObject {
         newItem.identifier = identifier
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty {
-            newItem.title = "Unnamed item"
+            newItem.title = L10n.Item.unnamed.localized
         } else {
             newItem.title = trimmed
         }

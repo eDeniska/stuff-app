@@ -7,6 +7,7 @@
 
 import Foundation
 import Logger
+import Localization
 
 public enum DetectedItem: String, CustomStringConvertible {
     case other
@@ -88,11 +89,12 @@ public enum DetectedItem: String, CustomStringConvertible {
 
     case accessory
     case houseItem
+    case trashBin
 
     public var category: AppCategory {
         switch self {
 
-        case .other, .food, .hygiene, .gun, .vehicle, .medical, .toy, .beauty, .bathing, .lighting, .stationery, .kitchen, .houseItem:
+        case .other, .food, .hygiene, .gun, .vehicle, .medical, .toy, .beauty, .bathing, .lighting, .stationery, .kitchen, .houseItem, .trashBin, .storage:
             return .other
 
         case .hat, .denim, .swimsuit, .sweatshirt, .tShirt, .suit, .skirt, .coat, .clothers:
@@ -133,9 +135,6 @@ public enum DetectedItem: String, CustomStringConvertible {
 
         case .bird, .fish, .cat, .dog, .livingThing:
             return .pets
-
-        case .storage:
-              return .other
         }
     }
 
@@ -144,7 +143,160 @@ public enum DetectedItem: String, CustomStringConvertible {
     }
 
     public var localizedTitle: String {
-        rawValue // TODO: replace with localization
+        switch self {
+        case .other:
+            return L10n.DetectedItem.other.localized
+        case .bird:
+            return L10n.DetectedItem.bird.localized
+        case .fish:
+            return L10n.DetectedItem.fish.localized
+        case .cat:
+            return L10n.DetectedItem.cat.localized
+        case .dog:
+            return L10n.DetectedItem.dog.localized
+        case .livingThing:
+            return L10n.DetectedItem.livingThing.localized
+        case .food:
+            return L10n.DetectedItem.food.localized
+        case .book:
+            return L10n.DetectedItem.book.localized
+        case .comicBook:
+            return L10n.DetectedItem.comicBook.localized
+        case .magazine:
+            return L10n.DetectedItem.magazine.localized
+        case .hygiene:
+            return L10n.DetectedItem.hygiene.localized
+        case .mug:
+            return L10n.DetectedItem.mug.localized
+        case .plate:
+            return L10n.DetectedItem.plate.localized
+        case .spoon:
+            return L10n.DetectedItem.spoon.localized
+        case .fork:
+            return L10n.DetectedItem.fork.localized
+        case .knife:
+            return L10n.DetectedItem.knife.localized
+        case .sportInventory:
+            return L10n.DetectedItem.sportInventory.localized
+        case .chair:
+            return L10n.DetectedItem.chair.localized
+        case .screwdriver:
+            return L10n.DetectedItem.screwdriver.localized
+        case .hammer:
+            return L10n.DetectedItem.hammer.localized
+        case .glasses:
+            return L10n.DetectedItem.glasses.localized
+        case .fridge:
+            return L10n.DetectedItem.fridge.localized
+        case .player:
+            return L10n.DetectedItem.player.localized
+        case .gadget:
+            return L10n.DetectedItem.gadget.localized
+        case .guitar:
+            return L10n.DetectedItem.guitar.localized
+        case .piano:
+            return L10n.DetectedItem.piano.localized
+        case .instrument:
+            return L10n.DetectedItem.instrument.localized
+        case .clock:
+            return L10n.DetectedItem.clock.localized
+        case .watch:
+            return L10n.DetectedItem.watch.localized
+        case .phone:
+            return L10n.DetectedItem.phone.localized
+        case .computer:
+            return L10n.DetectedItem.computer.localized
+        case .laptop:
+            return L10n.DetectedItem.laptop.localized
+        case .photo:
+            return L10n.DetectedItem.photo.localized
+        case .gun:
+            return L10n.DetectedItem.gun.localized
+        case .tool:
+            return L10n.DetectedItem.tool.localized
+        case .backpack:
+            return L10n.DetectedItem.backpack.localized
+        case .bag:
+            return L10n.DetectedItem.bag.localized
+        case .wallet:
+            return L10n.DetectedItem.wallet.localized
+        case .vehicle:
+            return L10n.DetectedItem.vehicle.localized
+        case .medical:
+            return L10n.DetectedItem.medical.localized
+        case .jewelry:
+            return L10n.DetectedItem.jewelry.localized
+        case .shoes:
+            return L10n.DetectedItem.shoes.localized
+        case .storage:
+            return L10n.DetectedItem.storage.localized
+        case .audio:
+            return L10n.DetectedItem.audio.localized
+        case .tv:
+            return L10n.DetectedItem.tv.localized
+        case .desk:
+            return L10n.DetectedItem.desk.localized
+        case .bed:
+            return L10n.DetectedItem.bed.localized
+        case .table:
+            return L10n.DetectedItem.table.localized
+        case .cabinet:
+            return L10n.DetectedItem.storage.localized
+        case .toy:
+            return L10n.DetectedItem.toy.localized
+        case .tie:
+            return L10n.DetectedItem.tie.localized
+        case .umbrella:
+            return L10n.DetectedItem.umbrella.localized
+        case .hat:
+            return L10n.DetectedItem.hat.localized
+        case .denim:
+            return L10n.DetectedItem.denim.localized
+        case .swimsuit:
+            return L10n.DetectedItem.swimsuit.localized
+        case .sweatshirt:
+            return L10n.DetectedItem.sweatshirt.localized
+        case .tShirt:
+            return L10n.DetectedItem.tShirt.localized
+        case .suit:
+            return L10n.DetectedItem.suit.localized
+        case .skirt:
+            return L10n.DetectedItem.skirt.localized
+        case .coat:
+            return L10n.DetectedItem.coat.localized
+        case .clothers:
+            return L10n.DetectedItem.clothers.localized
+        case .beauty:
+            return L10n.DetectedItem.beauty.localized
+        case .bathing:
+            return L10n.DetectedItem.bathing.localized
+        case .lighting:
+            return L10n.DetectedItem.lighting.localized
+        case .stationery:
+            return L10n.DetectedItem.stationery.localized
+        case .kitchen:
+            return L10n.DetectedItem.kitchen.localized
+        case .climate:
+            return L10n.DetectedItem.climate.localized
+        case .washing:
+            return L10n.DetectedItem.washing.localized
+        case .cleaning:
+            return L10n.DetectedItem.cleaning.localized
+        case .appliance:
+            return L10n.DetectedItem.appliance.localized
+        case .coffeeMaker:
+            return L10n.DetectedItem.coffeeMaker.localized
+        case .cooking:
+            return L10n.DetectedItem.cooking.localized
+        case .teaMaker:
+            return L10n.DetectedItem.teaMaker.localized
+        case .accessory:
+            return L10n.DetectedItem.accessory.localized
+        case .houseItem:
+            return L10n.DetectedItem.houseItem.localized
+        case .trashBin:
+            return L10n.DetectedItem.trashBin.localized
+        }
     }
 
     public init(prediction: String) {
@@ -1359,7 +1511,10 @@ public enum DetectedItem: String, CustomStringConvertible {
             self = .accessory
 
         case
-            "ashcan, trash can, garbage can, wastebin, ash bin, ash-bin, ashbin, dustbin, trash barrel, trash bin",
+            "ashcan, trash can, garbage can, wastebin, ash bin, ash-bin, ashbin, dustbin, trash barrel, trash bin":
+            self = .trashBin
+            
+        case
             "doormat, welcome mat",
             "pillow",
             "quilt, comforter, comfort, puff",

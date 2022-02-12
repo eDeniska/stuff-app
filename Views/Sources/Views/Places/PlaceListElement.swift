@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DataModel
+import Localization
 
 struct PlaceListElement: View {
     @ObservedObject private var place: ItemPlace
@@ -25,7 +26,7 @@ struct PlaceListElement: View {
                     .lineLimit(1)
                     .font(.body)
                 if let count = place.items.count, count > 0 {
-                    Text("\(count) item(s)")
+                    Text(L10n.Common.numberOfItems.localized(with: count))
                         .truncationMode(.tail)
                         .lineLimit(1)
                         .font(.caption)

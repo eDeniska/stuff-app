@@ -28,6 +28,7 @@
 		0DFD4D20275F944200088631 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DFD4D1F275F944200088631 /* Preview Assets.xcassets */; };
 		0DFD4D36275FAEA600088631 /* Views in Frameworks */ = {isa = PBXBuildFile; productRef = 0DFD4D35275FAEA600088631 /* Views */; };
 		86B8D2F127B79AC500DAEE77 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86B8D2F327B79AC500DAEE77 /* InfoPlist.strings */; };
+		86E001C427B7DA54002E7F1E /* L10n+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E001C327B7DA54002E7F1E /* L10n+App.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		86B8D2F227B79AC500DAEE77 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86B8D2F427B79AD700DAEE77 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86B8D2F527B79E1100DAEE77 /* Localization */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Localization; path = ../Localization; sourceTree = "<group>"; };
+		86E001C327B7DA54002E7F1E /* L10n+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "L10n+App.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 				0DFD4D18275F944000088631 /* StuffApp.swift */,
 				0DFD4D1A275F944000088631 /* ContentView.swift */,
 				0DCBDBB527B2A8CF00A5BEB2 /* MacContentView.swift */,
+				86E001C327B7DA54002E7F1E /* L10n+App.swift */,
 				0DFD4D1C275F944200088631 /* Assets.xcassets */,
 				0DFD4D1E275F944200088631 /* Preview Content */,
 			);
@@ -296,6 +299,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0DFD4D1B275F944000088631 /* ContentView.swift in Sources */,
+				86E001C427B7DA54002E7F1E /* L10n+App.swift in Sources */,
 				0DFD4D19275F944000088631 /* StuffApp.swift in Sources */,
 				0DCBDBB627B2A8CF00A5BEB2 /* MacContentView.swift in Sources */,
 				0DDA6B0827B54B270053E8F7 /* QuickAction.swift in Sources */,

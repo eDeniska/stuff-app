@@ -8,6 +8,7 @@
 import SwiftUI
 import DataModel
 import CoreData
+import Localization
 
 struct ChecklistListRow: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -30,40 +31,40 @@ struct ChecklistListRow: View {
             Button {
                 showItemAssignment = true
             } label: {
-                Label("Add items...", systemImage: "text.badge.plus")
+                Label(L10n.ChecklistsList.addItemsButton.localized, systemImage: "text.badge.plus")
             }
             .disabled(itemsUnavailable)
             Button(role: .destructive) {
                 showDeleteConfirmation = true
             } label: {
-                Label("Delete...", systemImage: "trash")
+                Label(L10n.Common.buttonDeleteEllipsis.localized, systemImage: "trash")
             }
         }
         .swipeActions {
             Button(role: .destructive) {
                 showDeleteConfirmation = true
             } label: {
-                Label("Delete...", systemImage: "trash")
+                Label(L10n.Common.buttonDeleteEllipsis.localized, systemImage: "trash")
             }
             Button {
                 showItemAssignment = true
             } label: {
-                Label("Add items...", systemImage: "text.badge.plus")
+                Label(L10n.ChecklistsList.addItemsButton.localized, systemImage: "text.badge.plus")
             }
             .tint(.indigo)
             .disabled(itemsUnavailable)
         }
-        .confirmationDialog("Delete \(checklist.title)?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+        .confirmationDialog(L10n.ChecklistsList.shouldDeleteChecklist.localized, isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button(role: .destructive) {
                 viewContext.delete(checklist)
                 viewContext.saveOrRollback()
             } label: {
-                Text("Delete")
+                Text(L10n.Common.buttonDelete.localized)
             }
             .keyboardShortcut(.defaultAction)
             Button(role: .cancel) {
             } label: {
-                Text("Cancel")
+                Text(L10n.Common.buttonCancel.localized)
             }
             .keyboardShortcut(.cancelAction)
         }
@@ -161,8 +162,8 @@ public struct ChecklistListView: View {
                 selectedChecklist = nil
                 shouldAddNew = true
             }
-            .searchable(text: $searchText, prompt: Text("Search for checklists..."))
-            .navigationTitle("Checklists")
+            .searchable(text: $searchText, prompt: Text(L10n.ChecklistsList.searchPlaceholder.localized))
+            .navigationTitle(L10n.ChecklistsList.listTitle.localized)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -172,14 +173,14 @@ public struct ChecklistListView: View {
                         selectedChecklist = nil
                         shouldAddNew = true
                     } label: {
-                        Label("Add Checklist", systemImage: "plus")
+                        Label(L10n.ChecklistsList.addChecklistButton.localized, systemImage: "plus")
                     }
                 }
             }
             ChecklistListWelcomeView()
         }
         .tabItem {
-            Label("Checklists", systemImage: "list.bullet.rectangle")
+            Label(L10n.ChecklistsList.listTitle.localized, systemImage: "list.bullet.rectangle")
         }
     }
 }

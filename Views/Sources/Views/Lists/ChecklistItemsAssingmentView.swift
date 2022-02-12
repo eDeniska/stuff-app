@@ -9,6 +9,7 @@ import SwiftUI
 import DataModel
 import Combine
 import CoreData
+import Localization
 
 struct ChecklistItemsAssingmentView: View {
 
@@ -32,7 +33,7 @@ struct ChecklistItemsAssingmentView: View {
     @State private var searchText: String = ""
 
     private func title(for sectionIdentifier: SectionedFetchResults<String, Item>.Section.ID) -> String {
-        sectionIdentifier.isEmpty ? "<Unnamed>" : sectionIdentifier
+        sectionIdentifier.isEmpty ? L10n.Category.unnamedCategory.localized : sectionIdentifier
     }
 
     init(checklist: Checklist) {
@@ -82,14 +83,14 @@ struct ChecklistItemsAssingmentView: View {
                     })
                 }
             }
-            .searchable(text: $searchText, prompt: Text("Filter items..."))
-            .navigationTitle("Add items to \(checklist.title)")
+            .searchable(text: $searchText, prompt: Text(L10n.ChecklistsList.filterItemsPlaceholder.localized))
+            .navigationTitle(L10n.ChecklistsList.assignItemsToTitle.localized(with: checklist.title))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Common.buttonCancel.localized)
                     }
                     .keyboardShortcut(.cancelAction)
                 }
@@ -99,7 +100,7 @@ struct ChecklistItemsAssingmentView: View {
                         viewContext.saveOrRollback()
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Save")
+                        Text(L10n.Common.buttonSave.localized)
                             .bold()
                     }
                     .keyboardShortcut("S", modifiers: [.command])

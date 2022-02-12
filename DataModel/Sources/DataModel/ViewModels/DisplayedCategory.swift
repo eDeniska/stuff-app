@@ -19,7 +19,7 @@ public enum DisplayedCategory: Equatable {
             return title.trimmingCharacters(in: .whitespacesAndNewlines)
 
         case .predefined(let appCategory):
-            return appCategory.rawValue
+            return appCategory.localizedTitle
         }
     }
 
@@ -48,12 +48,14 @@ public enum DisplayedCategory: Equatable {
             fetchRequest.fetchLimit = 1
             fetchRequest.predicate = NSPredicate(format: "\(#keyPath(ItemCategory.appCategory)) == %@", category.rawValue)
             if let existing = (try? context.fetch(fetchRequest))?.first {
+                // TODO: consider removing these later
                 existing.order = Int64(category.sortOrder)
+                existing.title = category.localizedTitle
                 return existing
             } else {
                 let newCategory = ItemCategory(context: context)
                 newCategory.appCategory = category.rawValue
-                newCategory.title = category.rawValue
+                newCategory.title = category.localizedTitle
                 newCategory.icon = category.iconName
                 newCategory.order = Int64(category.sortOrder)
                 newCategory.identifier = UUID()

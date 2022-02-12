@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "DataModel",
+    defaultLocalization: "en",
     platforms: [
          .macOS(.v12),
          .macCatalyst(.v15),

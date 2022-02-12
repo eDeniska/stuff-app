@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreData
 import DataModel
+import Localization
 
 struct ItemListRow: View {
 
@@ -31,40 +32,40 @@ struct ItemListRow: View {
             Button {
                 showChecklistAssignment = true
             } label: {
-                Label("Add to checklists...", systemImage: "text.badge.plus")
+                Label(L10n.ItemsList.addToChecklistsButton.localized, systemImage: "text.badge.plus")
             }
             .disabled(checklistsUnavailable)
             Button(role: .destructive) {
                 showDeleteConfirmation = true
             } label: {
-                Label("Delete...", systemImage: "trash")
+                Label(L10n.Common.buttonDeleteEllipsis.localized, systemImage: "trash")
             }
         }
         .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
                 showDeleteConfirmation = true
             } label: {
-                Label("Delete...", systemImage: "trash")
+                Label(L10n.Common.buttonDeleteEllipsis.localized, systemImage: "trash")
             }
             Button {
                 showChecklistAssignment = true
             } label: {
-                Label("Add to checklists...", systemImage: "text.badge.plus")
+                Label(L10n.ItemsList.addToChecklistsButton.localized, systemImage: "text.badge.plus")
             }
             .tint(.indigo)
             .disabled(checklistsUnavailable)
         }
-        .confirmationDialog("Delete \(item.title)?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+        .confirmationDialog(L10n.ItemsList.shouldDeleteItem.localized(with: item.title), isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button(role: .destructive) {
                 viewContext.delete(item)
                 viewContext.saveOrRollback()
             } label: {
-                Text("Delete")
+                Text(L10n.Common.buttonDelete.localized)
             }
             .keyboardShortcut(.defaultAction)
             Button(role: .cancel) {
             } label: {
-                Text("Cancel")
+                Text(L10n.Common.buttonCancel.localized)
             }
             .keyboardShortcut(.cancelAction)
         }
@@ -112,7 +113,7 @@ public struct ItemListView: View {
     }
 
     private func title(for sectionIdentifier: SectionedFetchResults<String, Item>.Section.ID) -> String {
-        sectionIdentifier.isEmpty ? "<Unnamed>" : sectionIdentifier
+        sectionIdentifier.isEmpty ? L10n.Category.unnamedCategory.localized : sectionIdentifier
     }
 
     public var body: some View {
@@ -161,8 +162,8 @@ public struct ItemListView: View {
                     })
                 }
             }
-            .searchable(text: $searchText, prompt: Text("Search for items..."))
-            .navigationTitle("Items")
+            .searchable(text: $searchText, prompt: Text(L10n.ItemsList.searchPlaceholder.localized))
+            .navigationTitle(L10n.ItemsList.listTitle.localized)
             .sheet(isPresented: $showNewItemForm) {
                 NavigationView {
                     ItemDetailsView(item: $selectedItem)
@@ -177,14 +178,14 @@ public struct ItemListView: View {
                         selectedItem = nil
                         showNewItemForm = true
                     } label: {
-                        Label("Add Item", systemImage: "plus")
+                        Label(L10n.ItemsList.addItemButton.localized, systemImage: "plus")
                     }
                 }
             }
             ItemDetailsWelcomeView()
         }
         .tabItem {
-            Label("Items", systemImage: "tag")
+            Label(L10n.ItemsList.listTitle.localized, systemImage: "tag")
         }
         .navigationViewStyle(.columns)
     }

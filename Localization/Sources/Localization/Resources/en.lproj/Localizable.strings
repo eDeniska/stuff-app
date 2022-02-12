@@ -1,3 +1,241 @@
 
-// Items
+// Common
+"button.cancel" = "Cancel";
+"button.save" = "Save";
+"button.choose" = "Choose...";
+"button.dismiss" = "Dismiss";
+"button.edit" = "Edit";
+"button.delete" = "Delete";
+"button.delete.ellipsis" = "Delete...";
+"button.separateWindow" = "Open in separate window";
+
+// AppCategory
+"appCategory.pets" = "pets";
+"appCategory.clothers" = "clothers";
+"appCategory.shoes" = "shoes";
+"appCategory.gadgets" = "gadgets";
+"appCategory.tableware" = "tableware";
+"appCategory.jewelry" = "jewelry";
+"appCategory.accessories" = "accessories";
+"appCategory.books" = "books";
+"appCategory.appliances" = "appliances";
+"appCategory.furniture" = "furniture";
+"appCategory.sports" = "sports";
+"appCategory.tools" = "tools";
+"appCategory.music" = "music";
+"appCategory.other" = "other";
+
+// DetectedItem
+"detectedItem.other" = "Other item";
+"detectedItem.bird" = "Bird";
+"detectedItem.fish" = "Fish";
+"detectedItem.cat" = "Cat";
+"detectedItem.dog" = "Dog";
+"detectedItem.livingThing" = "Living thing";
+"detectedItem.food" = "Food";
+"detectedItem.book" = "Book";
+"detectedItem.comicBook" = "Comic book";
+"detectedItem.magazine" = "Magazine";
+"detectedItem.hygiene" = "Hygiene item";
+"detectedItem.mug" = "Mug";
+"detectedItem.plate" = "Plate";
+"detectedItem.spoon" = "Spoon";
+"detectedItem.fork" = "Fork";
+"detectedItem.knife" = "Knife";
+"detectedItem.sportInventory" = "Sport item";
+"detectedItem.chair" = "Chair";
+"detectedItem.screwdriver" = "Screwdriver";
+"detectedItem.hammer" = "Hammer";
+"detectedItem.glasses" = "Glasses";
+"detectedItem.fridge" = "Fridge";
+"detectedItem.player" = "Player";
+"detectedItem.gadget" = "Gadget";
+"detectedItem.guitar" = "Guitar";
+"detectedItem.piano" = "Piano";
+"detectedItem.instrument" = "Musical instrument";
+"detectedItem.clock" = "Clock";
+"detectedItem.watch" = "Watch";
+"detectedItem.phone" = "Phone";
+"detectedItem.computer" = "Computer";
+"detectedItem.laptop" = "Laptop";
+"detectedItem.photo" = "Camera";
+"detectedItem.gun" = "Gun";
+"detectedItem.tool" = "Tool";
+"detectedItem.backpack" = "Backpack";
+"detectedItem.bag" = "Bag";
+"detectedItem.wallet" = "Wallet";
+"detectedItem.vehicle" = "Vehicle";
+"detectedItem.medical" = "Medical item";
+"detectedItem.jewelry" = "Jewelry";
+"detectedItem.shoes" = "Shoes";
+"detectedItem.storage" = "Storage";
+"detectedItem.audio" = "Audio item";
+"detectedItem.tv" = "TV";
+"detectedItem.desk" = "Desk";
+"detectedItem.bed" = "Bed";
+"detectedItem.table" = "Table";
+"detectedItem.cabinet" = "Cabinet";
+"detectedItem.toy" = "Toy";
+"detectedItem.tie" = "Tie";
+"detectedItem.umbrella" = "Umbrella";
+"detectedItem.hat" = "Hat";
+"detectedItem.denim" = "Jeans";
+"detectedItem.swimsuit" = "Swimsuit";
+"detectedItem.sweatshirt" = "Sweatshirt";
+"detectedItem.tShirt" = "T-shirt";
+"detectedItem.suit" = "Suit";
+"detectedItem.skirt" = "Skirt";
+"detectedItem.coat" = "Coat";
+"detectedItem.clothers" = "Clothers";
+"detectedItem.beauty" = "Beauty product";
+"detectedItem.bathing" = "Bathing product";
+"detectedItem.lighting" = "Lighting";
+"detectedItem.stationery" = "Stationery";
+"detectedItem.kitchen" = "Kitchen item";
+"detectedItem.climate" = "Climate equipment";
+"detectedItem.washing" = "Washing machine";
+"detectedItem.cleaning" = "Cleaning equipment";
+"detectedItem.appliance" = "Appliance";
+"detectedItem.coffeeMaker" = "Coffee maker";
+"detectedItem.cooking" = "Cooking equipment";
+"detectedItem.teaMaker" = "Teapot";
+"detectedItem.accessory" = "Accessory";
+"detectedItem.houseItem" = "House item";
+"detectedItem.trashBin" = "Trash bin";
+
+// App
+"app.menu.showItems" = "Show items";
+"app.menu.showPlaces" = "Show places";
+"app.menu.showChecklists" = "Show checklists";
+"app.quickAction.openChecklist" = "Open checklist";
+"app.toolbar.items" = "Items                        ";
+"app.toolbar.places" = "Places                        ";
+"app.toolbar.checklists" = "Checklists                        ";
+"app.window.items" = "Items";
+"app.window.places" = "Places";
+"app.window.checklists" = "Checklists";
+"app.title.items" = "Stuff – Items";
+"app.title.places" = "Stuff – Places";
+"app.title.checklists" = "Stuff – Checklists";
+
+// Category
+"category.section.title" = "Category";
+"category.create.named" = "Create category %@";
+"category.customIcon" = "Icon";
+"category.title" = "Category";
+"category.unnamed" = "unnamed";
+
+// Condition view
+"condition.view.title" = "Condition";
+
+// Item Condition
+"condition.unknown" = "unknown";
+"condition.brandNew" = "brand new";
+"condition.excellent" = "excellent";
+"condition.good" = "good";
+"condition.moderate" = "moderate";
+"condition.poor" = "poor";
+"condition.damaged" = "damaged";
+
+// Item
+"item.unnamed" = "Unnamed item";
+
+// Item Assignment
+"item.assignment.addToChecklists.title" = "Add %@ to checklists";
+
+// Item details
+"item.details.newItemTitle" = "New item";
+"item.details.itemTitle.placeholder" = "Item title";
+"item.details.section.item.title" = "Item";
+"item.details.itemDetails.placeholder" = "Item details";
+"item.details.section.details.title" = "Details";
+"item.details.noPlaceIsSet" = "No place is set";
+"item.details.shouldRemoveImage" = "Remove image?";
+"item.details.removeImage.confirmation" = "Remove";
+"item.details.addPhotos.title" = "Add photos of the item";
+"item.details.takePhoto.title" = "Take photo...";
+"item.details.choosePhotos.title" = "Choose from library...";
+"item.details.noCameraAccess.title" = "Camera access is not allowed";
+"item.details.button.openSettings" = "Open Settings";
+"item.details.section.images.title" = "Images";
+"item.details.predicting.title" = "Predicting...";
+"item.details.fetchingImages.title" = "Fetching images...";
+"item.details.button.addToChecklist" = "Add to checklist";
+"item.details.noLongerAvailable"  = "Item is no longer available";
+
+
+// Item Welcome
+"item.welcome.chooseExisting" = "Choose existing item";
+"item.welcome.or.label" = "or";
+"item.welcome.createNew.button" = "Add new";
+
+// Items list
 "items.list.title" = "Items";
+"items.list.addToChecklists.button" = "Add to checklists...";
+"items.list.shouldDeleteItem" = "Delete %@?";
+"items.list.searchPlaceholder" = "Search for items...";
+"items.list.addItem.button" = "Add item";
+
+// Place details
+"place.details.title" = "Place";
+"place.details.noLongerAvailable" = "Place is no longer available";
+"place.details.isEmpty" = "Place is empty";
+
+// Places list
+"places.list.title" = "Places";
+"places.list.searchPlaceholder" = "Search for places...";
+"places.list.noPlaceAssigned" = "No place assigned";
+"places.list.placeItems.button" = "Place items...";
+"places.list.shouldDeletePlace" = "Delete %@?";
+"places.list.addPlace.button" = "Add place";
+"places.list.placeItemsTo.title" = "Place items to %@";
+"places.list.filterItems.placeholder" = "Filter items...";
+
+//  Place Welcome
+"place.welcome.chooseExisting" = "Choose existing place";
+"place.welcome.or.label" = "or";
+"place.welcome.createNew.button" = "Add new";
+
+// New Place
+"place.new.title.placeholder" = "New place title";
+"place.new.title.section.title" = "Title";
+"place.new.customIcon" = "Icon";
+"place.new.title" = "New place";
+
+// Checklists list
+"checklists.list.searchPlaceholder" = "Search for checklists...";
+ "checklists.list.title" = "Checklists";
+ "checklists.list.addItems.button" = "Add items...";
+ "checklists.list.shouldDeleteChecklist" = "Delete %@?";
+ "checklists.list.addChecklist.button" = "Add checklist";
+ "checklists.list.assignItemsTo.title" = "Add items to %@";
+ "checklists.list.filterItems.placeholder" = "Filter items...";
+
+// Checklist Welcome
+"checklist.welcome.chooseExisting" = "Choose existing checklist";
+"checklist.welcome.or.label" = "or";
+"checklist.welcome.createNew.button" = "Add new";
+
+// New Checklist
+"checklist.new.title.placeholder" = "New checklist title";
+"checklist.new.title.section.title" = "Title";
+"checklist.new.customIcon" = "Icon";
+"checklist.new.title" = "New checklist";
+
+//  New Checklist Enty
+"checklist.entry.new.title.placeholder" = "Title";
+"checklist.entry.new.title.section.title" = "Title";
+"checklist.entry.new.suggestedItems.section.title" = "Suggested items";
+"checklist.entry.new.customIcon" = "Icon";
+"checklist.entry.new.title" = "Entry";
+
+// Checklist Details
+"checklist.details.noLongerAvailable" = "Checklist is no longer available";
+"checklist.details.isEmpty" = "Checklist is empty";
+"checklist.details.itemDetails.button" = "Item details...";
+"checklist.details.markAsUnchecked" = "Mark as unchecked";
+"checklist.details.markAsChecked" = "Mark as checked";
+"checklist.details.section.pending" = "Pending";
+"checklist.details.section.checked" = "Checked";
+"checklist.details.addEntry.button" = "Add entry";
+

@@ -1,3 +1,244 @@
 
-// Items
+// Common
+"button.cancel" = "Отменить";
+"button.save" = "Сохранить";
+"button.choose" = "Выбрать...";
+"button.dismiss" = "Закрыть";
+"button.edit" = "Редактировать";
+"button.delete" = "Удвлить";
+"button.delete.ellipsis" = "Удалить...";
+"button.separateWindow" = "Открыть в отдельном окне";
+
+// AppCategory
+"appCategory.pets" = "животные";
+"appCategory.clothers" = "одежда";
+"appCategory.shoes" = "обувь";
+"appCategory.gadgets" = "гаджеты";
+"appCategory.tableware" = "посуда";
+"appCategory.jewelry" = "украшения";
+"appCategory.accessories" = "аксессуары";
+"appCategory.books" = "книги";
+"appCategory.appliances" = "техника";
+"appCategory.furniture" = "медель";
+"appCategory.sports" = "спорт";
+"appCategory.tools" = "инструменты";
+"appCategory.music" = "музыка";
+"appCategory.other" = "прочее";
+
+// DetectedItem
+"detectedItem.other" = "Вещь";
+"detectedItem.bird" = "Птица";
+"detectedItem.fish" = "Рыба";
+"detectedItem.cat" = "Кошка";
+"detectedItem.dog" = "Собака";
+"detectedItem.livingThing" = "Живность";
+"detectedItem.food" = "Еда";
+"detectedItem.book" = "Книга";
+"detectedItem.comicBook" = "Комикс";
+"detectedItem.magazine" = "Журнал";
+"detectedItem.hygiene" = "Предмет гигиены";
+"detectedItem.mug" = "Кружка";
+"detectedItem.plate" = "Тарелка";
+"detectedItem.spoon" = "Ложка";
+"detectedItem.fork" = "Вилка";
+"detectedItem.knife" = "Нож";
+"detectedItem.sportInventory" = "Спортинвентарь";
+"detectedItem.chair" = "Стул";
+"detectedItem.screwdriver" = "Отвёртка";
+"detectedItem.hammer" = "Молоток";
+"detectedItem.glasses" = "Очки";
+"detectedItem.fridge" = "Холодильник";
+"detectedItem.player" = "Плеер";
+"detectedItem.gadget" = "Гаджет";
+"detectedItem.guitar" = "Гитара";
+"detectedItem.piano" = "Пианино";
+"detectedItem.instrument" = "Музыкальный инструмент";
+"detectedItem.clock" = "Часы";
+"detectedItem.watch" = "Часы";
+"detectedItem.phone" = "Телефон";
+"detectedItem.computer" = "Компьютер";
+"detectedItem.laptop" = "Ноутбук";
+"detectedItem.photo" = "Камера";
+"detectedItem.gun" = "Оружие";
+"detectedItem.tool" = "Инструмент";
+"detectedItem.backpack" = "Рюкзак";
+"detectedItem.bag" = "Сумка";
+"detectedItem.wallet" = "Кошелек";
+"detectedItem.vehicle" = "Машина";
+"detectedItem.medical" = "Медицинский предмет";
+"detectedItem.jewelry" = "Украшение";
+"detectedItem.shoes" = "Обувь";
+"detectedItem.storage" = "Контейнер";
+"detectedItem.audio" = "Аудиотехника";
+"detectedItem.tv" = "Телевизор";
+"detectedItem.desk" = "Рабочий стол";
+"detectedItem.bed" = "Кровать";
+"detectedItem.table" = "Стол";
+"detectedItem.cabinet" = "Шкаф";
+"detectedItem.toy" = "Игрушка";
+"detectedItem.tie" = "Галстук";
+"detectedItem.umbrella" = "Зонт";
+"detectedItem.hat" = "Шляпа";
+"detectedItem.denim" = "Джинсы";
+"detectedItem.swimsuit" = "Купальный костюм";
+"detectedItem.sweatshirt" = "Свитер";
+"detectedItem.tShirt" = "Футболка";
+"detectedItem.suit" = "Костюм";
+"detectedItem.skirt" = "Юбка";
+"detectedItem.coat" = "Пальто";
+"detectedItem.clothers" = "Одежда";
+"detectedItem.beauty" = "Косметика";
+"detectedItem.bathing" = "Ванные принадлежности";
+"detectedItem.lighting" = "Освещение";
+"detectedItem.stationery" = "Канцтовары";
+"detectedItem.kitchen" = "Кухонная утварь";
+"detectedItem.climate" = "Климатический прибор";
+"detectedItem.washing" = "Стиральная машина";
+"detectedItem.cleaning" = "Техника для уборки";
+"detectedItem.appliance" = "Техника";
+"detectedItem.coffeeMaker" = "Кофемашина";
+"detectedItem.cooking" = "Приготовление еды";
+"detectedItem.teaMaker" = "Чайник";
+"detectedItem.accessory" = "Аксессуар";
+"detectedItem.houseItem" = "Предмет уюта";
+"detectedItem.trashBin" = "Корзина для мусора";
+
+// App
+"app.menu.showItems" = "Показать вещи";
+"app.menu.showPlaces" = "Показать места";
+"app.menu.showChecklists" = "Показать списки";
+"app.quickAction.openChecklist" = "Открыть список";
+"app.toolbar.items" = "Вещи                        ";
+"app.toolbar.places" = "Места                        ";
+"app.toolbar.checklists" = "Списки                        ";
+"app.window.items" = "Вещи";
+"app.window.places" = "Места";
+"app.window.checklists" = "Списки";
+"app.title.items" = "Stuff – Вещи";
+"app.title.places" = "Stuff – Места";
+"app.title.checklists" = "Stuff – Списки";
+
+// Category
+"category.section.title" = "Категория";
+"category.create.named" = "Создать категорию %@";
+"category.customIcon" = "Значок";
+"category.title" = "Категория";
+"category.unnamed" = "без названия";
+
+// Condition view
+"condition.view.title" = "Состояние";
+
+// Item Condition
+"condition.unknown" = "неизвестно";
+"condition.brandNew" = "новое";
+"condition.excellent" = "отличное";
+"condition.good" = "хорошее";
+"condition.moderate" = "среднее";
+"condition.poor" = "плохое";
+"condition.damaged" = "с повреждениями";
+
+// Item
+"item.unnamed" = "Без названия";
+
+// Item Assignment
+"item.assignment.addToChecklists.title" = "Добавить %@ в списки";
+
+// Checklists list
+"checklists.list.searchPlaceholder" = "Искать списки...";
+
+// Item details
+"item.details.newItemTitle" = "Новая вещь";
+"item.details.itemTitle.placeholder" = "Название вещи";
+"item.details.section.item.title" = "Вещь";
+"item.details.itemDetails.placeholder" = "Детали";
+"item.details.section.details.title" = "детали";
+"item.details.noPlaceIsSet" = "Место не указано";
+"item.details.shouldRemoveImage" = "Удалить фото?";
+"item.details.removeImage.confirmation" = "Удалить";
+"item.details.addPhotos.title" = "Добавить фото вещи";
+"item.details.takePhoto.title" = "Сфотографировать...";
+"item.details.choosePhotos.title" = "Выбрать из медиатеки...";
+"item.details.noCameraAccess.title" = "Доступ к камере запрещен";
+"item.details.button.openSettings" = "Открыть Настройки";
+"item.details.section.images.title" = "Изображения";
+"item.details.predicting.title" = "Анализ...";
+"item.details.fetchingImages.title" = "Загрузка фото...";
+"item.details.button.addToChecklist" = "Добавить в список";
+"item.details.noLongerAvailable"  = "Эта вещь была удалена";
+
+// Item Welcome
+"item.welcome.chooseExisting" = "Выберите существующую вещь";
+"item.welcome.or.label" = "или";
+"item.welcome.createNew.button" = "Добавьте новую";
+
+// Items List
 "items.list.title" = "Вещи";
+"items.list.addToChecklists.button" = "Добавить в списки...";
+"items.list.shouldDeleteItem" = "Удалить %@?";
+"items.list.searchPlaceholder" = "Искать вещи...";
+"items.list.addItem.button" = "Добавить вещь";
+
+// Place details
+"place.details.title" = "Место";
+"place.details.noLongerAvailable" = "Это место было удалено";
+"place.details.isEmpty" = "Место пусто";
+
+// Places list
+"places.list.title" = "Места";
+"places.list.searchPlaceholder" = "Искать места...";
+"places.list.noPlaceAssigned" = "Место не задано";
+"places.list.placeItems.button" = "Разместить вещи...";
+"places.list.shouldDeletePlace" = "Удвлить %@?";
+"places.list.addPlace.button" = "Добавить место";
+"places.list.placeItemsTo.title" = "Разместить вещи – %@";
+"places.list.filterItems.placeholder" = "Отобрать вещи...";
+
+//  Place Welcome
+"place.welcome.chooseExisting" = "Выберите существующее место";
+"place.welcome.or.label" = "или";
+"place.welcome.createNew.button" = "Добавьте новое";
+
+// New Place
+"place.new.title.placeholder" = "Название места";
+"place.new.title.section.title" = "Название";
+"place.new.customIcon" = "Значок";
+"place.new.title" = "Новое место";
+
+// Checklists list
+"checklists.list.searchPlaceholder" = "Искать списки...";
+ "checklists.list.title" = "Списки";
+ "checklists.list.addItems.button" = "Добавить вещи...";
+ "checklists.list.shouldDeleteChecklist" = "Удалить %@?";
+ "checklists.list.addChecklist.button" = "Добавить список";
+ "checklists.list.assignItemsTo.title" = "Добавить ввещи в %@";
+ "checklists.list.filterItems.placeholder" = "Отобрать вещи...";
+
+// Checklist Welcome
+"checklist.welcome.chooseExisting" = "Выберите существующий список";
+"checklist.welcome.or.label" = "или";
+"checklist.welcome.createNew.button" = "Добавьте новый";
+
+// New Checklist
+"checklist.new.title.placeholder" = "Название списка";
+"checklist.new.title.section.title" = "Название";
+"checklist.new.customIcon" = "Значок";
+"checklist.new.title" = "Новый список";
+
+//  New Checklist Enty
+"checklist.entry.new.title.placeholder" = "Название";
+"checklist.entry.new.title.section.title" = "Название";
+"checklist.entry.new.suggestedItems.section.title" = "Подходящие вещи";
+"checklist.entry.new.customIcon" = "Значок";
+"checklist.entry.new.title" = "Запись";
+
+// Checklist Details
+"checklist.details.noLongerAvailable" = "Этот список был удален";
+"checklist.details.isEmpty" = "Список пуст";
+"checklist.details.itemDetails.button" = "Информация о вещи...";
+"checklist.details.markAsUnchecked" = "Отметить как неготово";
+"checklist.details.markAsChecked" = "Отметить как готово";
+"checklist.details.section.pending" = "Ожидает";
+"checklist.details.section.checked" = "Готово";
+"checklist.details.addEntry.button" = "Добавить запись";
+
+

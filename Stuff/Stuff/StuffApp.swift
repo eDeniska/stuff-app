@@ -9,6 +9,7 @@ import SwiftUI
 import DataModel
 import Logger
 import Views
+import Localization
 
 // TODO: Apple Watch app – go through checklist, use only thumbnails, if needed
 // TODO: add Spotlight search support
@@ -90,37 +91,37 @@ struct StuffApp: App {
                 Button {
                     requestedTab = .items
                 } label: {
-                    Label("Show items", systemImage: "tag")
+                    Label(L10n.App.showItems.localized, systemImage: "tag")
                 }
                 .keyboardShortcut("1", modifiers: [.command])
                 Button {
                     requestedTab = .places
                 } label: {
-                    Label("Show places", systemImage: "house")
+                    Label(L10n.App.showPlaces.localized, systemImage: "house")
                 }
                 .keyboardShortcut("2", modifiers: [.command])
                 Button {
                     requestedTab = .checklists
                 } label: {
-                    Label("Show checklists", systemImage: "list.bullet.rectangle")
+                    Label(L10n.App.showChecklists.localized, systemImage: "list.bullet.rectangle")
                 }
                 .keyboardShortcut("3", modifiers: [.command])
             }
         }
 
-        WindowGroup("Item") {
+        WindowGroup(L10n.App.windowItems.localized) {
             SingleItemDetailsView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
         .handlesExternalEvents(matching: [SingleItemDetailsView.activityIdentifier])
 
-        WindowGroup("Place") {
+        WindowGroup(L10n.App.windowPlaces.localized) {
             SinglePlaceView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
         .handlesExternalEvents(matching: [SinglePlaceView.activityIdentifier])
 
-        WindowGroup("Checklist") {
+        WindowGroup(L10n.App.windowChecklists.localized) {
             SingleChecklistView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Localization
 
 extension Notification.Name {
     static let newChecklistRequest = Notification.Name("NewChecklistRequestNotification")
@@ -14,14 +15,14 @@ extension Notification.Name {
 struct ChecklistListWelcomeView: View {
     var body: some View {
         VStack(spacing: 20) {
-            Text("Choose existing checklist")
+            Text(L10n.ChecklistWelcome.chooseExisting.localized)
                 .font(.title3)
-            Text("or")
+            Text(L10n.ChecklistWelcome.orLabel.localized)
                 .font(.body)
             Button {
                 NotificationCenter.default.post(name: .newChecklistRequest, object: nil)
             } label: {
-                Label("Add new", systemImage: "plus.square.dashed")
+                Label(L10n.ChecklistWelcome.createNewButton.localized, systemImage: "plus.square.dashed")
             }
             .buttonStyle(.borderedProminent)
             .font(.title2)

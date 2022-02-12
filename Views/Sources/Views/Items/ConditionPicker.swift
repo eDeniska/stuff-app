@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DataModel
+import Localization
 
 struct ConditionPicker: View {
     @Binding var itemCondition: ItemCondition
@@ -34,13 +35,13 @@ struct ConditionPicker: View {
                     }
                 }
             }
-            .navigationBarTitle("Condition")
+            .navigationBarTitle(L10n.ConditionView.title.localized)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Common.buttonCancel.localized)
                     }
                     .keyboardShortcut(.cancelAction)
                 }

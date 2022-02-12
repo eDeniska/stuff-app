@@ -9,6 +9,7 @@ import SwiftUI
 import DataModel
 import CoreData
 import Combine
+import Localization
 
 struct ItemChecklistsAssignmentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -58,7 +59,7 @@ struct ItemChecklistsAssignmentView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .searchable(text: $searchText, prompt: Text("Search for checklists..."))
+            .searchable(text: $searchText, prompt: Text(L10n.ChecklistsList.searchPlaceholder.localized))
             .onChange(of: searchText) { newValue in
                 let text = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 if text.isEmpty {
@@ -74,13 +75,13 @@ struct ItemChecklistsAssignmentView: View {
                     ])
                 }
             }
-            .navigationTitle("Add \(item.title) to checklists")
+            .navigationTitle(L10n.ItemAssignment.addItemToChecklistsTitle.localized(with: item.title))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Common.buttonCancel.localized)
                     }
                     .keyboardShortcut(.cancelAction)
                 }
@@ -90,7 +91,7 @@ struct ItemChecklistsAssignmentView: View {
                         viewContext.saveOrRollback()
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Save")
+                        Text(L10n.Common.buttonSave.localized)
                             .bold()
                     }
                     .keyboardShortcut("S", modifiers: [.command])

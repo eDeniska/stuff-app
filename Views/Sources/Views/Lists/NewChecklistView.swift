@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DataModel
+import Localization
 
 // TODO: add option to edit list info?..
 
@@ -39,10 +40,10 @@ struct NewChecklistView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("New checklist title", text: $newListTitle)
+                    TextField(L10n.NewChecklist.titlePlaceholder.localized, text: $newListTitle)
                         .onSubmit(submit)
                 } header: {
-                    Text("Title")
+                    Text(L10n.NewChecklist.titleSectionTitle.localized)
                 }
                 Section {
                     LazyVGrid(columns: gridItemLayout) {
@@ -62,22 +63,22 @@ struct NewChecklistView: View {
                         }
                     }
                 } header: {
-                    Text("Icon")
+                    Text(L10n.NewChecklist.customIcon.localized)
                 }
             }
-            .navigationTitle("New checklist")
+            .navigationTitle(L10n.NewChecklist.title.localized)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Common.buttonCancel.localized)
                     }
                     .keyboardShortcut(.cancelAction)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: submit) {
-                        Text("Save")
+                        Text(L10n.Common.buttonSave.localized)
                             .bold()
                     }
                     .keyboardShortcut("S", modifiers: [.command])

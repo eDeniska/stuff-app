@@ -9,6 +9,7 @@ import SwiftUI
 import DataModel
 import CoreData
 import Logger
+import Localization
 
 public struct PlaceDetailsView: View {
 
@@ -30,7 +31,7 @@ public struct PlaceDetailsView: View {
     private let validObject: Bool
 
     public init(place: ItemPlace, allowOpenInSeparateWindow: Bool = true) {
-        validObject = place.managedObjectContext == nil
+        validObject = place.managedObjectContext != nil
         self.place = place
         itemsRequest = SectionedFetchRequest(entity: Item.entity(),
                                              sectionIdentifier: \Item.categoryTitle,
@@ -47,7 +48,7 @@ public struct PlaceDetailsView: View {
 
     private func title(for sectionIdentifier: SectionedFetchResults<String, Item>.Section.ID) -> String {
         if sectionIdentifier.isEmpty {
-            return "<Unnamed>"
+            return L10n.Category.unnamedCategory.localized
         } else {
             return sectionIdentifier
         }
@@ -89,7 +90,7 @@ public struct PlaceDetailsView: View {
         }
         .overlay {
             if items.isEmpty {
-                Text("Place is empty")
+                Text(L10n.PlaceDetails.placeIsEmpty.localized)
                     .font(.title)
                     .foregroundColor(.secondary)
             }
@@ -100,7 +101,6 @@ public struct PlaceDetailsView: View {
         .navigationTitle(place.title)
         .userActivity(Self.activityIdentifier, isActive: !place.isFault) { activity in
             activity.title = place.title
-            // TODO: add more details?
             activity.userInfo = [Self.identifierKey: place.identifier]
             activity.isEligibleForHandoff = true
             activity.isEligibleForPrediction = true
@@ -110,14 +110,14 @@ public struct PlaceDetailsView: View {
                 Button {
                     showItemAssignment = true
                 } label: {
-                    Label("Place items...", systemImage: "text.badge.plus") // TODO: consider other icon
+                    Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus") // TODO: consider other icon
                 }
                 .disabled(itemsUnavailable)
                 if allowOpenInSeparateWindow {
                     Button {
                         SinglePlaceView.activateSession(place: place)
                     } label: {
-                        Label("Open in separate window", systemImage: "square.on.square")
+                        Label(L10n.Common.buttonSeparateWindow.localized, systemImage: "square.on.square")
                     }
                 }
             }

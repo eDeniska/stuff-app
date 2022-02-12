@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Localization
 
 public enum AppCategory: String, CaseIterable, Identifiable {
     case pets
@@ -71,7 +72,36 @@ public enum AppCategory: String, CaseIterable, Identifiable {
     }
 
     public var localizedTitle: String {
-        rawValue // TODO: replace with localization
+        switch self {
+        case .pets:
+            return L10n.AppCategory.pets.localized
+        case .clothers:
+            return L10n.AppCategory.clothers.localized
+        case .shoes:
+            return L10n.AppCategory.shoes.localized
+        case .gadgets:
+            return L10n.AppCategory.gadgets.localized
+        case .tableware:
+            return L10n.AppCategory.tableware.localized
+        case .jewelry:
+            return L10n.AppCategory.jewelry.localized
+        case .accessories:
+            return L10n.AppCategory.accessories.localized
+        case .books:
+            return L10n.AppCategory.books.localized
+        case .appliances:
+            return L10n.AppCategory.appliances.localized
+        case .furniture:
+            return L10n.AppCategory.furniture.localized
+        case .sports:
+            return L10n.AppCategory.sports.localized
+        case .tools:
+            return L10n.AppCategory.tools.localized
+        case .music:
+            return L10n.AppCategory.music.localized
+        case .other:
+            return L10n.AppCategory.other.localized
+        }
     }
 
     public var id: String {

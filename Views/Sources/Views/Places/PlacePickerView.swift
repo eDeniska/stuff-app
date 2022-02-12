@@ -9,6 +9,7 @@ import SwiftUI
 import DataModel
 import Logger
 import CoreData
+import Localization
 
 struct PlacePickerView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -52,7 +53,7 @@ struct PlacePickerView: View {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
                         HStack {
-                            Text("No place assigned")
+                            Text(L10n.PlacesList.noPlaceAssigned.localized)
                             Spacer()
                             if place == nil {
                                 Image(systemName: "checkmark")
@@ -63,7 +64,7 @@ struct PlacePickerView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .searchable(text: $searchText, prompt: Text("Search for places..."))
+            .searchable(text: $searchText, prompt: Text(L10n.PlacesList.searchPlaceholder.localized))
             .onChange(of: searchText) { newValue in
                 let text = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 if text.isEmpty {
@@ -75,13 +76,13 @@ struct PlacePickerView: View {
                     })
                 }
             }
-            .navigationTitle("Places")
+            .navigationTitle(L10n.PlacesList.listTitle.localized)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Common.buttonCancel.localized)
                     }
                     .keyboardShortcut(.cancelAction)
                 }

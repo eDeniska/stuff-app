@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DataModel
+import Localization
 
 // TODO: add option to edit entry info?..
 
@@ -83,10 +84,10 @@ public struct NewChecklistEntryView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Title", text: $title)
+                    TextField(L10n.NewChecklistEnty.titlePlaceholder.localized, text: $title)
                         .onSubmit(submit)
                 } header: {
-                    Text("Title")
+                    Text(L10n.NewChecklistEnty.titleSectionTitle.localized)
                 }
 
                 if !items.isEmpty {
@@ -102,7 +103,7 @@ public struct NewChecklistEntryView: View {
                             .buttonStyle(.plain)
                         }
                     } header: {
-                        Text("Suggested items")
+                        Text(L10n.NewChecklistEnty.suggestedItemsSectionTitle.localized)
                     }
                 }
 
@@ -124,22 +125,22 @@ public struct NewChecklistEntryView: View {
                         }
                     }
                 } header: {
-                    Text("Icon")
+                    Text(L10n.NewChecklistEnty.customIcon.localized)
                 }
             }
-            .navigationTitle("Entry")
+            .navigationTitle(L10n.NewChecklistEnty.title.localized)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Common.buttonCancel.localized)
                     }
                     .keyboardShortcut(.cancelAction)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: submit) {
-                        Text("Save")
+                        Text(L10n.Common.buttonSave.localized)
                             .bold()
                     }
                     .keyboardShortcut("S", modifiers: [.command])

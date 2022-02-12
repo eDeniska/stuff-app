@@ -12,6 +12,7 @@ import CoreData
 import ImageRecognizer
 import Logger
 import AVFoundation
+import Localization
 
 // TODO: add onSubmit action to save on enter press?
 
@@ -65,7 +66,7 @@ public struct ItemDetailsView: View {
         }
     }
 }
-public struct ItemDetailsViewInternal: View {
+struct ItemDetailsViewInternal: View {
 
     private enum FocusedField {
         case title
@@ -111,7 +112,7 @@ public struct ItemDetailsViewInternal: View {
     private let hasDismissButton: Bool
 
     private var title: String {
-        itemDetails.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "New item" : itemDetails.title
+        itemDetails.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? L10n.ItemDetails.newItemTitle.localized : itemDetails.title
     }
 
     private func cameraAccessAllowed() -> Bool {
@@ -122,7 +123,7 @@ public struct ItemDetailsViewInternal: View {
         AVCaptureDevice.authorizationStatus(for: .video) == .restricted
     }
 
-    public init(item: Binding<Item?>, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
+    init(item: Binding<Item?>, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
         _item = item
         _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item.wrappedValue))
         _isEditing = State(wrappedValue: item.wrappedValue == nil)
@@ -135,12 +136,12 @@ public struct ItemDetailsViewInternal: View {
         }
     }
 
-    public var body: some View {
+    var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                 GroupBox {
                     if isEditing {
-                        TextField("Item title", text: $itemDetails.title)
+                        TextField(L10n.ItemDetails.itemTitlePlaceholder.localized, text: $itemDetails.title)
                             .focused($focusedField, equals: .title)
                             .font(.title2)
                             .id("title")
@@ -153,7 +154,7 @@ public struct ItemDetailsViewInternal: View {
                             .padding(UIDevice.current.isMac ? 8 : 0)
                     }
                 } label: {
-                    Text("Item")
+                    Text(L10n.ItemDetails.itemSectionTitle.localized)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -169,7 +170,7 @@ public struct ItemDetailsViewInternal: View {
                                     showCategoryPicker = true
                                 } label: {
                                     HStack {
-                                        Text("Choose...")
+                                        Text(L10n.Common.buttonChoose.localized)
                                             .font(.title2)
                                     }
                                     .contentShape(Rectangle())
@@ -198,7 +199,7 @@ public struct ItemDetailsViewInternal: View {
                             .padding(UIDevice.current.isMac ? 8 : 0)
                     }
                 } label: {
-                    Text("Category")
+                    Text(L10n.Category.title.localized)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -210,7 +211,7 @@ public struct ItemDetailsViewInternal: View {
                 if !itemDetails.details.isEmpty || isEditing {
                     GroupBox {
                         if isEditing {
-                            TextField("Item details", text: $itemDetails.details)
+                            TextField(L10n.ItemDetails.detailsPlaceholder.localized, text: $itemDetails.details)
                                 .font(.title2)
                                 .focused($focusedField, equals: .details)
                                 .id("details")
@@ -223,7 +224,7 @@ public struct ItemDetailsViewInternal: View {
                                 .padding(UIDevice.current.isMac ? 8 : 0)
                         }
                     } label: {
-                        Text("Details")
+                        Text(L10n.ItemDetails.detailsSectionTitle.localized)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -240,7 +241,7 @@ public struct ItemDetailsViewInternal: View {
                                     showConditionPicker = true
                                 } label: {
                                     HStack {
-                                        Text("Choose...")
+                                        Text(L10n.Common.buttonChoose.localized)
                                             .font(.title2)
                                     }
                                     .contentShape(Rectangle())
@@ -269,7 +270,7 @@ public struct ItemDetailsViewInternal: View {
                             .padding(UIDevice.current.isMac ? 8 : 0)
                     }
                 } label: {
-                    Text("Condition")
+                    Text(L10n.ConditionView.title.localized)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -282,14 +283,14 @@ public struct ItemDetailsViewInternal: View {
                     if isEditing {
                         if UIDevice.current.isMac {
                             HStack {
-                                Text(itemDetails.place?.title ?? "No place is set")
+                                Text(itemDetails.place?.title ?? L10n.ItemDetails.noPlaceIsSet.localized)
                                     .font(.title2)
                                 Spacer()
                                 Button {
                                     showPlacePicker = true
                                 } label: {
                                     HStack {
-                                        Text("Choose...")
+                                        Text(L10n.Common.buttonChoose.localized)
                                             .font(.title2)
                                     }
                                     .contentShape(Rectangle())
@@ -302,7 +303,7 @@ public struct ItemDetailsViewInternal: View {
                                 showPlacePicker = true
                             } label: {
                                 HStack {
-                                    Text(itemDetails.place?.title ?? "No place is set")
+                                    Text(itemDetails.place?.title ?? L10n.ItemDetails.noPlaceIsSet.localized)
                                         .font(.title2)
                                     Spacer()
                                 }
@@ -311,14 +312,14 @@ public struct ItemDetailsViewInternal: View {
                             .id("placeTitle")
                         }
                     } else {
-                        Text(itemDetails.place?.title ?? "No place is set")
+                        Text(itemDetails.place?.title ?? L10n.ItemDetails.noPlaceIsSet.localized)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .font(.title2)
                             .id("placeTitle")
                             .padding(UIDevice.current.isMac ? 8 : 0)
                     }
                 } label: {
-                    Text("Place")
+                    Text(L10n.PlaceDetails.title.localized)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -358,13 +359,13 @@ public struct ItemDetailsViewInternal: View {
                                                 }
 
                                                 .buttonStyle(.plain)
-                                                .accessibilityLabel(Text("Remove image?"))
+                                                .accessibilityLabel(Text(L10n.ItemDetails.shouldRemoveImage.localized))
 
                                             } else {
                                                 EmptyView()
                                             }
                                         }
-                                        .confirmationDialog("Remove the image?", isPresented: Binding {
+                                        .confirmationDialog(L10n.ItemDetails.shouldRemoveImage.localized, isPresented: Binding {
                                             removingImageId == image.id
                                         } set: { newValue in
                                             if !newValue {
@@ -374,7 +375,7 @@ public struct ItemDetailsViewInternal: View {
                                             Button(role: .destructive) {
                                                 itemDetails.removeImage(with: image.id)
                                             } label: {
-                                                Text("Remove")
+                                                Text(L10n.ItemDetails.removeImageConfirmation.localized)
                                             }
                                         }
                                 }
@@ -395,26 +396,26 @@ public struct ItemDetailsViewInternal: View {
                                     }
                                     .buttonStyle(.plain)
                                     .frame(width: 200, height: 200)
-                                    .accessibilityLabel(Text("Add image"))
-                                    .confirmationDialog("Add photos of the item", isPresented: $showPhotoSourcePikcer, titleVisibility: .visible) {
+                                    .accessibilityLabel(Text(L10n.ItemDetails.addPhotosTitle.localized))
+                                    .confirmationDialog(L10n.ItemDetails.addPhotosTitle.localized, isPresented: $showPhotoSourcePikcer, titleVisibility: .visible) {
                                         Button {
                                             takePhoto()
                                         } label: {
-                                            Label("Take photo...", systemImage: "camera")
+                                            Label(L10n.ItemDetails.takePhotoTitle.localized, systemImage: "camera")
                                         }
 
                                         Button {
                                             addPhoto()
                                         } label: {
-                                            Label("Choose from library...", systemImage: "photo.on.rectangle.angled")
+                                            Label(L10n.ItemDetails.choosePhotosTitle.localized, systemImage: "photo.on.rectangle.angled")
                                         }
                                     }
-                                    .alert("Camera access is not allowed", isPresented: $showCameraPermissionWarning) {
+                                    .alert(L10n.ItemDetails.noCameraAccessTitle.localized, isPresented: $showCameraPermissionWarning) {
                                         if UIDevice.current.isMac {
                                             Button(role: .cancel) {
                                                 showCameraPermissionWarning = false
                                             } label: {
-                                                Text("Dismiss")
+                                                Text(L10n.Common.buttonDismiss.localized)
                                             }
                                             .keyboardShortcut(.cancelAction)
                                         } else {
@@ -428,13 +429,13 @@ public struct ItemDetailsViewInternal: View {
                                                     }
                                                 }
                                             } label: {
-                                                Text("Open settings")
+                                                Text(L10n.ItemDetails.buttonOpenSettings.localized)
                                             }
                                             .keyboardShortcut(.defaultAction)
                                             Button(role: .cancel) {
                                                 showCameraPermissionWarning = false
                                             } label: {
-                                                Text("Cancel")
+                                                Text(L10n.Common.buttonCancel.localized)
                                             }
                                             .keyboardShortcut(.cancelAction)
                                         }
@@ -475,7 +476,7 @@ public struct ItemDetailsViewInternal: View {
                             return true
                         }
                     } label: {
-                        Text("Images")
+                        Text(L10n.ItemDetails.imagesSectionTitle.localized)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
@@ -489,7 +490,7 @@ public struct ItemDetailsViewInternal: View {
         .overlay(ZStack(alignment: .center) {
             if isPredicting || isFetchingImages {
                 VStack {
-                    ProgressView(isPredicting ? "Predicting..." : "Fetching images...")
+                    ProgressView(isPredicting ? L10n.ItemDetails.predictingTitle.localized : L10n.ItemDetails.fetchingImagesTitle.localized)
                         .progressViewStyle(.circular)
                 }
                 .padding()
@@ -509,7 +510,7 @@ public struct ItemDetailsViewInternal: View {
                             isEditing.toggle()
                         }
                     } label: {
-                        Text("Save")
+                        Text(L10n.Common.buttonSave.localized)
                             .bold()
                     }
                     .keyboardShortcut("S", modifiers: [.command])
@@ -518,7 +519,7 @@ public struct ItemDetailsViewInternal: View {
                     Button {
                         isEditing.toggle()
                     } label: {
-                        Text("Edit")
+                        Text(L10n.Common.buttonEdit.localized)
                     }
                 }
             }
@@ -532,14 +533,14 @@ public struct ItemDetailsViewInternal: View {
                             isEditing.toggle()
                         }
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Common.buttonCancel.localized)
                     }
                     .keyboardShortcut(.cancelAction)
                 } else if hasDismissButton {
                     Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Dismiss")
+                        Text(L10n.Common.buttonDismiss.localized)
                     }
                     .keyboardShortcut(.cancelAction)
                 }
@@ -556,7 +557,7 @@ public struct ItemDetailsViewInternal: View {
                             .disabled(isItem(in: checklist))
                         }
                     } label: {
-                        Label("Add to checklist", systemImage: "text.badge.plus")
+                        Label(L10n.ItemDetails.buttonAddToChecklist.localized, systemImage: "text.badge.plus")
                     }
                     .menuStyle(.borderlessButton)
                     .disabled(Checklist.isEmpty(in: viewContext))
@@ -567,7 +568,7 @@ public struct ItemDetailsViewInternal: View {
                     Button {
                         SingleItemDetailsView.activateSession(item: item)
                     } label: {
-                        Label("Open in separate window", systemImage: "square.on.square")
+                        Label(L10n.Common.buttonSeparateWindow.localized, systemImage: "square.on.square")
                     }
                 }
             }

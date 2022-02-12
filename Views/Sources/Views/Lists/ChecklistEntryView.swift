@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreData
 import DataModel
+import Localization
 
 struct ChecklistEntryView: View {
     @ObservedObject private var entry: ChecklistEntry
@@ -55,20 +56,20 @@ struct ChecklistEntryView: View {
                 Button {
                     itemDetailsPresented = true
                 } label: {
-                    Label("Item details...", systemImage: "tag")
+                    Label(L10n.ChecklistDetails.itemDetailsButton.localized, systemImage: "tag")
                 }
             }
             if isChecked {
                 Button {
                     isChecked.toggle()
                 } label: {
-                    Label("Mark as unchecked", systemImage: "circle")
+                    Label(L10n.ChecklistDetails.markAsUnchecked.localized, systemImage: "circle")
                 }
             } else {
                 Button {
                     isChecked.toggle()
                 } label: {
-                    Label("Mark as checked", systemImage: "checkmark.circle")
+                    Label(L10n.ChecklistDetails.markAsChecked.localized, systemImage: "checkmark.circle")
                 }
             }
         }
@@ -86,6 +87,19 @@ struct ChecklistEntryView: View {
             entry.isChecked = newValue
             entry.updateSortOrder()
             entry.managedObjectContext?.saveOrRollback()
+        }
+        // TODO: verify mark checked/unchecked as leading swipe action
+        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+            Button {
+                isChecked.toggle()
+            } label: {
+                if isChecked {
+                    Label(L10n.ChecklistDetails.markAsUnchecked.localized, systemImage: "circle")
+                } else {
+                    Label(L10n.ChecklistDetails.markAsChecked.localized, systemImage: "checkmark.circle")
+                }
+            }
+            .tint(.blue)
         }
     }
 }

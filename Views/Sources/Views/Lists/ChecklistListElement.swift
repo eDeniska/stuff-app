@@ -8,6 +8,7 @@
 import SwiftUI
 import DataModel
 import CoreData
+import Localization
 
 struct ChecklistListElement: View {
     @ObservedObject private var checklist: Checklist
@@ -26,7 +27,7 @@ struct ChecklistListElement: View {
                     .lineLimit(1)
                     .font(.body)
                 if let count = checklist.entries.count, count > 0 {
-                    Text("\(count) item(s)")
+                    Text(L10n.ChecklistsList.elementNumberOfEntries.localized(with: count))
                         .truncationMode(.tail)
                         .lineLimit(1)
                         .font(.caption)

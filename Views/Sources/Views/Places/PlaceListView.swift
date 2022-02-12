@@ -9,9 +9,9 @@ import SwiftUI
 import DataModel
 import Combine
 import CoreData
+import Localization
 
 // TODO: add option to edit place info?..
-// TODO: select place that was just created
 
 struct PlaceListRow: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -34,40 +34,40 @@ struct PlaceListRow: View {
             Button {
                 showItemAssignment = true
             } label: {
-                Label("Place items...", systemImage: "text.badge.plus") // TODO: consider other icon
+                Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus") // TODO: consider other icon
             }
             .disabled(itemsUnavailable)
             Button(role: .destructive) {
                 showDeleteConfirmation = true
             } label: {
-                Label("Delete...", systemImage: "trash")
+                Label(L10n.Common.buttonDeleteEllipsis.localized, systemImage: "trash")
             }
         }
         .swipeActions {
             Button(role: .destructive) {
                 showDeleteConfirmation = true
             } label: {
-                Label("Delete...", systemImage: "trash")
+                Label(L10n.Common.buttonDeleteEllipsis.localized, systemImage: "trash")
             }
             Button {
                 showItemAssignment = true
             } label: {
-                Label("Place items...", systemImage: "text.badge.plus") // TODO: consider other icon
+                Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus") // TODO: consider other icon
             }
             .tint(.indigo)
             .disabled(itemsUnavailable)
         }
-        .confirmationDialog("Delete \(place.title)?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+        .confirmationDialog(L10n.PlacesList.shouldDeletePlace.localized, isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button(role: .destructive) {
                 viewContext.delete(place)
                 viewContext.saveOrRollback()
             } label: {
-                Text("Delete")
+                Text(L10n.Common.buttonDelete.localized)
             }
             .keyboardShortcut(.defaultAction)
             Button(role: .cancel) {
             } label: {
-                Text("Cancel")
+                Text(L10n.Common.buttonCancel.localized)
             }
             .keyboardShortcut(.cancelAction)
         }
@@ -137,7 +137,7 @@ public struct PlaceListView: View {
             .sheet(isPresented: $shouldAddNew) {
                 NewPlaceView(createdPlace: $selectedPlace)
             }
-            .searchable(text: $searchText, prompt: Text("Search for places..."))
+            .searchable(text: $searchText, prompt: Text(L10n.PlacesList.searchPlaceholder.localized))
             .onChange(of: searchText) { newValue in
                 let text = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 if text.isEmpty {
@@ -149,7 +149,7 @@ public struct PlaceListView: View {
                     })
                 }
             }
-            .navigationTitle("Places")
+            .navigationTitle(L10n.PlacesList.listTitle.localized)
             .onReceive(NotificationCenter.default.publisher(for: .newPlaceRequest, object: nil)) { _ in
                 selectedPlace = nil
                 shouldAddNew = true
@@ -163,14 +163,14 @@ public struct PlaceListView: View {
                         selectedPlace = nil
                         shouldAddNew = true
                     } label: {
-                        Label("Add Place", systemImage: "plus")
+                        Label(L10n.PlacesList.addPlaceButton.localized, systemImage: "plus")
                     }
                 }
             }
             PlaceDetailsWelcomeView()
         }
         .tabItem {
-            Label("Places", systemImage: "house")
+            Label(L10n.PlacesList.listTitle.localized, systemImage: "house")
         }
     }
 }

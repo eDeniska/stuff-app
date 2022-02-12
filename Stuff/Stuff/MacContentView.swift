@@ -10,6 +10,7 @@ import Views
 import Logger
 import DataModel
 import CoreData
+import Localization
 
 @MainActor
 class ToolbarDelegate: NSObject {
@@ -60,7 +61,7 @@ extension ToolbarDelegate: NSToolbarDelegate {
             let images = [UIImage(systemName: "tag", withConfiguration: configuration)!,
                           UIImage(systemName: "house", withConfiguration: configuration)!,
                           UIImage(systemName: "list.bullet.rectangle", withConfiguration: configuration)!]
-            let labels = ["Items", "Places", "Checklists"]
+            let labels = [L10n.App.toolbarItems.localized, L10n.App.toolbarPlaces.localized, L10n.App.toolbarChecklists.localized]
             let item = NSToolbarItemGroup(itemIdentifier: itemIdentifier,
                                           images: images,
                                           selectionMode: .selectOne,
@@ -115,11 +116,11 @@ struct MacContentView: View {
     private func updateSceneTitle() {
         switch selected {
         case .items:
-            scene?.title = "Stuff – Items"
+            scene?.title = L10n.App.titleItems.localized
         case .places:
-            scene?.title = "Stuff – Places"
+            scene?.title = L10n.App.titlePlaces.localized
         case .checklists:
-            scene?.title = "Stuff – Checklists"
+            scene?.title = L10n.App.titleChecklists.localized
         }
     }
 

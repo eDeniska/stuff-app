@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Localization
 
 public enum ItemCondition: String, CaseIterable {
     case unknown
@@ -20,25 +21,25 @@ public enum ItemCondition: String, CaseIterable {
         switch self {
 
         case .unknown:
-            return "unknown"
+            return L10n.ItemCondition.unknown.localized
 
         case .brandNew:
-            return "brand new"
+            return L10n.ItemCondition.brandNew.localized
 
         case .excellent:
-            return "excellent"
+            return L10n.ItemCondition.excellent.localized
 
         case .good:
-            return "good"
+            return L10n.ItemCondition.good.localized
 
         case .moderate:
-            return "moderate"
+            return L10n.ItemCondition.moderate.localized
 
         case .poor:
-            return "poor"
+            return L10n.ItemCondition.poor.localized
 
         case .damaged:
-            return "damaged"
+            return L10n.ItemCondition.damaged.localized
         }
     }
 }

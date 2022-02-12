@@ -79,10 +79,13 @@ public struct ItemListElement: View {
     }
 
     private func iconName() -> String {
-        guard let appCategory = item.category?.appCategory, let category = AppCategory(rawValue: appCategory) else {
+        if let appCategory = item.category?.appCategory, let category = AppCategory(rawValue: appCategory) {
+            return category.iconName
+        } else if let icon = item.category?.icon {
+            return icon
+        } else {
             return AppCategory.other.iconName
         }
-        return category.iconName
     }
 }
 

@@ -10,6 +10,7 @@ import Combine
 import CoreData
 import DataModel
 import Logger
+import Localization
 
 public struct CategoryPickerView: View {
 
@@ -47,16 +48,17 @@ public struct CategoryPickerView: View {
         PhoneNavigationView {
             Form {
                 Section {
-                    TextField("Category", text: $text)
+                    TextField(L10n.Category.sectionTitle.localized, text: $text)
                     if isNewCategory() {
                         Button {
                             // creating category object before saving context
-                            let category = category.itemCategory(in: viewContext)
-                            category.icon = selectedIcon
+                            category = .custom(trimmedTitle)
+                            let objCategory = category.itemCategory(in: viewContext)
+                            objCategory.icon = selectedIcon
                             presentationMode.wrappedValue.dismiss()
                             Logger.default.info("create new and dismiss")
                         } label: {
-                            Text("Create category '\(trimmedTitle)'")
+                            Text(L10n.Category.createCategoryNamed.localized(with: trimmedTitle))
                         }
                     }
                 }
@@ -79,7 +81,7 @@ public struct CategoryPickerView: View {
                             }
                         }
                     } header: {
-                        Text("Custom Icon")
+                        Text(L10n.Category.customIcon.localized)
                     }
                 }
                 
@@ -122,30 +124,32 @@ public struct CategoryPickerView: View {
                     }
                 }
             }
-            .navigationTitle("Category")
+            .navigationTitle(L10n.Category.title.localized)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
-                        Text("Cancel")
+                        Text(L10n.Common.buttonCancel.localized)
                     }
                     .keyboardShortcut(.cancelAction)
                 }
             }
-            .onChange(of: text) { [text] newValue in
-                let newTitle = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                guard newTitle != text else {
-                    return
-                }
-                if let appCategory = AppCategory.allCases.first(where: { $0.localizedTitle == newTitle }) {
-                    category = .predefined(appCategory)
-                } else {
-                    category = .custom(newTitle)
-                }
-            }
+//            .onChange(of: text) { [text] newValue in
+//                let newTitle = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+//                guard newTitle != text else {
+//                    return
+//                }
+////                if let appCategory = AppCategory.allCases.first(where: { $0.localizedTitle == newTitle }) {
+////                    category = .predefined(appCategory)
+////                } else {
+////                    category = .custom(newTitle)
+////                }
+//            }
             .onChange(of: category) { newValue in
-                text = newValue.title
+                if text.trimmingCharacters(in: .whitespacesAndNewlines) != newValue.title {
+                    text = newValue.title
+                }
             }
         }
     }

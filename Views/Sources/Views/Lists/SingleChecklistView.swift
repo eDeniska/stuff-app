@@ -9,6 +9,7 @@ import SwiftUI
 import DataModel
 import CoreData
 import Logger
+import Localization
 
 public struct SingleChecklistView: View {
 
@@ -47,7 +48,7 @@ public struct SingleChecklistView: View {
                                     Logger.default.error("[SCENE] no scene, could not dismiss window")
                                 }
                             } label: {
-                                Text("Dismiss")
+                                Text(L10n.Common.buttonDismiss.localized)
                             }
                         }
                     }
@@ -56,7 +57,7 @@ public struct SingleChecklistView: View {
                     }
             } else {
                 VStack {
-                    Text("Checklist is no longer available")
+                    Text(L10n.ChecklistDetails.checklistNoLongerAvailable.localized)
                     Button(role: .cancel) {
                         if let scene = scene {
                             Logger.default.info("[SCENE] processing captured scene: \(scene)")
@@ -67,7 +68,7 @@ public struct SingleChecklistView: View {
                             Logger.default.error("[SCENE] no scene, could not dismiss window")
                         }
                     } label: {
-                        Text("Dismiss")
+                        Text(L10n.Common.buttonDismiss.localized)
                     }
                 }
             }
