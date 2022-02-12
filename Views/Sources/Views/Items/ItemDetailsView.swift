@@ -24,13 +24,56 @@ public struct ItemDetailsView: View {
     public static let activityIdentifier = "com.tazetdinov.stuff.item.view"
     public static let identifierKey = "itemID"
 
+    @Binding private var item: Item?
+    private let hasDismissButton: Bool
+    private let allowOpenInSeparateWindow: Bool
+    private let startWithPhoto: Bool
+    private let validObject: Bool
+
+    public init(item: Item?, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
+        if let item = item {
+            validObject = item.managedObjectContext != nil
+        } else {
+            validObject = true
+        }
+        _item = Binding(projectedValue: .constant(item))
+        self.hasDismissButton = hasDismissButton
+        self.allowOpenInSeparateWindow = allowOpenInSeparateWindow
+        self.startWithPhoto = startWithPhoto
+    }
+
+    public init(item: Binding<Item?>, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
+        _item = item
+        self.hasDismissButton = hasDismissButton
+        self.allowOpenInSeparateWindow = allowOpenInSeparateWindow
+        self.startWithPhoto = startWithPhoto
+        if let item = item.wrappedValue {
+            validObject = item.managedObjectContext != nil
+        } else {
+            validObject = true
+        }
+    }
+
+    public var body: some View {
+        if validObject {
+            ItemDetailsViewInternal(item: $item,
+                                    hasDismissButton: hasDismissButton,
+                                    allowOpenInSeparateWindow: allowOpenInSeparateWindow,
+                                    startWithPhoto: startWithPhoto)
+        } else {
+            ItemDetailsWelcomeView()
+        }
+    }
+}
+public struct ItemDetailsViewInternal: View {
+
     private enum FocusedField {
         case title
         case details
     }
 
     @StateObject private var itemDetails: ItemViewModel
-    private let item: Item?
+    @Binding private var item: Item?
 
     @State private var showPhotoPicker = false
     @State private var showTakePhoto = false
@@ -79,11 +122,11 @@ public struct ItemDetailsView: View {
         AVCaptureDevice.authorizationStatus(for: .video) == .restricted
     }
 
-    public init(item: Item?, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
-        self.item = item
-        _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item))
-        _isEditing = State(wrappedValue: item == nil)
-        isNew = item == nil
+    public init(item: Binding<Item?>, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
+        _item = item
+        _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item.wrappedValue))
+        _isEditing = State(wrappedValue: item.wrappedValue == nil)
+        isNew = item.wrappedValue == nil
         self.hasDismissButton = hasDismissButton
 
         self.allowOpenInSeparateWindow = UIApplication.shared.supportsMultipleScenes && allowOpenInSeparateWindow
@@ -458,7 +501,7 @@ public struct ItemDetailsView: View {
             ToolbarItem(placement: .primaryAction) {
                 if isEditing {
                     Button {
-                        itemDetails.save(in: viewContext)
+                        item = itemDetails.save(in: viewContext)
                         viewContext.saveOrRollback()
                         if isNew {
                             presentationMode.wrappedValue.dismiss()
@@ -540,13 +583,13 @@ public struct ItemDetailsView: View {
         .onAppear {
             checklistsUnavailable = Checklist.isEmpty(in: viewContext)
         }
-        .userActivity(Self.activityIdentifier, isActive: !(item?.isFault ?? true)) { activity in
-            guard let item = item else {
+        .userActivity(ItemDetailsView.activityIdentifier, isActive: !(item?.isFault ?? true)) { activity in
+            guard let item = item, !item.isFault && !item.isDeleted else {
                 return
             }
 
             activity.title = itemDetails.title
-            activity.userInfo = [Self.identifierKey: item.identifier]
+            activity.userInfo = [ItemDetailsView.identifierKey: item.identifier]
             activity.isEligibleForHandoff = true
             activity.isEligibleForPrediction = true
         }

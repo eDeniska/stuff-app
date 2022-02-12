@@ -152,7 +152,7 @@ public class ItemViewModel: ObservableObject {
         item?.managedObjectContext?.saveOrRollback()
     }
 
-    public func save(in context: NSManagedObjectContext) {
+    public func save(in context: NSManagedObjectContext) -> Item {
         let identifier: UUID
         let newItem: Item
 
@@ -200,6 +200,7 @@ public class ItemViewModel: ObservableObject {
                 fileStorageManager.save(data: image.imageData, with: fileName)
             }
         }
+        return newItem
     }
 
     public func reset() {

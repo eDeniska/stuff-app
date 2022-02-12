@@ -10,7 +10,6 @@ import DataModel
 
 // TODO: add option to edit list info?..
 
-
 struct NewChecklistView: View {
 
     @Environment(\.presentationMode) private var presentationMode
@@ -18,6 +17,8 @@ struct NewChecklistView: View {
 
     @State private var newListTitle = ""
     @State private var selectedIcon = ChecklistIcon.allCases.first?.rawValue ?? ""
+
+    @Binding var createdChecklist: Checklist?
 
     private let gridItemLayout = [GridItem(.adaptive(minimum: 80))]
 
@@ -29,7 +30,7 @@ struct NewChecklistView: View {
         guard !trimmedTitle.isEmpty else {
             return
         }
-        Checklist.checklist(title: trimmedTitle, icon: selectedIcon, in: viewContext)
+        createdChecklist = Checklist.checklist(title: trimmedTitle, icon: selectedIcon, in: viewContext)
         viewContext.saveOrRollback()
         presentationMode.wrappedValue.dismiss()
     }

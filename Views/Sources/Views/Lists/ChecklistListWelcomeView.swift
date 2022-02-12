@@ -7,10 +7,11 @@
 
 import SwiftUI
 
+extension Notification.Name {
+    static let newChecklistRequest = Notification.Name("NewChecklistRequestNotification")
+}
+
 struct ChecklistListWelcomeView: View {
-
-    var addNewChecklistAction: (() -> Void)?
-
     var body: some View {
         VStack(spacing: 20) {
             Text("Choose existing checklist")
@@ -18,7 +19,7 @@ struct ChecklistListWelcomeView: View {
             Text("or")
                 .font(.body)
             Button {
-                addNewChecklistAction?()
+                NotificationCenter.default.post(name: .newChecklistRequest, object: nil)
             } label: {
                 Label("Add new", systemImage: "plus.square.dashed")
             }

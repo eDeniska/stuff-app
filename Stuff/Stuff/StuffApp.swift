@@ -18,9 +18,9 @@ import Views
 // TODO: onboarding
 // TODO: add option to export and import data
 // TODO: add onSubmit actions for text fields where appropriate
-// TODO: add keyboard commands to both iOS/iPadOS and macOS
 // TODO: Keyboard shortcuts for New Item, New Place, New Checklist and shortcuts for buttons in details view
 // TODO: remap new window command to other key?..
+// TODO: support undo in editing lists
 
 // TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
 

@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+extension Notification.Name {
+    static let newPlaceRequest = Notification.Name("NewPlaceRequestNotification")
+}
+
 struct PlaceDetailsWelcomeView: View {
 
     var addNewPlaceAction: (() -> Void)?
@@ -18,7 +22,7 @@ struct PlaceDetailsWelcomeView: View {
             Text("or")
                 .font(.body)
             Button {
-                addNewPlaceAction?()
+                NotificationCenter.default.post(name: .newPlaceRequest, object: nil)
             } label: {
                 Label("Add new", systemImage: "plus.square.dashed")
             }

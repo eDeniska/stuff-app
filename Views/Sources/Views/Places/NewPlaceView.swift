@@ -16,6 +16,8 @@ struct NewPlaceView: View {
     @State private var newPlaceTitle = ""
     @State private var selectedIcon = PlaceIcon.allCases.first?.rawValue ?? ""
 
+    @Binding var createdPlace: ItemPlace?
+
     private let gridItemLayout = [GridItem(.adaptive(minimum: 80))]
 
     private var trimmedTitle: String {
@@ -26,7 +28,7 @@ struct NewPlaceView: View {
         guard !trimmedTitle.isEmpty else {
             return
         }
-        ItemPlace.place(title: trimmedTitle, icon: selectedIcon, in: viewContext)
+        createdPlace = ItemPlace.place(title: trimmedTitle, icon: selectedIcon, in: viewContext)
         viewContext.saveOrRollback()
         presentationMode.wrappedValue.dismiss()
     }
