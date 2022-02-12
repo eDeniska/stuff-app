@@ -12,10 +12,12 @@ import Views
 import Localization
 
 // TODO: Apple Watch app – go through checklist, use only thumbnails, if needed
+// TODO: watchOS needs packages without UIKit and Vision - need to refactor DataModel to split logic and data model; localization should avoid UIKit, or again, split into separate modules
 // TODO: add Spotlight search support
 // TODO: add option to share checklists (and items)
 // TODO: add option to make reminders out of checklists
 
+// TODO: add widget with recent checklists
 // TODO: onboarding
 // TODO: add option to export and import data
 // TODO: add onSubmit actions for text fields where appropriate
@@ -24,12 +26,6 @@ import Localization
 // TODO: support undo in editing lists
 
 // TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
-
-//extension Notification.Name {
-//    static let itemsTabSelected = Notification.Name("com.tazetdinov.stuff.toolbar.tab-items")
-//    static let placesTabSelected = Notification.Name("com.tazetdinov.stuff.toolbar.tab-places")
-//    static let checklistsTabSelected = Notification.Name("com.tazetdinov.stuff.toolbar.tab-checklists")
-//}
 
 enum Tab: Int, Codable, Equatable, Hashable {
     case items = 0

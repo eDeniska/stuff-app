@@ -25,6 +25,8 @@
 		<dict>
 			<key>UIApplicationShortcutItemIconSymbolName</key>
 			<string>plus.viewfinder</string>
+			<key>UIApplicationShortcutItemSubtitle</key>
+			<string>subtitle.capture.item</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>title.capture.item</string>
 			<key>UIApplicationShortcutItemType</key>
