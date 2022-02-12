@@ -4,7 +4,8 @@
 "button.save" = "Сохранить";
 "button.choose" = "Выбрать...";
 "button.dismiss" = "Закрыть";
-"button.edit" = "Редактировать";
+"button.edit.mac" = "Редактировать";
+"button.edit.phone" = "Править";
 "button.delete" = "Удвлить";
 "button.delete.ellipsis" = "Удалить...";
 "button.separateWindow" = "Открыть в отдельном окне";

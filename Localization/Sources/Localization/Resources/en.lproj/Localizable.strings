@@ -4,7 +4,8 @@
 "button.save" = "Save";
 "button.choose" = "Choose...";
 "button.dismiss" = "Dismiss";
-"button.edit" = "Edit";
+"button.edit.mac" = "Edit";
+"button.edit.phone" = "Edit";
 "button.delete" = "Delete";
 "button.delete.ellipsis" = "Delete...";
 "button.separateWindow" = "Open in separate window";

@@ -12,6 +12,8 @@ import Localization
 
 struct ChecklistEntryView: View {
     @ObservedObject private var entry: ChecklistEntry
+    
+    @Environment(\.managedObjectContext) private var viewContext
 
     @State private var isChecked: Bool
     @State private var itemDetailsPresented = false
@@ -72,6 +74,12 @@ struct ChecklistEntryView: View {
                     Label(L10n.ChecklistDetails.markAsChecked.localized, systemImage: "checkmark.circle")
                 }
             }
+            Button(role: .destructive) {
+                viewContext.delete(entry)
+                viewContext.saveOrRollback()
+            } label: {
+                Label(L10n.Common.buttonDelete.localized, systemImage: "trash")
+            }
         }
         .sheet(isPresented: $itemDetailsPresented) {
             if let item = entry.item {
@@ -88,18 +96,25 @@ struct ChecklistEntryView: View {
             entry.updateSortOrder()
             entry.managedObjectContext?.saveOrRollback()
         }
-        // TODO: verify mark checked/unchecked as leading swipe action
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
             Button {
                 isChecked.toggle()
             } label: {
                 if isChecked {
-                    Label(L10n.ChecklistDetails.markAsUnchecked.localized, systemImage: "circle")
+                    Label(L10n.ChecklistDetails.markAsUnchecked.localized, systemImage: "arrow.counterclockwise.circle")
                 } else {
                     Label(L10n.ChecklistDetails.markAsChecked.localized, systemImage: "checkmark.circle")
                 }
             }
             .tint(.blue)
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button(role: .destructive) {
+                viewContext.delete(entry)
+                viewContext.saveOrRollback()
+            } label: {
+                Label(L10n.Common.buttonDelete.localized, systemImage: "trash")
+            }
         }
     }
 }
