@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Views",
+    name: "ViewModels",
     defaultLocalization: "en",
     platforms: [
          .macOS(.v12),
@@ -14,23 +14,25 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "Views",
-            targets: ["Views"]),
+            name: "ViewModels",
+            targets: ["ViewModels"]),
     ],
     dependencies: [
+        // Dependencies declare other packages that this package depends on.
+        // .package(url: /* package url */, from: "1.0.0"),
+        .package(name: "Logger", path: "../Logger"),
         .package(name: "DataModel", path: "../DataModel"),
-        .package(name: "ViewModels", path: "../ViewModels"),
         .package(name: "Localization", path: "../Localization"),
-        .package(name: "ImageRecognizer", path: "../ImageRecognizer")
+        .package(name: "ImageRecognizer", path: "../ImageRecognizer"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "Views",
-            dependencies: ["DataModel", "ViewModels", "ImageRecognizer", "Localization"]),
+            name: "ViewModels",
+            dependencies: ["Logger", "DataModel", "ImageRecognizer", "Localization"]),
         .testTarget(
-            name: "ViewsTests",
-            dependencies: ["Views"]),
+            name: "ViewModelsTests",
+            dependencies: ["ViewModels"]),
     ]
 )

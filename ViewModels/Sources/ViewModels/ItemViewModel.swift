@@ -12,6 +12,7 @@ import UIKit
 import Logger
 import ImageRecognizer
 import Localization
+import DataModel
 
 @MainActor
 public class ItemViewModel: ObservableObject {

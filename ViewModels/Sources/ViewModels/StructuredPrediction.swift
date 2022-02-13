@@ -7,6 +7,7 @@
 
 import Foundation
 import ImageRecognizer
+import DataModel
 
 struct StructuredPrediction {
     var confidence: Double

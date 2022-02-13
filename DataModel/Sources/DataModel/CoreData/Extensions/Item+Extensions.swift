@@ -7,20 +7,25 @@
 
 import CoreData
 import Logger
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public extension Item {
     @objc var categoryTitle: String {
         category?.title ?? ""
     }
 
+#if canImport(UIKit)
     var thumbnail: UIImage? {
         guard let data = thumbnailData else {
             return nil
         }
         return UIImage(data: data)
     }
-
+#endif
+    
     static func item(with url: URL, in context: NSManagedObjectContext) -> Item? {
         guard let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url),
               let item = try? context.existingObject(with: objectId) as? Item else {

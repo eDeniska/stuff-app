@@ -13,6 +13,7 @@ import ImageRecognizer
 import Logger
 import AVFoundation
 import Localization
+import ViewModels
 
 // TODO: add onSubmit action to save on enter press?
 

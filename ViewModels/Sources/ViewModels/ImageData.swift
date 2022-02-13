@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import DataModel
 
 public class ImageData: Identifiable, Equatable {
     public static func == (lhs: ImageData, rhs: ImageData) -> Bool {

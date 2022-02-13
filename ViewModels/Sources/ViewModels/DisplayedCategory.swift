@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import DataModel
 
 public enum DisplayedCategory: Equatable {
 

@@ -11,6 +11,7 @@ import CoreData
 import DataModel
 import Logger
 import Localization
+import ViewModels
 
 public struct CategoryPickerView: View {
 

@@ -118,8 +118,4 @@ extension L10n {
         case poor = "condition.poor"
         case damaged = "condition.damaged"
     }
-    
-    enum Item: String, Localizable {
-        case unnamed = "item.unnamed"
-    }
 }

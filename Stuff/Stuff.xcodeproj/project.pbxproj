@@ -55,9 +55,10 @@
 		0DFD4D1F275F944200088631 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0DFD4D2B275F945C00088631 /* Stuff.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stuff.entitlements; sourceTree = "<group>"; };
 		0DFD4D2C275FACA900088631 /* Views */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Views; path = ../Views; sourceTree = "<group>"; };
+		8672FED727B8E3D300C436A6 /* ViewModels */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ViewModels; path = ../ViewModels; sourceTree = "<group>"; };
 		86B8D2F227B79AC500DAEE77 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86B8D2F427B79AD700DAEE77 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		86B8D2F527B79E1100DAEE77 /* Localization */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Localization; path = ../Localization; sourceTree = "<group>"; };
+		86CC62EF27B8E61D00F251DB /* Localization */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Localization; path = ../Localization; sourceTree = "<group>"; };
 		86E001C327B7DA54002E7F1E /* L10n+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "L10n+App.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -167,10 +168,11 @@
 			isa = PBXGroup;
 			children = (
 				0DFD4D2C275FACA900088631 /* Views */,
-				0DCC17592760CCFD00E0322F /* ImageRecognizer */,
+				8672FED727B8E3D300C436A6 /* ViewModels */,
 				0DCC175E2760E31900E0322F /* DataModel */,
+				86CC62EF27B8E61D00F251DB /* Localization */,
+				0DCC17592760CCFD00E0322F /* ImageRecognizer */,
 				0D8EAE1C276A21DE00B39E9D /* Logger */,
-				86B8D2F527B79E1100DAEE77 /* Localization */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
