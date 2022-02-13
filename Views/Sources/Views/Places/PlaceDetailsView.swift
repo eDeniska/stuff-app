@@ -128,7 +128,7 @@ public struct PlaceDetailsView: View {
         .onAppear {
             itemsUnavailable = Item.isEmpty(in: viewContext)
         }
-        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil).receive(on: DispatchQueue.main)) { _ in
             itemsUnavailable = Item.isEmpty(in: viewContext)
         }
         } else {

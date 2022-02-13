@@ -71,10 +71,10 @@ struct ContentView: View {
 
     var body: some View {
         platformView()
-            .onReceive(NotificationCenter.default.publisher(for: .itemCaptureRequest, object: nil)) { _ in
+            .onReceive(NotificationCenter.default.publisher(for: .itemCaptureRequest, object: nil).receive(on: DispatchQueue.main)) { _ in
                 showItemCapture = true
             }
-            .onReceive(NotificationCenter.default.publisher(for: .checklistSelected, object: nil)) { notification in
+            .onReceive(NotificationCenter.default.publisher(for: .checklistSelected, object: nil).receive(on: DispatchQueue.main)) { notification in
                 if let checklistID = notification.userInfo?[ChecklistEntryListView.identifierKey] as? UUID {
                     selectedChecklist = Checklist.checklist(with: checklistID, in: viewContext)
                 }

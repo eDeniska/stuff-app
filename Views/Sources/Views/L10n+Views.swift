@@ -98,7 +98,6 @@ extension L10n {
         case shouldDeleteChecklist = "checklists.list.shouldDeleteChecklist" // "Delete \(item.title)?"
         case addChecklistButton = "checklists.list.addChecklist.button" // "Add checklist"
         case assignItemsToTitle = "checklists.list.assignItemsTo.title" // "Add items to
-        case elementNumberOfEntries = "checklists.list.element.numberOfEntries"
         case filterItemsPlaceholder = "checklists.list.filterItems.placeholder" // "Filter items..."
     }
     

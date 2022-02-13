@@ -75,7 +75,7 @@ struct ItemListRow: View {
         .onAppear {
             checklistsUnavailable = Checklist.isEmpty(in: viewContext)
         }
-        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil).receive(on: DispatchQueue.main)) { _ in
             checklistsUnavailable = Checklist.isEmpty(in: viewContext)
         }
     }
@@ -144,7 +144,7 @@ public struct ItemListView: View {
                 }
                 .hidden()
             }
-            .onReceive(NotificationCenter.default.publisher(for: .newItemRequest, object: nil)) { _ in
+            .onReceive(NotificationCenter.default.publisher(for: .newItemRequest, object: nil).receive(on: DispatchQueue.main)) { _ in
                 selectedItem = nil
                 showNewItemForm = true
             }

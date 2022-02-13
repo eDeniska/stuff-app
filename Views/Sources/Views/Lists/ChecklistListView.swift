@@ -74,7 +74,7 @@ struct ChecklistListRow: View {
         .onAppear {
             itemsUnavailable = Item.isEmpty(in: viewContext)
         }
-        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil).receive(on: DispatchQueue.main)) { _ in
             itemsUnavailable = Item.isEmpty(in: viewContext)
         }
         .onChange(of: checklist) { newValue in
@@ -158,7 +158,7 @@ public struct ChecklistListView: View {
                     ])
                 }
             }
-            .onReceive(NotificationCenter.default.publisher(for: .newChecklistRequest, object: nil)) { _ in
+            .onReceive(NotificationCenter.default.publisher(for: .newChecklistRequest, object: nil).receive(on: DispatchQueue.main)) { _ in
                 selectedChecklist = nil
                 shouldAddNew = true
             }

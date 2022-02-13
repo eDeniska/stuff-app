@@ -595,7 +595,7 @@ struct ItemDetailsViewInternal: View {
             activity.isEligibleForHandoff = true
             activity.isEligibleForPrediction = true
         }
-        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil).receive(on: DispatchQueue.main)) { _ in
             checklistsUnavailable = Checklist.isEmpty(in: viewContext)
         }
         .onChange(of: takenImage) { image in

@@ -16,9 +16,13 @@ import Localization
 // TODO: add Spotlight search support
 // TODO: add option to share checklists (and items)
 // TODO: add option to make reminders out of checklists
+// TODO: Siri/Shortcuts intents to manage lists
+
+// TODO: smart checklists for lost items, items without a place, damaged items - you can't "complete" them
 
 // TODO: add widget with recent checklists
 // TODO: onboarding
+// TODO: pin/biometric lock of the app access
 // TODO: add option to export and import data
 // TODO: add onSubmit actions for text fields where appropriate
 // TODO: Keyboard shortcuts for New Item, New Place, New Checklist and shortcuts for buttons in details view
@@ -80,6 +84,13 @@ struct StuffApp: App {
                     }
                     selectedChecklist = Checklist.checklist(with: identifier, in: persistenceController.container.viewContext)
                     Logger.default.info("[HANDOFF] got checklist = [\(selectedChecklist?.title ?? "<>")]")
+                }
+                .onOpenURL { url in
+                    Logger.default.info("[WIDGET] url from widget = \(url)")
+                    if let checklist = WidgetURLHandler.checklist(from: url, in: persistenceController.container.viewContext) {
+                        Logger.default.info("[WIDGET] got checklist = \(checklist.identifier)")
+                        selectedChecklist = checklist
+                    }
                 }
         }
         .commands {

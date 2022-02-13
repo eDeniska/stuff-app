@@ -75,6 +75,7 @@ struct ChecklistEntryView: View {
                 }
             }
             Button(role: .destructive) {
+                entry.checklist?.lastModified = .now
                 viewContext.delete(entry)
                 viewContext.saveOrRollback()
             } label: {
@@ -92,6 +93,7 @@ struct ChecklistEntryView: View {
             isChecked = newValue
         }
         .onChange(of: isChecked) { newValue in
+            entry.checklist?.lastModified = .now
             entry.isChecked = newValue
             entry.updateSortOrder()
             entry.managedObjectContext?.saveOrRollback()
@@ -110,6 +112,7 @@ struct ChecklistEntryView: View {
         }
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             Button(role: .destructive) {
+                entry.checklist?.lastModified = .now
                 viewContext.delete(entry)
                 viewContext.saveOrRollback()
             } label: {

@@ -77,7 +77,7 @@ struct PlaceListRow: View {
         .onAppear {
             itemsUnavailable = Item.isEmpty(in: viewContext)
         }
-        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil).receive(on: DispatchQueue.main)) { _ in
             itemsUnavailable = Item.isEmpty(in: viewContext)
         }
     }
@@ -150,7 +150,7 @@ public struct PlaceListView: View {
                 }
             }
             .navigationTitle(L10n.PlacesList.listTitle.localized)
-            .onReceive(NotificationCenter.default.publisher(for: .newPlaceRequest, object: nil)) { _ in
+            .onReceive(NotificationCenter.default.publisher(for: .newPlaceRequest, object: nil).receive(on: DispatchQueue.main)) { _ in
                 selectedPlace = nil
                 shouldAddNew = true
             }

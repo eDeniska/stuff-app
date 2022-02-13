@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import Logger
 
 public extension Checklist {
 
@@ -15,7 +16,7 @@ public extension Checklist {
         entry.identifier = UUID()
         entry.title = title
         entry.icon = icon
-        entry.lastModified = Date()
+        entry.lastModified = .now
         return entry
     }
 
@@ -44,7 +45,12 @@ public extension Checklist {
         let request = Checklist.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.lastModified), ascending: false)]
         request.fetchLimit = limit
-        return (try? context.fetch(request)) ?? []
+        do {
+            return try context.fetch(request)
+        } catch {
+            Logger.default.error("could lot load checklists: \(error)")
+            return []
+        }
     }
 
     static func checklists(for item: Item) -> [Checklist] {
@@ -82,6 +88,7 @@ public extension Checklist {
         guard let context = managedObjectContext else {
             return
         }
+        var isModified = false
         var pendingItems = items
 
         for existing in entries {
@@ -91,12 +98,17 @@ public extension Checklist {
             if pendingItems.contains(existingItem) {
                 pendingItems.remove(existingItem)
             } else {
+                isModified = true
                 context.delete(existing)
             }
         }
 
         for added in pendingItems {
             added.add(to: self)
+        }
+        isModified = isModified || !pendingItems.isEmpty
+        if isModified {
+            lastModified = .now
         }
     }
 }

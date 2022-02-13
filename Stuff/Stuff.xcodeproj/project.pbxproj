@@ -27,9 +27,47 @@
 		0DFD4D1D275F944200088631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DFD4D1C275F944200088631 /* Assets.xcassets */; };
 		0DFD4D20275F944200088631 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DFD4D1F275F944200088631 /* Preview Assets.xcassets */; };
 		0DFD4D36275FAEA600088631 /* Views in Frameworks */ = {isa = PBXBuildFile; productRef = 0DFD4D35275FAEA600088631 /* Views */; };
+		8669BF7A27B91A9300D09911 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8669BF7927B91A9300D09911 /* WidgetKit.framework */; };
+		8669BF7C27B91A9300D09911 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8669BF7B27B91A9300D09911 /* SwiftUI.framework */; };
+		8669BF7F27B91A9300D09911 /* RecentChechlistsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8669BF7E27B91A9300D09911 /* RecentChechlistsWidget.swift */; };
+		8669BF8127B91A9400D09911 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8669BF8027B91A9400D09911 /* Assets.xcassets */; };
+		8669BF8527B91A9400D09911 /* StuffWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8669BF7827B91A9300D09911 /* StuffWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8669BF8C27B91AB900D09911 /* DataModel in Frameworks */ = {isa = PBXBuildFile; productRef = 8669BF8B27B91AB900D09911 /* DataModel */; };
+		8669BF8E27B91AB900D09911 /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = 8669BF8D27B91AB900D09911 /* Localization */; };
+		8669BF9027B91AB900D09911 /* Logger in Frameworks */ = {isa = PBXBuildFile; productRef = 8669BF8F27B91AB900D09911 /* Logger */; };
+		8669BF9327B91BAD00D09911 /* RecentChecklistsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8669BF9127B91BA900D09911 /* RecentChecklistsProvider.swift */; };
+		8669BF9727B91BED00D09911 /* RecentChecklistsEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8669BF9627B91BEC00D09911 /* RecentChecklistsEntry.swift */; };
+		8669BF9827B91BF200D09911 /* RecentChecklistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8669BF9427B91BBE00D09911 /* RecentChecklistsView.swift */; };
+		8669BF9A27B91DF000D09911 /* StuffWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8669BF9927B91DF000D09911 /* StuffWidgetBundle.swift */; };
+		8669BF9C27B938D700D09911 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB6D1AB2760FB460068F985 /* CloudKit.framework */; };
+		8669BF9F27B93F3700D09911 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8669BFA127B93F3700D09911 /* InfoPlist.strings */; };
 		86B8D2F127B79AC500DAEE77 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86B8D2F327B79AC500DAEE77 /* InfoPlist.strings */; };
 		86E001C427B7DA54002E7F1E /* L10n+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E001C327B7DA54002E7F1E /* L10n+App.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8669BF8327B91A9400D09911 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0DFD4D0D275F943F00088631 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8669BF7727B91A9300D09911;
+			remoteInfo = StuffWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8669BF8727B91A9400D09911 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8669BF8527B91A9400D09911 /* StuffWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0D37950B279DA40100E63290 /* StuffMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StuffMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +93,19 @@
 		0DFD4D1F275F944200088631 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0DFD4D2B275F945C00088631 /* Stuff.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stuff.entitlements; sourceTree = "<group>"; };
 		0DFD4D2C275FACA900088631 /* Views */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Views; path = ../Views; sourceTree = "<group>"; };
+		8669BF7827B91A9300D09911 /* StuffWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StuffWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8669BF7927B91A9300D09911 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		8669BF7B27B91A9300D09911 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		8669BF7E27B91A9300D09911 /* RecentChechlistsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentChechlistsWidget.swift; sourceTree = "<group>"; };
+		8669BF8027B91A9400D09911 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8669BF8227B91A9400D09911 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8669BF8627B91A9400D09911 /* StuffWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StuffWidgetExtension.entitlements; sourceTree = "<group>"; };
+		8669BF9127B91BA900D09911 /* RecentChecklistsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentChecklistsProvider.swift; sourceTree = "<group>"; };
+		8669BF9427B91BBE00D09911 /* RecentChecklistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentChecklistsView.swift; sourceTree = "<group>"; };
+		8669BF9627B91BEC00D09911 /* RecentChecklistsEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentChecklistsEntry.swift; sourceTree = "<group>"; };
+		8669BF9927B91DF000D09911 /* StuffWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuffWidgetBundle.swift; sourceTree = "<group>"; };
+		8669BFA027B93F3700D09911 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8669BFA227B93F3800D09911 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8672FED727B8E3D300C436A6 /* ViewModels */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ViewModels; path = ../ViewModels; sourceTree = "<group>"; };
 		86B8D2F227B79AC500DAEE77 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86B8D2F427B79AD700DAEE77 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -85,6 +136,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8669BF7527B91A9300D09911 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8669BF9027B91AB900D09911 /* Logger in Frameworks */,
+				8669BF7C27B91A9300D09911 /* SwiftUI.framework in Frameworks */,
+				8669BF8E27B91AB900D09911 /* Localization in Frameworks */,
+				8669BF9C27B938D700D09911 /* CloudKit.framework in Frameworks */,
+				8669BF7A27B91A9300D09911 /* WidgetKit.framework in Frameworks */,
+				8669BF8C27B91AB900D09911 /* DataModel in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -111,11 +175,13 @@
 		0DFD4D0C275F943F00088631 = {
 			isa = PBXGroup;
 			children = (
+				8669BF8627B91A9400D09911 /* StuffWidgetExtension.entitlements */,
 				0DCC175B2760D7CC00E0322F /* LICENSE */,
 				0DCC175A2760D7CC00E0322F /* README.md */,
 				0DFD4D33275FAD9500088631 /* Packages */,
 				0DFD4D17275F944000088631 /* Stuff */,
 				0D37950C279DA40100E63290 /* StuffMac */,
+				8669BF7D27B91A9300D09911 /* StuffWidget */,
 				0DFD4D16275F944000088631 /* Products */,
 				0DFD4D2D275FACC000088631 /* Frameworks */,
 			);
@@ -126,6 +192,7 @@
 			children = (
 				0DFD4D15275F944000088631 /* Stuff.app */,
 				0D37950B279DA40100E63290 /* StuffMac.app */,
+				8669BF7827B91A9300D09911 /* StuffWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -160,6 +227,8 @@
 			children = (
 				0D37951F279DA42E00E63290 /* CloudKit.framework */,
 				0DB6D1AB2760FB460068F985 /* CloudKit.framework */,
+				8669BF7927B91A9300D09911 /* WidgetKit.framework */,
+				8669BF7B27B91A9300D09911 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -175,6 +244,29 @@
 				0D8EAE1C276A21DE00B39E9D /* Logger */,
 			);
 			name = Packages;
+			sourceTree = "<group>";
+		};
+		8669BF7D27B91A9300D09911 /* StuffWidget */ = {
+			isa = PBXGroup;
+			children = (
+				8669BF9B27B9351800D09911 /* RecentChecklists */,
+				8669BF8027B91A9400D09911 /* Assets.xcassets */,
+				8669BF8227B91A9400D09911 /* Info.plist */,
+				8669BF9927B91DF000D09911 /* StuffWidgetBundle.swift */,
+				8669BFA127B93F3700D09911 /* InfoPlist.strings */,
+			);
+			path = StuffWidget;
+			sourceTree = "<group>";
+		};
+		8669BF9B27B9351800D09911 /* RecentChecklists */ = {
+			isa = PBXGroup;
+			children = (
+				8669BF7E27B91A9300D09911 /* RecentChechlistsWidget.swift */,
+				8669BF9127B91BA900D09911 /* RecentChecklistsProvider.swift */,
+				8669BF9427B91BBE00D09911 /* RecentChecklistsView.swift */,
+				8669BF9627B91BEC00D09911 /* RecentChecklistsEntry.swift */,
+			);
+			path = RecentChecklists;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,10 +301,12 @@
 				0DFD4D11275F944000088631 /* Sources */,
 				0DFD4D12275F944000088631 /* Frameworks */,
 				0DFD4D13275F944000088631 /* Resources */,
+				8669BF8727B91A9400D09911 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8669BF8427B91A9400D09911 /* PBXTargetDependency */,
 			);
 			name = Stuff;
 			packageProductDependencies = (
@@ -223,6 +317,28 @@
 			productName = Stuff;
 			productReference = 0DFD4D15275F944000088631 /* Stuff.app */;
 			productType = "com.apple.product-type.application";
+		};
+		8669BF7727B91A9300D09911 /* StuffWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8669BF8A27B91A9400D09911 /* Build configuration list for PBXNativeTarget "StuffWidgetExtension" */;
+			buildPhases = (
+				8669BF7427B91A9300D09911 /* Sources */,
+				8669BF7527B91A9300D09911 /* Frameworks */,
+				8669BF7627B91A9300D09911 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StuffWidgetExtension;
+			packageProductDependencies = (
+				8669BF8B27B91AB900D09911 /* DataModel */,
+				8669BF8D27B91AB900D09911 /* Localization */,
+				8669BF8F27B91AB900D09911 /* Logger */,
+			);
+			productName = StuffWidgetExtension;
+			productReference = 8669BF7827B91A9300D09911 /* StuffWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -239,6 +355,9 @@
 					};
 					0DFD4D14275F944000088631 = {
 						CreatedOnToolsVersion = 13.1;
+					};
+					8669BF7727B91A9300D09911 = {
+						CreatedOnToolsVersion = 13.2.1;
 					};
 				};
 			};
@@ -258,6 +377,7 @@
 			targets = (
 				0DFD4D14275F944000088631 /* Stuff */,
 				0D37950A279DA40100E63290 /* StuffMac */,
+				8669BF7727B91A9300D09911 /* StuffWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -281,6 +401,15 @@
 				0DCC175D2760D7CC00E0322F /* LICENSE in Resources */,
 				0DFD4D1D275F944200088631 /* Assets.xcassets in Resources */,
 				86B8D2F127B79AC500DAEE77 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8669BF7627B91A9300D09911 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8669BF8127B91A9400D09911 /* Assets.xcassets in Resources */,
+				8669BF9F27B93F3700D09911 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,9 +437,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8669BF7427B91A9300D09911 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8669BF9A27B91DF000D09911 /* StuffWidgetBundle.swift in Sources */,
+				8669BF9727B91BED00D09911 /* RecentChecklistsEntry.swift in Sources */,
+				8669BF7F27B91A9300D09911 /* RecentChechlistsWidget.swift in Sources */,
+				8669BF9827B91BF200D09911 /* RecentChecklistsView.swift in Sources */,
+				8669BF9327B91BAD00D09911 /* RecentChecklistsProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		8669BF8427B91A9400D09911 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8669BF7727B91A9300D09911 /* StuffWidgetExtension */;
+			targetProxy = 8669BF8327B91A9400D09911 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
+		8669BFA127B93F3700D09911 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8669BFA027B93F3700D09911 /* en */,
+				8669BFA227B93F3800D09911 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		86B8D2F327B79AC500DAEE77 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -502,6 +660,7 @@
 		0DFD4D29275F944200088631 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Stuff/Stuff.entitlements;
@@ -537,6 +696,7 @@
 		0DFD4D2A275F944200088631 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Stuff/Stuff.entitlements;
@@ -561,6 +721,68 @@
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-concurrency -Xfrontend -enable-actor-data-race-checks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tazetdinov.opensource.Stuff;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Release;
+		};
+		8669BF8827B91A9400D09911 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = StuffWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = 4E63BYV878;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StuffWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Stuff;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tazetdinov.opensource.Stuff.StuffWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Debug;
+		};
+		8669BF8927B91A9400D09911 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = StuffWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = 4E63BYV878;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StuffWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Stuff;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tazetdinov.opensource.Stuff.StuffWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -599,6 +821,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		8669BF8A27B91A9400D09911 /* Build configuration list for PBXNativeTarget "StuffWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8669BF8827B91A9400D09911 /* Debug */,
+				8669BF8927B91A9400D09911 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -625,6 +856,18 @@
 		0DFD4D35275FAEA600088631 /* Views */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Views;
+		};
+		8669BF8B27B91AB900D09911 /* DataModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DataModel;
+		};
+		8669BF8D27B91AB900D09911 /* Localization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Localization;
+		};
+		8669BF8F27B91AB900D09911 /* Logger */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Logger;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

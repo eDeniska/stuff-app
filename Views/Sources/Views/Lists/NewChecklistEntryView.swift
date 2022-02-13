@@ -54,6 +54,7 @@ public struct NewChecklistEntryView: View {
 
     private func save(item: Item) {
         item.add(to: checklist)
+        checklist.lastModified = .now
         viewContext.refresh(checklist, mergeChanges: true)
         viewContext.saveOrRollback()
     }
@@ -64,6 +65,7 @@ public struct NewChecklistEntryView: View {
         entry.title = title
         entry.icon = selectedIcon ?? checklist.icon
         entry.updateSortOrder()
+        checklist.lastModified = .now
         viewContext.refresh(checklist, mergeChanges: true)
         viewContext.saveOrRollback()
     }
