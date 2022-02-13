@@ -12,7 +12,7 @@
 
 // AppCategory
 "appCategory.pets" = "животные";
-"appCategory.clothers" = "одежда";
+"appCategory.clothes" = "одежда";
 "appCategory.shoes" = "обувь";
 "appCategory.gadgets" = "гаджеты";
 "appCategory.tableware" = "посуда";
@@ -87,7 +87,7 @@
 "detectedItem.suit" = "Костюм";
 "detectedItem.skirt" = "Юбка";
 "detectedItem.coat" = "Пальто";
-"detectedItem.clothers" = "Одежда";
+"detectedItem.clothes" = "Одежда";
 "detectedItem.beauty" = "Косметика";
 "detectedItem.bathing" = "Ванные принадлежности";
 "detectedItem.lighting" = "Освещение";
@@ -193,6 +193,7 @@
 "places.list.addPlace.button" = "Добавить место";
 "places.list.placeItemsTo.title" = "Разместить вещи – %@";
 "places.list.filterItems.placeholder" = "Отобрать вещи...";
+"places.list.addNewPlace.button" = "Добавить новое место...";
 
 //  Place Welcome
 "place.welcome.chooseExisting" = "Выберите существующее место";
@@ -242,3 +243,9 @@
 "checklist.details.section.checked" = "Готово";
 "checklist.details.addEntry.button" = "Добавить запись";
 
+// Widget
+"recentChecklists.widget.title" = "Списки";
+"recentChecklists.widget.description" = "Просматривайте свои недавние списки или создайте новый.";
+"recentChecklists.view.title" = "Недавние списки";
+"recentChecklists.button.add" = "Добавить...";
+"recentChecklists.noChecklists" = "Списков нет";

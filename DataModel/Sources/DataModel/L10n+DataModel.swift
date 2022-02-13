@@ -11,7 +11,7 @@ import Localization
 extension L10n {
     enum AppCategory: String, Localizable {
         case pets = "appCategory.pets"
-        case clothers = "appCategory.clothers"
+        case clothes = "appCategory.clothes"
         case shoes = "appCategory.shoes"
         case gadgets = "appCategory.gadgets"
         case tableware = "appCategory.tableware"
@@ -88,7 +88,7 @@ extension L10n {
         case suit = "detectedItem.suit"
         case skirt = "detectedItem.skirt"
         case coat = "detectedItem.coat"
-        case clothers = "detectedItem.clothers"
+        case clothes = "detectedItem.clothes"
 
         case beauty = "detectedItem.beauty"
         case bathing = "detectedItem.bathing"

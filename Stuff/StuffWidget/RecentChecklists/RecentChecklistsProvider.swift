@@ -17,7 +17,7 @@ struct RecentChecklistsProvider: TimelineProvider {
     let container = PersistenceController.shared.container
     
     func placeholder(in context: Context) -> RecentChecklistsEntry {
-        RecentChecklistsEntry(date: Date())
+        RecentChecklistsEntry(date: .now, isPlaceholder: true)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (RecentChecklistsEntry) -> ()) {

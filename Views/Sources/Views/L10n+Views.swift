@@ -76,6 +76,7 @@ extension L10n {
         case addPlaceButton = "places.list.addPlace.button" // "Add place"
         case placeItemsToTitle = "places.list.placeItemsTo.title" // "Place items to \(place.title)"
         case filterItemsPlaceholder = "places.list.filterItems.placeholder" // "Filter items..."
+        case addNewPlaceButton = "places.list.addNewPlace.button" // "Add new place..."
     }
     
     enum PlaceWelcome: String, Localizable {

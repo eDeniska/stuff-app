@@ -10,7 +10,7 @@ import Localization
 
 public enum AppCategory: String, CaseIterable, Identifiable {
     case pets
-    case clothers
+    case clothes
     case shoes
     case gadgets
     case tableware
@@ -30,7 +30,7 @@ public enum AppCategory: String, CaseIterable, Identifiable {
         case .pets:
             return "tortoise"
 
-        case .clothers:
+        case .clothes:
             return "tshirt"
 
         case .shoes:
@@ -75,8 +75,8 @@ public enum AppCategory: String, CaseIterable, Identifiable {
         switch self {
         case .pets:
             return L10n.AppCategory.pets.localized
-        case .clothers:
-            return L10n.AppCategory.clothers.localized
+        case .clothes:
+            return L10n.AppCategory.clothes.localized
         case .shoes:
             return L10n.AppCategory.shoes.localized
         case .gadgets:
@@ -111,7 +111,7 @@ public enum AppCategory: String, CaseIterable, Identifiable {
     public var sortOrder: Int {
         switch self {
 
-        case .pets, .clothers, .shoes, .gadgets, .tableware, .jewelry, .accessories, .books, .appliances, .furniture, .sports, .tools, .music:
+        case .pets, .clothes, .shoes, .gadgets, .tableware, .jewelry, .accessories, .books, .appliances, .furniture, .sports, .tools, .music:
             return 0
         case .other:
             return -999

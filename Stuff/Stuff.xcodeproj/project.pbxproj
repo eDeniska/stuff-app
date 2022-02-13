@@ -41,6 +41,7 @@
 		8669BF9A27B91DF000D09911 /* StuffWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8669BF9927B91DF000D09911 /* StuffWidgetBundle.swift */; };
 		8669BF9C27B938D700D09911 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DB6D1AB2760FB460068F985 /* CloudKit.framework */; };
 		8669BF9F27B93F3700D09911 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8669BFA127B93F3700D09911 /* InfoPlist.strings */; };
+		8669BFA427B9731000D09911 /* L10n+StuffWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8669BFA327B9731000D09911 /* L10n+StuffWidget.swift */; };
 		86B8D2F127B79AC500DAEE77 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86B8D2F327B79AC500DAEE77 /* InfoPlist.strings */; };
 		86E001C427B7DA54002E7F1E /* L10n+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E001C327B7DA54002E7F1E /* L10n+App.swift */; };
 /* End PBXBuildFile section */
@@ -106,6 +107,7 @@
 		8669BF9927B91DF000D09911 /* StuffWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuffWidgetBundle.swift; sourceTree = "<group>"; };
 		8669BFA027B93F3700D09911 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8669BFA227B93F3800D09911 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8669BFA327B9731000D09911 /* L10n+StuffWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "L10n+StuffWidget.swift"; sourceTree = "<group>"; };
 		8672FED727B8E3D300C436A6 /* ViewModels */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ViewModels; path = ../ViewModels; sourceTree = "<group>"; };
 		86B8D2F227B79AC500DAEE77 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86B8D2F427B79AD700DAEE77 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -175,7 +177,6 @@
 		0DFD4D0C275F943F00088631 = {
 			isa = PBXGroup;
 			children = (
-				8669BF8627B91A9400D09911 /* StuffWidgetExtension.entitlements */,
 				0DCC175B2760D7CC00E0322F /* LICENSE */,
 				0DCC175A2760D7CC00E0322F /* README.md */,
 				0DFD4D33275FAD9500088631 /* Packages */,
@@ -251,9 +252,11 @@
 			children = (
 				8669BF9B27B9351800D09911 /* RecentChecklists */,
 				8669BF8027B91A9400D09911 /* Assets.xcassets */,
+				8669BF8627B91A9400D09911 /* StuffWidgetExtension.entitlements */,
 				8669BF8227B91A9400D09911 /* Info.plist */,
 				8669BF9927B91DF000D09911 /* StuffWidgetBundle.swift */,
 				8669BFA127B93F3700D09911 /* InfoPlist.strings */,
+				8669BFA327B9731000D09911 /* L10n+StuffWidget.swift */,
 			);
 			path = StuffWidget;
 			sourceTree = "<group>";
@@ -261,10 +264,10 @@
 		8669BF9B27B9351800D09911 /* RecentChecklists */ = {
 			isa = PBXGroup;
 			children = (
-				8669BF7E27B91A9300D09911 /* RecentChechlistsWidget.swift */,
+				8669BF9627B91BEC00D09911 /* RecentChecklistsEntry.swift */,
 				8669BF9127B91BA900D09911 /* RecentChecklistsProvider.swift */,
 				8669BF9427B91BBE00D09911 /* RecentChecklistsView.swift */,
-				8669BF9627B91BEC00D09911 /* RecentChecklistsEntry.swift */,
+				8669BF7E27B91A9300D09911 /* RecentChechlistsWidget.swift */,
 			);
 			path = RecentChecklists;
 			sourceTree = "<group>";
@@ -446,6 +449,7 @@
 				8669BF7F27B91A9300D09911 /* RecentChechlistsWidget.swift in Sources */,
 				8669BF9827B91BF200D09911 /* RecentChecklistsView.swift in Sources */,
 				8669BF9327B91BAD00D09911 /* RecentChecklistsProvider.swift in Sources */,
+				8669BFA427B9731000D09911 /* L10n+StuffWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -734,13 +738,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = StuffWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = StuffWidget/StuffWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 4E63BYV878;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StuffWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Stuff;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -765,13 +770,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = StuffWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = StuffWidget/StuffWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 4E63BYV878;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StuffWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Stuff;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (

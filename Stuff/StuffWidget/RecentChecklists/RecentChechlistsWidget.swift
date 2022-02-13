@@ -8,8 +8,7 @@
 import WidgetKit
 import SwiftUI
 import DataModel
-
-// TODO: add widget localization
+import Localization
 
 struct RecentChechlistsWidget: Widget {
     let kind: String = "RecentChechlistsWidget"
@@ -18,8 +17,9 @@ struct RecentChechlistsWidget: Widget {
         StaticConfiguration(kind: kind, provider: RecentChecklistsProvider()) { entry in
             StuffWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Stuff")
-        .description("List of recent checklists.")
+        .supportedFamilies([.systemSmall, .systemMedium])
+        .configurationDisplayName(L10n.RecentChecklists.widgetTitle.localized)
+        .description(L10n.RecentChecklists.widgetDescription.localized)
     }
 }
 

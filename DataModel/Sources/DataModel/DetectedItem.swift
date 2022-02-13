@@ -71,7 +71,7 @@ public enum DetectedItem: String, CustomStringConvertible {
     case suit
     case skirt
     case coat
-    case clothers
+    case clothes
 
     case beauty
     case bathing
@@ -97,8 +97,8 @@ public enum DetectedItem: String, CustomStringConvertible {
         case .other, .food, .hygiene, .gun, .vehicle, .medical, .toy, .beauty, .bathing, .lighting, .stationery, .kitchen, .houseItem, .trashBin, .storage:
             return .other
 
-        case .hat, .denim, .swimsuit, .sweatshirt, .tShirt, .suit, .skirt, .coat, .clothers:
-            return .clothers
+        case .hat, .denim, .swimsuit, .sweatshirt, .tShirt, .suit, .skirt, .coat, .clothes:
+            return .clothes
 
         case .bed, .chair, .desk, .cabinet, .table:
             return .furniture
@@ -264,8 +264,8 @@ public enum DetectedItem: String, CustomStringConvertible {
             return L10n.DetectedItem.skirt.localized
         case .coat:
             return L10n.DetectedItem.coat.localized
-        case .clothers:
-            return L10n.DetectedItem.clothers.localized
+        case .clothes:
+            return L10n.DetectedItem.clothes.localized
         case .beauty:
             return L10n.DetectedItem.beauty.localized
         case .bathing:
@@ -1402,7 +1402,7 @@ public enum DetectedItem: String, CustomStringConvertible {
             "sock",
             "stole",
             "vestment":
-            self = .clothers
+            self = .clothes
 
         case
             "lipstick, lip rouge",

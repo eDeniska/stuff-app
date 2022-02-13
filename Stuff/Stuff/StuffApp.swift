@@ -20,7 +20,6 @@ import Localization
 
 // TODO: smart checklists for lost items, items without a place, damaged items - you can't "complete" them
 
-// TODO: add widget with recent checklists
 // TODO: onboarding
 // TODO: pin/biometric lock of the app access
 // TODO: add option to export and import data
@@ -30,6 +29,9 @@ import Localization
 // TODO: support undo in editing lists
 
 // TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
+
+// TODO: add item title to place/category/condition assignment views
+// TODO: camera capture rotation behaves incorrectly on iPhone
 
 enum Tab: Int, Codable, Equatable, Hashable {
     case items = 0
@@ -54,6 +56,10 @@ struct StuffApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(selectedItem: $selectedItem, selectedPlace: $selectedPlace, selectedChecklist: $selectedChecklist, requestedTab: $requestedTab)
+                .onAppear {
+                    ItemCategory.performHousekeeping(in: persistenceController.container.viewContext)
+                    persistenceController.container.viewContext.saveOrRollback()
+                }
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .onContinueUserActivity(ItemDetailsView.activityIdentifier) { activity in
                     Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
@@ -87,9 +93,17 @@ struct StuffApp: App {
                 }
                 .onOpenURL { url in
                     Logger.default.info("[WIDGET] url from widget = \(url)")
-                    if let checklist = WidgetURLHandler.checklist(from: url, in: persistenceController.container.viewContext) {
-                        Logger.default.info("[WIDGET] got checklist = \(checklist.identifier)")
-                        selectedChecklist = checklist
+                    if let action = WidgetURLHandler.action(from: url, in: persistenceController.container.viewContext) {
+                        switch action {
+                        case .showChecklist(let checklist):
+                            Logger.default.info("[WIDGET] got checklist = \(checklist.identifier)")
+                            selectedChecklist = checklist
+                        case .createChecklist:
+                            requestedTab = .checklists
+                            NotificationCenter.default.post(name: .newChecklistRequest, object: nil)
+                        }
+                    } else {
+                        Logger.default.error("[WIDGET] could not get action from url = \(url)")
                     }
                 }
         }

@@ -12,7 +12,7 @@
 
 // AppCategory
 "appCategory.pets" = "pets";
-"appCategory.clothers" = "clothers";
+"appCategory.clothes" = "clothes";
 "appCategory.shoes" = "shoes";
 "appCategory.gadgets" = "gadgets";
 "appCategory.tableware" = "tableware";
@@ -87,7 +87,7 @@
 "detectedItem.suit" = "Suit";
 "detectedItem.skirt" = "Skirt";
 "detectedItem.coat" = "Coat";
-"detectedItem.clothers" = "Clothers";
+"detectedItem.clothes" = "Clothes";
 "detectedItem.beauty" = "Beauty product";
 "detectedItem.bathing" = "Bathing product";
 "detectedItem.lighting" = "Lighting";
@@ -191,6 +191,7 @@
 "places.list.addPlace.button" = "Add place";
 "places.list.placeItemsTo.title" = "Place items to %@";
 "places.list.filterItems.placeholder" = "Filter items...";
+"places.list.addNewPlace.button" = "Add new place...";
 
 //  Place Welcome
 "place.welcome.chooseExisting" = "Choose existing place";
@@ -240,3 +241,9 @@
 "checklist.details.section.checked" = "Checked";
 "checklist.details.addEntry.button" = "Add entry";
 
+// Widget
+"recentChecklists.widget.title" = "Checklists";
+"recentChecklists.widget.description" = "Review list of recent checklists or easily create new one.";
+"recentChecklists.view.title" = "Recent checklists";
+"recentChecklists.button.add" = "Add...";
+"recentChecklists.noChecklists" = "No checklists";

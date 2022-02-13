@@ -19,8 +19,10 @@ struct PlacePickerView: View {
     private var places: FetchedResults<ItemPlace>
     
     @State private var searchText: String = ""
-    
+    @State private var shouldAddNew = false
+
     @Binding var place: ItemPlace?
+    @State private var createdPlace: ItemPlace? = nil
     
     var body: some View {
         PhoneNavigationView {
@@ -59,9 +61,25 @@ struct PlacePickerView: View {
                                 Image(systemName: "checkmark")
                             }
                         }
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }
+                if !UIDevice.current.isPhone {
+                    // iPad and Mac do not have navigation bar visible
+                    Section {
+                        Button {
+                            shouldAddNew = true
+                        } label: {
+                            HStack {
+                                Text(L10n.PlacesList.addNewPlaceButton.localized)
+                                Spacer()
+                            }
+                            .contentShape(Rectangle())
+                        }
+                    }
+                }
+
             }
             .listStyle(.insetGrouped)
             .searchable(text: $searchText, prompt: Text(L10n.PlacesList.searchPlaceholder.localized))
@@ -86,7 +104,18 @@ struct PlacePickerView: View {
                     }
                     .keyboardShortcut(.cancelAction)
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        shouldAddNew = true
+                    } label: {
+                        Label(L10n.PlacesList.addPlaceButton.localized, systemImage: "plus")
+                    }
+                }
             }
+            .sheet(isPresented: $shouldAddNew) {
+                NewPlaceView(createdPlace: $createdPlace)
+            }
+
         }
     }
 }

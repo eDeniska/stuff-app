@@ -8,6 +8,13 @@
 import SwiftUI
 import PhotosUI
 
+// TODO: check, if this might solve issues with iPhone
+extension UIImagePickerController {
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+}
+
 struct CameraView: UIViewControllerRepresentable {
 
     @Binding var image: UIImage?
