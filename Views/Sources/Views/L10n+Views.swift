@@ -7,6 +7,7 @@
 
 import Foundation
 import Localization
+import UIKit
 
 extension L10n {
     
@@ -22,7 +23,6 @@ extension L10n {
     enum ConditionView: String, Localizable {
         case title = "condition.view.title"
         case conditionForItem = "condition.tile.forItem"
-
     }
     
     enum ItemAssignment: String, Localizable {
@@ -94,6 +94,20 @@ extension L10n {
         case titleSectionTitle = "place.new.title.section.title" // "Title"
         case customIcon = "place.new.customIcon" // "Icon"
         case title = "place.new.title" // "New place"
+    }
+    
+    enum PhotoViewer: String, Localizable {
+        case nextLong = "photoViewer.next.long"
+        case previousLong = "photoViewer.previous.long"
+        case nextShort = "photoViewer.next.short"
+        case previousShort = "photoViewer.previous.short"
+        
+        static var next: PhotoViewer {
+            UIDevice.current.isPhone ? .nextShort : .nextLong
+        }
+        static var previous: PhotoViewer {
+            UIDevice.current.isPhone ? .previousShort : .previousLong
+        }
     }
 
     enum ChecklistsList: String, Localizable {

@@ -172,24 +172,20 @@ public struct ItemListView: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button {
-                        selectedItem = nil
-                        showNewItemForm = true
-                    } label: {
-                        Label(L10n.ItemsList.addItemButton.localized, systemImage: "plus")
-                    }
-                }
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
                         selectedItem = nil
                         showItemCapture = true
                     } label: {
                         Label(L10n.ItemsList.addItemButton.localized, systemImage: "camera")
                     }
+                    Button {
+                        selectedItem = nil
+                        showNewItemForm = true
+                    } label: {
+                        Label(L10n.ItemsList.addItemButton.localized, systemImage: "plus")
+                    }
+                    EditButton()
                 }
             }
             ItemDetailsWelcomeView()

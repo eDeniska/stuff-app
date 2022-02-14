@@ -38,14 +38,6 @@ struct ContentView: View {
                     .tag(Tab.places)
                 ChecklistListView(selectedChecklist: $selectedChecklist)
                     .tag(Tab.checklists)
-                // TODO: consider removing settings altogether
-//                NavigationView {
-//                    Text("Settings")
-//                        .navigationTitle("Settings")
-//                }
-//                .tabItem {
-//                    Label("Settings", systemImage: "gear")
-//                }
             }
             .onChange(of: requestedTab) { newValue in
                 if let tab = newValue {

@@ -251,3 +251,9 @@
 "recentChecklists.button.add" = "Add...";
 "recentChecklists.noChecklists" = "No checklists";
 "recentChecklists.openAppToSync" = "Open app to update widget";
+
+// Photo Viewer
+"photoViewer.next.long" = "Next →";
+"photoViewer.previous.long" = "← Previous";
+"photoViewer.next.short" = "→";
+"photoViewer.previous.short" = "←";

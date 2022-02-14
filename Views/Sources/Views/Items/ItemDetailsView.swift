@@ -67,6 +67,7 @@ public struct ItemDetailsView: View {
         }
     }
 }
+
 struct ItemDetailsViewInternal: View {
 
     private enum FocusedField {
@@ -91,6 +92,8 @@ struct ItemDetailsViewInternal: View {
     @State private var isPredicting = false
     @State private var isFetchingImages = false
     @State private var removingImageId: String? = nil
+    
+    @State private var presentedPhotoViewerIndex: Int? = nil
 
     @FocusState private var focusedField: FocusedField?
 
@@ -341,6 +344,12 @@ struct ItemDetailsViewInternal: View {
                                         .clipped()
                                         .cornerRadius(8)
                                         .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            // TODO: might need to add accessibility action here
+                                            if !isEditing {
+                                                presentedPhotoViewerIndex = itemDetails.images.firstIndex { $0.id == image.id }
+                                            }
+                                        }
                                         .onDrag {
                                             let itemProvider = NSItemProvider(object: image.image)
                                             itemProvider.suggestedName = image.suggestedName
@@ -484,6 +493,11 @@ struct ItemDetailsViewInternal: View {
                 }
             }
             .padding(.horizontal)
+            // TODO: consider making this separate window on Mac
+            .modal(isPresented: Binding { presentedPhotoViewerIndex != nil } set: { if !$0 { presentedPhotoViewerIndex = nil } },
+                   onPhone: .sheet, onPad: .sheet, onMac: .fullScreen) {
+                ImagesPagedView(images: itemDetails.images.map(\.image), index: presentedPhotoViewerIndex ?? 0)
+            }
         }
         .simultaneousGesture(DragGesture().onChanged { _ in
             focusedField = nil

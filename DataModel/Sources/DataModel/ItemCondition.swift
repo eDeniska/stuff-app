@@ -17,7 +17,7 @@ public enum ItemCondition: String, CaseIterable {
     case poor
     case damaged
 
-    public var localizedTitle: String { // TODO: use proper localization
+    public var localizedTitle: String {
         switch self {
 
         case .unknown:

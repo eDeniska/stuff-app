@@ -21,7 +21,8 @@ struct CameraView: UIViewControllerRepresentable {
         imagePickerVC.sourceType = .camera
         imagePickerVC.cameraCaptureMode = .photo
         imagePickerVC.showsCameraControls = true
-        imagePickerVC.allowsEditing = true
+        imagePickerVC.allowsEditing = false
+        
         return imagePickerVC
     }
 
@@ -52,7 +53,7 @@ extension CameraView.Coordinator: UIImagePickerControllerDelegate, UINavigationC
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        cameraView.image = info[.editedImage] as? UIImage
+        cameraView.image = info[picker.allowsEditing ? .editedImage : .originalImage] as? UIImage
         picker.presentingViewController?.dismiss(animated: true)
     }
 }

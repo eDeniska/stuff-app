@@ -253,3 +253,9 @@
 "recentChecklists.button.add" = "Добавить...";
 "recentChecklists.noChecklists" = "Списков нет";
 "recentChecklists.openAppToSync" = "Откройте приложение, чтобы обновить виджет";
+
+// Photo Viewer
+"photoViewer.next.long" = "Вперед →";
+"photoViewer.previous.long" = "← Назад";
+"photoViewer.next.short" = "→";
+"photoViewer.previous.short" = "←";
