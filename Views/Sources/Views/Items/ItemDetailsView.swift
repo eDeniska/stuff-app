@@ -29,10 +29,10 @@ public struct ItemDetailsView: View {
     @Binding private var item: Item?
     private let hasDismissButton: Bool
     private let allowOpenInSeparateWindow: Bool
-    private let startWithPhoto: Bool
     private let validObject: Bool
+    private let startingImage: UIImage?
 
-    public init(item: Item?, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
+    public init(item: Item?, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true) {
         if let item = item {
             validObject = item.managedObjectContext != nil
         } else {
@@ -41,14 +41,14 @@ public struct ItemDetailsView: View {
         _item = Binding(projectedValue: .constant(item))
         self.hasDismissButton = hasDismissButton
         self.allowOpenInSeparateWindow = allowOpenInSeparateWindow
-        self.startWithPhoto = startWithPhoto
+        startingImage = nil
     }
 
-    public init(item: Binding<Item?>, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
+    public init(item: Binding<Item?>, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startingImage: UIImage? = nil) {
         _item = item
         self.hasDismissButton = hasDismissButton
         self.allowOpenInSeparateWindow = allowOpenInSeparateWindow
-        self.startWithPhoto = startWithPhoto
+        self.startingImage = startingImage
         if let item = item.wrappedValue {
             validObject = item.managedObjectContext != nil
         } else {
@@ -61,7 +61,7 @@ public struct ItemDetailsView: View {
             ItemDetailsViewInternal(item: $item,
                                     hasDismissButton: hasDismissButton,
                                     allowOpenInSeparateWindow: allowOpenInSeparateWindow,
-                                    startWithPhoto: startWithPhoto)
+                                    startingImage: startingImage)
         } else {
             ItemDetailsWelcomeView()
         }
@@ -124,7 +124,9 @@ struct ItemDetailsViewInternal: View {
         AVCaptureDevice.authorizationStatus(for: .video) == .restricted
     }
 
-    init(item: Binding<Item?>, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startWithPhoto: Bool = false) {
+    private let startingImage: UIImage?
+
+    init(item: Binding<Item?>, hasDismissButton: Bool = false, allowOpenInSeparateWindow: Bool = true, startingImage: UIImage? = nil) {
         _item = item
         _itemDetails = StateObject(wrappedValue: ItemViewModel(item: item.wrappedValue))
         _isEditing = State(wrappedValue: item.wrappedValue == nil)
@@ -132,9 +134,7 @@ struct ItemDetailsViewInternal: View {
         self.hasDismissButton = hasDismissButton
 
         self.allowOpenInSeparateWindow = UIApplication.shared.supportsMultipleScenes && allowOpenInSeparateWindow
-        if startWithPhoto {
-            _showTakePhoto = State(wrappedValue: true)
-        }
+        self.startingImage = startingImage
     }
 
     var body: some View {
@@ -205,7 +205,7 @@ struct ItemDetailsViewInternal: View {
                         .foregroundColor(.secondary)
                 }
                 .popover(isPresented: $showCategoryPicker) {
-                    CategoryPickerView(category: $itemDetails.category)
+                    CategoryPickerView(category: $itemDetails.category, itemTitle: itemDetails.title)
                         .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
                 }
 
@@ -276,7 +276,7 @@ struct ItemDetailsViewInternal: View {
                         .foregroundColor(.secondary)
                 }
                 .popover(isPresented: $showConditionPicker) {
-                    ConditionPicker(itemCondition: $itemDetails.condition)
+                    ConditionPicker(itemCondition: $itemDetails.condition, itemTitle: itemDetails.title)
                         .frame(minWidth: 300, idealWidth: 400, minHeight: 300, idealHeight: 400)
                 }
 
@@ -325,7 +325,7 @@ struct ItemDetailsViewInternal: View {
                         .foregroundColor(.secondary)
                 }
                 .popover(isPresented: $showPlacePicker) {
-                    PlacePickerView(place: $itemDetails.place)
+                    PlacePickerView(place: $itemDetails.place, itemTitle: itemDetails.title)
                         .frame(minWidth: 300, idealWidth: 400, minHeight: 400, idealHeight: 600)
                 }
 
@@ -584,6 +584,9 @@ struct ItemDetailsViewInternal: View {
         .disabled(isPredicting || isFetchingImages)
         .onAppear {
             checklistsUnavailable = Checklist.isEmpty(in: viewContext)
+            if let startingImage = startingImage {
+                itemDetails.addImage(startingImage)
+            }
         }
         .userActivity(ItemDetailsView.activityIdentifier, isActive: !(item?.isFault ?? true)) { activity in
             guard let item = item, !item.isFault && !item.isDeleted else {

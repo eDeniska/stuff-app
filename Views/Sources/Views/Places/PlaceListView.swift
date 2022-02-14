@@ -57,7 +57,7 @@ struct PlaceListRow: View {
             .tint(.indigo)
             .disabled(itemsUnavailable)
         }
-        .confirmationDialog(L10n.PlacesList.shouldDeletePlace.localized, isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+        .confirmationDialog(L10n.PlacesList.shouldDeletePlace.localized(with: place.title), isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button(role: .destructive) {
                 viewContext.delete(place)
                 viewContext.saveOrRollback()

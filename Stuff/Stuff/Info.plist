@@ -24,7 +24,7 @@
 	<array>
 		<dict>
 			<key>UIApplicationShortcutItemIconSymbolName</key>
-			<string>plus.viewfinder</string>
+			<string>camera</string>
 			<key>UIApplicationShortcutItemSubtitle</key>
 			<string>subtitle.capture.item</string>
 			<key>UIApplicationShortcutItemTitle</key>

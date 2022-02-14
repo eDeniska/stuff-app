@@ -28,10 +28,9 @@ import Localization
 // TODO: remap new window command to other key?..
 // TODO: support undo in editing lists
 
-// TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
+// TODO: add photo viewer
 
-// TODO: add item title to place/category/condition assignment views
-// TODO: camera capture rotation behaves incorrectly on iPhone
+// TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
 
 enum Tab: Int, Codable, Equatable, Hashable {
     case items = 0

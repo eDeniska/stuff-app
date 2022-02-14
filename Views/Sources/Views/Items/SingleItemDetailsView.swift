@@ -26,6 +26,8 @@ public struct SingleItemDetailsView: View {
     }
 
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.scenePhase) private var scenePhase
+
     @SceneStorage(SingleItemDetailsView.itemIDKey) private var itemID = ""
     @State private var scene: UIWindowScene?
 
@@ -94,6 +96,11 @@ public struct SingleItemDetailsView: View {
                 Logger.default.info("[SCENE] no URL")
             }
             Logger.default.info("[SCENE] advertising activity \(activity)")
+        }
+        .onChange(of: scenePhase) { newValue in
+            if newValue != .active {
+                WidgetDataManager.storeWidgetInfo(from: viewContext)
+            }
         }
     }
 }

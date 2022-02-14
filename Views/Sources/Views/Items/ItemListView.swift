@@ -105,6 +105,7 @@ public struct ItemListView: View {
 
     @State private var searchText: String = ""
     @State private var showNewItemForm = false
+    @State private var showItemCapture = false
 
     @Binding private var selectedItem: Item?
 
@@ -135,14 +136,15 @@ public struct ItemListView: View {
                 }
             }
             .background {
-                NavigationLink(isActive: Binding { selectedItem != nil } set: {
-                    if !$0 { selectedItem = nil }
-                }) {
-                    ItemDetailsView(item: selectedItem)
-                } label: {
-                    EmptyView()
+                VStack {
+                    NavigationLink(isActive: Binding { selectedItem != nil } set: { if !$0 { selectedItem = nil } }) {
+                        ItemDetailsView(item: selectedItem)
+                    } label: {
+                        EmptyView()
+                    }
+                    .hidden()
+                    ItemCaptureView(createdItem: $selectedItem, startItemCapture: $showItemCapture)
                 }
-                .hidden()
             }
             .onReceive(NotificationCenter.default.publisher(for: .newItemRequest, object: nil).receive(on: DispatchQueue.main)) { _ in
                 selectedItem = nil
@@ -179,6 +181,14 @@ public struct ItemListView: View {
                         showNewItemForm = true
                     } label: {
                         Label(L10n.ItemsList.addItemButton.localized, systemImage: "plus")
+                    }
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        selectedItem = nil
+                        showItemCapture = true
+                    } label: {
+                        Label(L10n.ItemsList.addItemButton.localized, systemImage: "camera")
                     }
                 }
             }

@@ -16,6 +16,7 @@ import ViewModels
 public struct CategoryPickerView: View {
 
     @Binding var category: DisplayedCategory
+    let itemTitle: String
 
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
@@ -125,7 +126,10 @@ public struct CategoryPickerView: View {
                     }
                 }
             }
-            .navigationTitle(L10n.Category.title.localized)
+            .navigationTitle(itemTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
+                             L10n.Category.title.localized :
+                             L10n.Category.categoryForItem.localized(with: itemTitle)
+            )
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
@@ -158,7 +162,7 @@ public struct CategoryPickerView: View {
 
 struct CategoryPickerView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryPickerView(category: .constant(.predefined(.other)))
+        CategoryPickerView(category: .constant(.predefined(.other)), itemTitle: "Item")
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

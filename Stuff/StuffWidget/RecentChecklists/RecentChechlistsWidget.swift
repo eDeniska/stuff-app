@@ -25,7 +25,7 @@ struct RecentChechlistsWidget: Widget {
 
 struct StuffWidget_Previews: PreviewProvider {
     static var previews: some View {
-        StuffWidgetEntryView(entry: RecentChecklistsEntry(date: .now))
+        StuffWidgetEntryView(entry: RecentChecklistsEntry(date: .now, totalChecklists: 5))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

@@ -16,5 +16,7 @@ extension L10n {
         case viewTitle = "recentChecklists.view.title" // "Recent checklists"
         case addButton = "recentChecklists.button.add" // "Add..."
         case noChecklists = "recentChecklists.noChecklists" // "No checklists"
+        case openAppToSync = "recentChecklists.openAppToSync" // "Open app to sync"
+        case totalNumberOfChecklists = "recentChecklists.totalNumberOfChecklist"
     }
 }

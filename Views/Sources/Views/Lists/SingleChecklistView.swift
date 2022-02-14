@@ -26,6 +26,8 @@ public struct SingleChecklistView: View {
     }
 
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.scenePhase) private var scenePhase
+
     @SceneStorage(SingleChecklistView.checklistIDKey) private var checklistID = ""
     @State private var scene: UIWindowScene?
 
@@ -94,6 +96,11 @@ public struct SingleChecklistView: View {
                 Logger.default.info("[SCENE] no URL")
             }
             Logger.default.info("[SCENE] advertising activity \(activity)")
+        }
+        .onChange(of: scenePhase) { newValue in
+            if newValue != .active {
+                WidgetDataManager.storeWidgetInfo(from: viewContext)
+            }
         }
     }
 }

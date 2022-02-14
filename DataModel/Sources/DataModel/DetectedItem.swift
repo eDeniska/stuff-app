@@ -300,6 +300,7 @@ public enum DetectedItem: String, CustomStringConvertible {
     }
 
     public init(prediction: String) {
+        Logger.default.debug("prediction: \(prediction)")
         switch prediction {
         case
             "background",
@@ -684,9 +685,12 @@ public enum DetectedItem: String, CustomStringConvertible {
             self = .sportInventory
 
         case
-            "bucket, pail",
+            "hammer":
+            self = .hammer
+
+
+        case
             "carpenter's kit, tool kit",
-            "hammer",
             "hatchet",
             "hook, claw",
             "lighter, light, igniter, ignitor",
@@ -1511,6 +1515,7 @@ public enum DetectedItem: String, CustomStringConvertible {
             self = .accessory
 
         case
+            "bucket, pail",
             "ashcan, trash can, garbage can, wastebin, ash bin, ash-bin, ashbin, dustbin, trash barrel, trash bin":
             self = .trashBin
             

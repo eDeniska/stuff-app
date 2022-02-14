@@ -25,6 +25,7 @@ struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var showItemCapture = false
+    @State private var createdItem: Item? = nil
 
     @ViewBuilder private func platformView() -> some View {
         if UIDevice.current.isMac {
@@ -79,10 +80,14 @@ struct ContentView: View {
                     selectedChecklist = Checklist.checklist(with: checklistID, in: viewContext)
                 }
             }
-            .sheet(isPresented: $showItemCapture) {
-                NavigationView {
-                    ItemDetailsView(item: nil, allowOpenInSeparateWindow: false, startWithPhoto: true)
+            .background {
+                ItemCaptureView(createdItem: $createdItem, startItemCapture: $showItemCapture)
+            }
+            .onChange(of: createdItem) { newValue in
+                if let item = newValue {
+                    selectedItem = item
                 }
+                createdItem = nil
             }
             .onChange(of: scenePhase) { phase in
                 if phase == .background {
@@ -93,6 +98,7 @@ struct ContentView: View {
                                                   icon: UIApplicationShortcutIcon(systemImageName: checklist.icon ?? "list.bullet.rectangle"),
                                                   userInfo: [ChecklistEntryListView.identifierKey: checklist.identifier.uuidString as NSString])
                     }
+                    WidgetDataManager.storeWidgetInfo(from: viewContext)
                 }
             }
     }

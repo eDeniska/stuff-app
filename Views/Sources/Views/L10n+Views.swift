@@ -15,11 +15,14 @@ extension L10n {
         case createCategoryNamed = "category.create.named" // "Create category '\(trimmedTitle)'"
         case customIcon = "category.customIcon" // "Icon"
         case title = "category.title" // "Category"
+        case categoryForItem = "category.tile.forItem" // "Category for %@"
         case unnamedCategory = "category.unnamed" // Unnamed
     }
     
     enum ConditionView: String, Localizable {
-        case title = "condition.view.title";
+        case title = "condition.view.title"
+        case conditionForItem = "condition.tile.forItem"
+
     }
     
     enum ItemAssignment: String, Localizable {
@@ -77,6 +80,7 @@ extension L10n {
         case placeItemsToTitle = "places.list.placeItemsTo.title" // "Place items to \(place.title)"
         case filterItemsPlaceholder = "places.list.filterItems.placeholder" // "Filter items..."
         case addNewPlaceButton = "places.list.addNewPlace.button" // "Add new place..."
+        case placeForItem = "places.list.placeForItem"
     }
     
     enum PlaceWelcome: String, Localizable {

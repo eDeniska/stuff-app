@@ -11,6 +11,8 @@ import Localization
 
 struct ConditionPicker: View {
     @Binding var itemCondition: ItemCondition
+    let itemTitle: String
+
     @Environment(\.presentationMode) private var presentationMode
 
     var body: some View  {
@@ -35,7 +37,10 @@ struct ConditionPicker: View {
                     }
                 }
             }
-            .navigationBarTitle(L10n.ConditionView.title.localized)
+            .navigationTitle(itemTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
+                             L10n.ConditionView.title.localized :
+                             L10n.ConditionView.conditionForItem.localized(with: itemTitle)
+            )
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {

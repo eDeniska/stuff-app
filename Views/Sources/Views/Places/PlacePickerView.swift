@@ -22,6 +22,8 @@ struct PlacePickerView: View {
     @State private var shouldAddNew = false
 
     @Binding var place: ItemPlace?
+    let itemTitle: String
+
     @State private var createdPlace: ItemPlace? = nil
     
     var body: some View {
@@ -94,7 +96,10 @@ struct PlacePickerView: View {
                     })
                 }
             }
-            .navigationTitle(L10n.PlacesList.listTitle.localized)
+            .navigationTitle(itemTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
+                             L10n.PlacesList.listTitle.localized :
+                             L10n.PlacesList.placeForItem.localized(with: itemTitle)
+            )
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {

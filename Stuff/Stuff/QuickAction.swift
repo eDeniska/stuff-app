@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Logger
 import Views
 
 enum QuickAction: String {
@@ -29,39 +28,5 @@ enum QuickAction: String {
             ])
             NotificationCenter.default.post(notification)
         }
-    }
-}
-
-class SceneDelegate: NSObject, UIWindowSceneDelegate {
-    func windowScene(_ windowScene: UIWindowScene,
-                     performActionFor shortcutItem: UIApplicationShortcutItem,
-                     completionHandler: @escaping (Bool) -> Void) {
-
-        Logger.default.info("got action \(shortcutItem)")
-        guard let action = QuickAction(rawValue: shortcutItem.type) else {
-            completionHandler(false)
-            return
-        }
-        action.handle(with: shortcutItem)
-        completionHandler(true)
-    }
-}
-
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    func application(_ application: UIApplication,
-                     configurationForConnecting connectingSceneSession: UISceneSession,
-                     options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-
-        if let shortcutItem = options.shortcutItem, let action = QuickAction(rawValue: shortcutItem.type) {
-            Logger.default.info("got on connect action \(shortcutItem)")
-            DispatchQueue.main.async {
-                action.handle(with: shortcutItem)
-            }
-        }
-
-        let sceneConfiguration = UISceneConfiguration(name: "Configuration", sessionRole: connectingSceneSession.role)
-        sceneConfiguration.delegateClass = SceneDelegate.self
-
-        return sceneConfiguration
     }
 }

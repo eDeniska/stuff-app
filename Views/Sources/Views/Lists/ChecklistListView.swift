@@ -54,7 +54,7 @@ struct ChecklistListRow: View {
             .tint(.indigo)
             .disabled(itemsUnavailable)
         }
-        .confirmationDialog(L10n.ChecklistsList.shouldDeleteChecklist.localized, isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+        .confirmationDialog(L10n.ChecklistsList.shouldDeleteChecklist.localized(with: checklist.title), isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button(role: .destructive) {
                 viewContext.delete(checklist)
                 viewContext.saveOrRollback()

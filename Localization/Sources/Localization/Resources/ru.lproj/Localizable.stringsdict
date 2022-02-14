@@ -22,6 +22,26 @@
 			<string>%d записей</string>
 		</dict>
 	</dict>
+	<key>recentChecklists.totalNumberOfChecklist</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Всего %#@checklists@</string>
+		<key>checklists</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d список</string>
+			<key>few</key>
+			<string>%d списка</string>
+			<key>many</key>
+			<string>%d списков</string>
+			<key>other</key>
+			<string>%d списков</string>
+		</dict>
+	</dict>
 	<key>common.numberOfItems</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>

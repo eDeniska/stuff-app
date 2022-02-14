@@ -11,8 +11,6 @@ import DataModel
 import WidgetKit
 import Localization
 
-// TODO: show total number of checklists
-
 struct ListLabelStyle: LabelStyle {
     @ScaledMetric var padding: CGFloat = 6
 
@@ -39,6 +37,7 @@ extension LabelStyle where Self == DefaultLabelStyle {
 
 struct StuffWidgetEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     var entry: RecentChecklistsEntry
     
     @ViewBuilder
@@ -50,15 +49,15 @@ struct StuffWidgetEntryView : View {
                     .truncationMode(.tail)
                     .lineLimit(1)
                 Spacer()
-                if widgetFamily != .systemSmall {
+                if widgetFamily != .systemSmall && row.entries > 0 {
                     Text(L10n.Common.numberOfEntries.localized(with: row.entries))
                         .truncationMode(.tail)
                         .lineLimit(1)
-                        .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
             }
-            .font(.headline)
+            .font(.footnote)
+            .padding(.vertical, 2)
         }
     }
 
@@ -72,19 +71,28 @@ struct StuffWidgetEntryView : View {
                         Text(L10n.RecentChecklists.addButton.localized)
                     }
                     .foregroundColor(Color("AccentColor"))
-//                    .foregroundColor(.accentColor)
                 }
             }
-            .font(.title3)
-            .padding()
-            if entry.rows.isEmpty {
-                Text(L10n.RecentChecklists.noChecklists.localized)
-                    .font(.title)
+            .font(.subheadline)
+            .padding([.top, .horizontal])
+            .padding(.bottom, 8)
+            if entry.needsSync {
+                Text(L10n.RecentChecklists.openAppToSync.localized)
+                    .font(.title2)
                     .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    .padding(.bottom)
+            } else if entry.rows.isEmpty {
+                Text(L10n.RecentChecklists.noChecklists.localized)
+                    .font(.title2)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     .padding(.bottom)
             } else {
-                ForEach(Array(entry.rows.enumerated()), id: \.1) { index, row in
+                Divider()
+                ForEach(entry.rows) { row in
                     VStack(spacing: 0) {
                         if entry.isPlaceholder {
                             link(row: row)
@@ -92,13 +100,23 @@ struct StuffWidgetEntryView : View {
                         } else {
                             link(row: row)
                         }
-                        if index != entry.rows.count - 1 {
-                            Divider()
-                        }
+                        Divider()
                     }
                 }
-                .padding(.horizontal, 8)
+                .padding(.horizontal, widgetFamily == .systemSmall ? 8 : 12)
+                .privacySensitive()
                 Spacer()
+                if dynamicTypeSize <= .large {
+                    HStack(spacing: 0) {
+                        Spacer()
+                        Text(L10n.RecentChecklists.totalNumberOfChecklists.localized(with: entry.totalChecklists))
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 12)
+                }
             }
         }
     }

@@ -125,9 +125,11 @@
 "category.customIcon" = "Icon";
 "category.title" = "Category";
 "category.unnamed" = "unnamed";
+"category.tile.forItem" = "%@ – category";
 
 // Condition view
 "condition.view.title" = "Condition";
+"condition.tile.forItem" = "%@ – condition";
 
 // Item Condition
 "condition.unknown" = "unknown";
@@ -192,6 +194,7 @@
 "places.list.placeItemsTo.title" = "Place items to %@";
 "places.list.filterItems.placeholder" = "Filter items...";
 "places.list.addNewPlace.button" = "Add new place...";
+"places.list.placeForItem" = "%@ – place";
 
 //  Place Welcome
 "place.welcome.chooseExisting" = "Choose existing place";
@@ -247,3 +250,4 @@
 "recentChecklists.view.title" = "Recent checklists";
 "recentChecklists.button.add" = "Add...";
 "recentChecklists.noChecklists" = "No checklists";
+"recentChecklists.openAppToSync" = "Open app to update widget";

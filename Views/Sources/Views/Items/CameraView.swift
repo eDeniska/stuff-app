@@ -7,19 +7,17 @@
 
 import SwiftUI
 import PhotosUI
+import UIKit
+import Logger
 
-// TODO: check, if this might solve issues with iPhone
-extension UIImagePickerController {
-    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
+public class CameraMarkerViewController: UIViewController {
 }
 
 struct CameraView: UIViewControllerRepresentable {
 
     @Binding var image: UIImage?
 
-    func makeUIViewController(context: Context) -> UIImagePickerController {
+    func makeUIViewController(context: Context) -> UIViewController {
         let imagePickerVC = UIImagePickerController()
         imagePickerVC.delegate = context.coordinator
         imagePickerVC.mediaTypes = [UTType.image.identifier]
@@ -27,10 +25,14 @@ struct CameraView: UIViewControllerRepresentable {
         imagePickerVC.cameraCaptureMode = .photo
         imagePickerVC.showsCameraControls = true
         imagePickerVC.allowsEditing = true
-        return imagePickerVC
+        let vc = CameraMarkerViewController()
+        vc.addChild(imagePickerVC)
+        vc.view.addSubview(imagePickerVC.view)
+        imagePickerVC.didMove(toParent: vc)
+        return vc
     }
 
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
     }
 
     func makeCoordinator() -> Coordinator {

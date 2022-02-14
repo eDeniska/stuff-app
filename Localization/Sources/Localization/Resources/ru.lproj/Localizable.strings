@@ -125,9 +125,11 @@
 "category.customIcon" = "Значок";
 "category.title" = "Категория";
 "category.unnamed" = "без названия";
+"category.tile.forItem" = "%@ – категория";
 
 // Condition view
 "condition.view.title" = "Состояние";
+"condition.tile.forItem" = "%@ – состояние";
 
 // Item Condition
 "condition.unknown" = "неизвестно";
@@ -194,6 +196,7 @@
 "places.list.placeItemsTo.title" = "Разместить вещи – %@";
 "places.list.filterItems.placeholder" = "Отобрать вещи...";
 "places.list.addNewPlace.button" = "Добавить новое место...";
+"places.list.placeForItem" = "%@ – место";
 
 //  Place Welcome
 "place.welcome.chooseExisting" = "Выберите существующее место";
@@ -249,3 +252,4 @@
 "recentChecklists.view.title" = "Недавние списки";
 "recentChecklists.button.add" = "Добавить...";
 "recentChecklists.noChecklists" = "Списков нет";
+"recentChecklists.openAppToSync" = "Откройте приложение, чтобы обновить виджет";

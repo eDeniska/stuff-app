@@ -26,6 +26,8 @@ public struct SinglePlaceView: View {
     }
 
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.scenePhase) private var scenePhase
+
     @SceneStorage(SinglePlaceView.placeIDKey) private var placeID = ""
     @State private var scene: UIWindowScene?
 
@@ -94,6 +96,11 @@ public struct SinglePlaceView: View {
                 Logger.default.info("[SCENE] no URL")
             }
             Logger.default.info("[SCENE] advertising activity \(activity)")
+        }
+        .onChange(of: scenePhase) { newValue in
+            if newValue != .active {
+                WidgetDataManager.storeWidgetInfo(from: viewContext)
+            }
         }
     }
 }
