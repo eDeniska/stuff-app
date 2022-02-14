@@ -80,7 +80,7 @@ fileprivate extension UIViewController {
                 break
             }
             let vc = viewControllers.removeFirst()
-            if vc is CameraMarkerViewController {
+            if vc is UIImagePickerController {
                 return true
             }
             viewControllers.append(contentsOf: vc.children)

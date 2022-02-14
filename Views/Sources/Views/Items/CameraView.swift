@@ -10,9 +10,6 @@ import PhotosUI
 import UIKit
 import Logger
 
-public class CameraMarkerViewController: UIViewController {
-}
-
 struct CameraView: UIViewControllerRepresentable {
 
     @Binding var image: UIImage?
@@ -25,14 +22,15 @@ struct CameraView: UIViewControllerRepresentable {
         imagePickerVC.cameraCaptureMode = .photo
         imagePickerVC.showsCameraControls = true
         imagePickerVC.allowsEditing = true
-        let vc = CameraMarkerViewController()
-        vc.addChild(imagePickerVC)
-        vc.view.addSubview(imagePickerVC.view)
-        imagePickerVC.didMove(toParent: vc)
-        return vc
+        return imagePickerVC
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        // this is hacky, but we need to make sure that UIImagePickerController will revert back to portrait automatically on initial presentation
+        if UIDevice.current.isPhone && UIDevice.current.orientation != .portrait {
+            UIDevice.current.setValue(UIDeviceOrientation.portrait.rawValue, forKey: #keyPath(UIDevice.orientation))
+            UINavigationController.attemptRotationToDeviceOrientation()
+        }
     }
 
     func makeCoordinator() -> Coordinator {
@@ -45,7 +43,6 @@ struct CameraView: UIViewControllerRepresentable {
         init(cameraView: CameraView) {
             self.cameraView = cameraView
         }
-
     }
 }
 
