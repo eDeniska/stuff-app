@@ -10,6 +10,7 @@ import DataModel
 import CoreData
 import Logger
 import Localization
+import WidgetKit
 
 public struct SingleChecklistView: View {
 
@@ -99,7 +100,7 @@ public struct SingleChecklistView: View {
         }
         .onChange(of: scenePhase) { newValue in
             if newValue != .active {
-                WidgetDataManager.storeWidgetInfo(from: viewContext)
+                WidgetCenter.shared.reloadAllTimelines()
             }
         }
     }

@@ -68,6 +68,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return UIDevice.current.isPhone ? .allButUpsideDown : .all
     }
 
+    override func buildMenu(with builder: UIMenuBuilder) {
+        super.buildMenu(with: builder)
+        builder.remove(menu: .format)
+    }
+
 }
 
 fileprivate extension UIViewController {

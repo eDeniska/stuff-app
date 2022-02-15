@@ -18,6 +18,7 @@ public struct PlaceDetailsView: View {
 
     @ObservedObject private var place: ItemPlace
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.editMode) private var editMode
 
     private var items: SectionedFetchResults<String, Item> { itemsRequest.wrappedValue }
     private var itemsRequest: SectionedFetchRequest<String, Item>
@@ -26,6 +27,10 @@ public struct PlaceDetailsView: View {
 
     @State private var showItemAssignment = false
     @State private var itemsUnavailable = true
+
+    @State private var placeTitle = ""
+
+    private let gridItemLayout = [GridItem(.adaptive(minimum: 80))]
 
     private let allowOpenInSeparateWindow: Bool
     private let validObject: Bool
@@ -57,12 +62,39 @@ public struct PlaceDetailsView: View {
     public var body: some View {
         if validObject {
         List {
+            if editMode?.wrappedValue == .active {
+                Section {
+                    TextField(L10n.EditPlace.titlePlaceholder.localized, text: $placeTitle)
+                } header: {
+                    Text(L10n.EditPlace.titleSectionTitle.localized)
+                }
+                Section {
+                    LazyVGrid(columns: gridItemLayout) {
+                        ForEach(PlaceIcon.allCases) { icon in
+                            Button {
+                                place.icon = icon.rawValue
+                                viewContext.saveOrRollback()
+                            } label: {
+                                Image(systemName: icon.rawValue)
+                                    .font(.title3)
+                                    .padding()
+                                    .frame(width: 60, height: 60, alignment: .center)
+                                    .overlay(icon.rawValue == place.icon ? RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor) : nil)
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .id(icon)
+                        }
+                    }
+                } header: {
+                    Text(L10n.EditPlace.customIcon.localized)
+                }
+            }
             ForEach(items) { section in
                 Section(header: Text(title(for: section.id))) {
                     ForEach(section) { item in
                         Button {
                             presentedItem = item
-
                         } label: {
                             HStack {
                                 ItemListElement(item: item)
@@ -89,7 +121,7 @@ public struct PlaceDetailsView: View {
             }
         }
         .overlay {
-            if items.isEmpty {
+            if items.isEmpty && editMode?.wrappedValue != .active {
                 Text(L10n.PlaceDetails.placeIsEmpty.localized)
                     .font(.title)
                     .foregroundColor(.secondary)
@@ -97,6 +129,17 @@ public struct PlaceDetailsView: View {
         }
         .sheet(isPresented: $showItemAssignment) {
             PlaceItemsAssingmentView(place: place)
+        }
+        .onAppear {
+            placeTitle = place.title
+        }
+        .onChange(of: placeTitle) { newValue in
+            var title = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            if title.isEmpty {
+                title = L10n.EditPlace.unnamedPlace.localized
+            }
+            place.title = title
+            viewContext.saveOrRollback()
         }
         .navigationTitle(place.title)
         .userActivity(Self.activityIdentifier, isActive: !place.isFault) { activity in

@@ -8,7 +8,7 @@
 import SwiftUI
 import Localization
 
-extension Notification.Name {
+public extension Notification.Name {
     static let newPlaceRequest = Notification.Name("NewPlaceRequestNotification")
 }
 

@@ -58,6 +58,17 @@ public extension Checklist {
         }
     }
 
+    static func all(in context: NSManagedObjectContext) -> [Checklist] {
+        let request = Checklist.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.lastModified), ascending: false)]
+        do {
+            return try context.fetch(request)
+        } catch {
+            Logger.default.error("could lot load checklists: \(error)")
+            return []
+        }
+    }
+
     static func checklists(for item: Item) -> [Checklist] {
         guard let context = item.managedObjectContext else {
             return []

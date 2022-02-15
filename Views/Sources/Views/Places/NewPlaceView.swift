@@ -38,10 +38,10 @@ struct NewPlaceView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField(L10n.NewPlace.titlePlaceholder.localized, text: $newPlaceTitle)
+                    TextField(L10n.EditPlace.titlePlaceholder.localized, text: $newPlaceTitle)
                         .onSubmit(submit)
                 } header: {
-                    Text(L10n.NewPlace.titleSectionTitle.localized)
+                    Text(L10n.EditPlace.titleSectionTitle.localized)
                 }
                 Section {
                     LazyVGrid(columns: gridItemLayout) {
@@ -61,10 +61,10 @@ struct NewPlaceView: View {
                         }
                     }
                 } header: {
-                    Text(L10n.NewPlace.customIcon.localized)
+                    Text(L10n.EditPlace.customIcon.localized)
                 }
             }
-            .navigationTitle(L10n.NewPlace.title.localized)
+            .navigationTitle(L10n.EditPlace.title.localized)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {

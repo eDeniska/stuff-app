@@ -41,7 +41,7 @@
 	<key>recentChecklists.totalNumberOfChecklist</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Всего %#@checklists@</string>
+		<string>%#@checklists@</string>
 		<key>checklists</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
@@ -54,6 +54,55 @@
 			<string>%d checklist</string>
 			<key>other</key>
 			<string>%d checklists</string>
+		</dict>
+	</dict>
+	<key>checklistEntries.totalNumberOfEntries</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@entries@ total</string>
+		<key>entries</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>no entries</string>
+			<key>one</key>
+			<string>%d entry</string>
+			<key>other</key>
+			<string>%d entries</string>
+		</dict>
+	</dict>
+	<key>checklistEntries.checkedOfTotalEntries</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Checked %#@checked@ of %#@entries@ total</string>
+		<key>entries</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>no entries</string>
+			<key>one</key>
+			<string>%d entry</string>
+			<key>other</key>
+			<string>%d entries</string>
+		</dict>
+		<key>checked</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>None</string>
+			<key>one</key>
+			<string>%d</string>
+			<key>other</key>
+			<string>%d</string>
 		</dict>
 	</dict>
 </dict>

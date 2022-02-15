@@ -10,6 +10,7 @@ import DataModel
 import CoreData
 import Logger
 import Localization
+import WidgetKit
 
 public struct SingleItemDetailsView: View {
 
@@ -99,7 +100,7 @@ public struct SingleItemDetailsView: View {
         }
         .onChange(of: scenePhase) { newValue in
             if newValue != .active {
-                WidgetDataManager.storeWidgetInfo(from: viewContext)
+                WidgetCenter.shared.reloadAllTimelines()
             }
         }
     }

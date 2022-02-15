@@ -9,6 +9,19 @@ import Foundation
 import WidgetKit
 import DataModel
 
+struct ChecklistRow: Identifiable, Hashable, Codable {
+    let identifier: UUID
+    let title: String
+    let icon: String
+    let entries: Int
+    let url: URL
+
+    var id: UUID {
+        identifier
+    }
+}
+
+
 struct RecentChecklistsEntry: TimelineEntry {
     let date: Date
     let rows: [ChecklistRow]

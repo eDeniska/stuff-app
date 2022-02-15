@@ -11,31 +11,8 @@ import DataModel
 import WidgetKit
 import Localization
 
-struct ListLabelStyle: LabelStyle {
-    @ScaledMetric var padding: CGFloat = 6
 
-    public func makeBody(configuration: Configuration) -> some View {
-        HStack {
-            Image(systemName: "rectangle")
-                .hidden()
-                .padding(padding)
-                .overlay(
-                    configuration.icon
-//                        .foregroundColor(.accentColor)
-                        .foregroundColor(Color("AccentColor"))
-                )
-            configuration.title
-        }
-    }
-}
-
-extension LabelStyle where Self == DefaultLabelStyle {
-    static var listLabelStyle: ListLabelStyle {
-        ListLabelStyle()
-    }
-}
-
-struct StuffWidgetEntryView : View {
+struct RecentChecklistsView : View {
     @Environment(\.widgetFamily) private var widgetFamily
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     var entry: RecentChecklistsEntry
@@ -63,9 +40,13 @@ struct StuffWidgetEntryView : View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Text(L10n.RecentChecklists.viewTitle.localized)
-                if widgetFamily != .systemSmall {
+            HStack(spacing: 0) {
+                if widgetFamily == .systemSmall {
+                    Spacer(minLength: 0)
+                    Text(L10n.RecentChecklists.viewTitle.localized)
+                    Spacer(minLength: 0)
+                } else {
+                    Text(L10n.RecentChecklists.viewTitle.localized)
                     Spacer()
                     Link(destination: WidgetURLHandler.createChecklistURL()) {
                         Text(L10n.RecentChecklists.addButton.localized)

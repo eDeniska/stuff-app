@@ -24,14 +24,17 @@ public struct ChecklistEntryListView: View {
 
     @ObservedObject private var checklist: Checklist
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.editMode) private var editMode
 
     private var entriesRequest: SectionedFetchRequest<Bool, ChecklistEntry>
     private var entries: SectionedFetchResults<Bool, ChecklistEntry> { entriesRequest.wrappedValue }
 
     @State private var addEntry = false
+    @State private var checklistTitle = ""
 
     private let allowOpenInSeparateWindow: Bool
     private let validObject: Bool
+    private let gridItemLayout = [GridItem(.adaptive(minimum: 80))]
 
     init(checklist: Checklist, allowOpenInSeparateWindow: Bool = true) {
         validObject = checklist.managedObjectContext != nil
@@ -58,6 +61,34 @@ public struct ChecklistEntryListView: View {
     public var body: some View {
         if validObject {
             List {
+                if editMode?.wrappedValue == .active {
+                    Section {
+                        TextField(L10n.EditChecklist.titlePlaceholder.localized, text: $checklistTitle)
+                    } header: {
+                        Text(L10n.EditChecklist.titleSectionTitle.localized)
+                    }
+                    Section {
+                        LazyVGrid(columns: gridItemLayout) {
+                            ForEach(ChecklistIcon.allCases) { icon in
+                                Button {
+                                    checklist.icon = icon.rawValue
+                                    viewContext.saveOrRollback()
+                                } label: {
+                                    Image(systemName: icon.rawValue)
+                                        .font(.title3)
+                                        .padding()
+                                        .frame(width: 60, height: 60, alignment: .center)
+                                        .overlay(icon.rawValue == checklist.icon ? RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor) : nil)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .id(icon)
+                            }
+                        }
+                    } header: {
+                        Text(L10n.EditChecklist.customIcon.localized)
+                    }
+                }
                 ForEach(entries) { section in
                     Section(header: Text(title(for: section.id))) {
                         ForEach(section) { entry in
@@ -83,11 +114,22 @@ public struct ChecklistEntryListView: View {
                 }
             }
             .overlay {
-                if entries.isEmpty {
+                if entries.isEmpty && editMode?.wrappedValue != .active {
                     Text(L10n.ChecklistDetails.checklistIsEmpty.localized)
                         .font(.title)
                         .foregroundColor(.secondary)
                 }
+            }
+            .onAppear {
+                checklistTitle = checklist.title
+            }
+            .onChange(of: checklistTitle) { newValue in
+                var title = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                if title.isEmpty {
+                    title = L10n.EditChecklist.unnamedChecklist.localized
+                }
+                checklist.title = title
+                viewContext.saveOrRollback()
             }
             .navigationTitle(checklist.title)
             // for some reason, after deleting the item app crashes on identifier access...

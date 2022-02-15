@@ -13,13 +13,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d запись</string>
+			<string>%d пункт</string>
 			<key>few</key>
-			<string>%d записи</string>
+			<string>%d пункта</string>
 			<key>many</key>
-			<string>%d записей</string>
+			<string>%d пунктов</string>
 			<key>other</key>
-			<string>%d записей</string>
+			<string>%d пунктов</string>
 		</dict>
 	</dict>
 	<key>recentChecklists.totalNumberOfChecklist</key>
@@ -60,6 +60,63 @@
 			<string>%d вещей</string>
 			<key>other</key>
 			<string>%d вещей</string>
+		</dict>
+	</dict>
+	<key>checklistEntries.checkedOfTotalEntries</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@checked@ из %#@entries@</string>
+		<key>checked</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Отмечен %d</string>
+			<key>zero</key>
+			<string>Не отмечено ни один</string>
+			<key>few</key>
+			<string>Отмечены %d</string>
+			<key>many</key>
+			<string>Отмечены %d</string>
+			<key>other</key>
+			<string>Отмечены %d</string>
+		</dict>
+		<key>entries</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d пункт</string>
+			<key>few</key>
+			<string>%d пункта</string>
+			<key>many</key>
+			<string>%d пунктов</string>
+			<key>other</key>
+			<string>%d пунктов</string>
+		</dict>
+	</dict>
+	<key>checklistEntries.totalNumberOfEntries</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Всего %#@entries@</string>
+		<key>entries</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d пункт</string>
+			<key>few</key>
+			<string>%d пункта</string>
+			<key>many</key>
+			<string>%d пунктов</string>
+			<key>other</key>
+			<string>%d пунктов</string>
 		</dict>
 	</dict>
 </dict>

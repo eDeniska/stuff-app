@@ -10,6 +10,9 @@ import DataModel
 import WidgetKit
 
 struct RecentChecklistsProvider: TimelineProvider {
+
+    private let context = PersistenceController.shared.container.viewContext
+
     private enum Constants {
         static let timelineRefreshInterval: TimeInterval = 15.0 * 60.0
     }
@@ -32,14 +35,18 @@ struct RecentChecklistsProvider: TimelineProvider {
 // MARK: - Data fetching routines
 extension RecentChecklistsProvider {
     func entry() -> RecentChecklistsEntry {
-
-        guard let info = WidgetDataManager.recentChecklistsWidgetInfo() else {
-            return RecentChecklistsEntry(totalChecklists: 0, needsSync: true)
+        let recent = Checklist.recentChecklists(limit: 3, in: context).map { checklist in
+            ChecklistRow(identifier: checklist.identifier,
+                         title: checklist.title,
+                         icon: checklist.icon ?? "list.bullet.rectangle",
+                         entries: checklist.entries.count,
+                         url: WidgetURLHandler.url(for: checklist)
+                         )
         }
-        return RecentChecklistsEntry(date: info.lastModified,
-                                     rows: Array(info.recentChecklists.prefix(3)),
-                                     totalChecklists: info.totalChecklists
-        )
+
+        return RecentChecklistsEntry(date: .now,
+                                     rows: recent,
+                                     totalChecklists: Checklist.count(in: context))
     }
 }
 

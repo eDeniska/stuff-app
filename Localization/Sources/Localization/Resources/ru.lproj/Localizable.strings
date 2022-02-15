@@ -118,6 +118,11 @@
 "app.title.items" = "Stuff – Вещи";
 "app.title.places" = "Stuff – Места";
 "app.title.checklists" = "Stuff – Списки";
+"app.menu.newMenu" = "Добавить";
+"app.menu.newWindow" = "Новое окно";
+"app.menu.newItem" = "Новая вещь...";
+"app.menu.newPlace" = "Новое место...";
+"app.menu.newChecklist" = "Новый список...";
 
 // Category
 "category.section.title" = "Категория";
@@ -203,11 +208,12 @@
 "place.welcome.or.label" = "или";
 "place.welcome.createNew.button" = "Добавьте новое";
 
-// New Place
-"place.new.title.placeholder" = "Название места";
-"place.new.title.section.title" = "Название";
-"place.new.customIcon" = "Значок";
-"place.new.title" = "Новое место";
+// Edit Place
+"place.edit.title.placeholder" = "Название места";
+"place.edit.title.section.title" = "Название";
+"place.edit.customIcon" = "Значок";
+"place.edit.title" = "Новое место";
+"place.edit.unnamed.title" = "Без названия";
 
 // Checklists list
 "checklists.list.searchPlaceholder" = "Искать списки...";
@@ -223,18 +229,19 @@
 "checklist.welcome.or.label" = "или";
 "checklist.welcome.createNew.button" = "Добавьте новый";
 
-// New Checklist
-"checklist.new.title.placeholder" = "Название списка";
-"checklist.new.title.section.title" = "Название";
-"checklist.new.customIcon" = "Значок";
-"checklist.new.title" = "Новый список";
+// Edit Checklist
+"checklist.edit.title.placeholder" = "Название списка";
+"checklist.edit.title.section.title" = "Название";
+"checklist.edit.customIcon" = "Значок";
+"checklist.edit.title" = "Новый список";
+"checklist.edit.unnamed.title" = "Без названия";
 
 //  New Checklist Enty
 "checklist.entry.new.title.placeholder" = "Название";
 "checklist.entry.new.title.section.title" = "Название";
 "checklist.entry.new.suggestedItems.section.title" = "Подходящие вещи";
 "checklist.entry.new.customIcon" = "Значок";
-"checklist.entry.new.title" = "Запись";
+"checklist.entry.new.title" = "Пункт";
 
 // Checklist Details
 "checklist.details.noLongerAvailable" = "Этот список был удален";
@@ -244,7 +251,7 @@
 "checklist.details.markAsChecked" = "Отметить как готово";
 "checklist.details.section.pending" = "Ожидает";
 "checklist.details.section.checked" = "Готово";
-"checklist.details.addEntry.button" = "Добавить запись";
+"checklist.details.addEntry.button" = "Добавить пункт";
 
 // Widget
 "recentChecklists.widget.title" = "Списки";
@@ -253,6 +260,12 @@
 "recentChecklists.button.add" = "Добавить...";
 "recentChecklists.noChecklists" = "Списков нет";
 "recentChecklists.openAppToSync" = "Откройте приложение, чтобы обновить виджет";
+
+// Checklist Widget
+"checklistEntries.widget.title" = "Список";
+"checklistEntries.widget.description" = "Не упускайте из виду важный список.";
+"checklistEntries.noEntries" = "Список пуст";
+"checklistEntries.pickChecklist" = "Выберите список";
 
 // Photo Viewer
 "photoViewer.next.long" = "Вперед →";

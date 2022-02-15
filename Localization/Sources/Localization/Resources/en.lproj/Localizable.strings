@@ -118,6 +118,11 @@
 "app.title.items" = "Stuff – Items";
 "app.title.places" = "Stuff – Places";
 "app.title.checklists" = "Stuff – Checklists";
+"app.menu.newMenu" = "New";
+"app.menu.newWindow" = "New window";
+"app.menu.newItem" = "Add item...";
+"app.menu.newPlace" = "Add place...";
+"app.menu.newChecklist" = "Add checklist...";
 
 // Category
 "category.section.title" = "Category";
@@ -201,31 +206,33 @@
 "place.welcome.or.label" = "or";
 "place.welcome.createNew.button" = "Add new";
 
-// New Place
-"place.new.title.placeholder" = "New place title";
-"place.new.title.section.title" = "Title";
-"place.new.customIcon" = "Icon";
-"place.new.title" = "New place";
+// Edit Place
+"place.edit.title.placeholder" = "New place title";
+"place.edit.title.section.title" = "Title";
+"place.edit.customIcon" = "Icon";
+"place.edit.title" = "New place";
+"place.edit.unnamed.title" = "Unnamed place";
 
 // Checklists list
 "checklists.list.searchPlaceholder" = "Search for checklists...";
- "checklists.list.title" = "Checklists";
- "checklists.list.addItems.button" = "Add items...";
- "checklists.list.shouldDeleteChecklist" = "Delete %@?";
- "checklists.list.addChecklist.button" = "Add checklist";
- "checklists.list.assignItemsTo.title" = "Add items to %@";
- "checklists.list.filterItems.placeholder" = "Filter items...";
+"checklists.list.title" = "Checklists";
+"checklists.list.addItems.button" = "Add items...";
+"checklists.list.shouldDeleteChecklist" = "Delete %@?";
+"checklists.list.addChecklist.button" = "Add checklist";
+"checklists.list.assignItemsTo.title" = "Add items to %@";
+"checklists.list.filterItems.placeholder" = "Filter items...";
 
 // Checklist Welcome
 "checklist.welcome.chooseExisting" = "Choose existing checklist";
 "checklist.welcome.or.label" = "or";
 "checklist.welcome.createNew.button" = "Add new";
 
-// New Checklist
-"checklist.new.title.placeholder" = "New checklist title";
-"checklist.new.title.section.title" = "Title";
-"checklist.new.customIcon" = "Icon";
-"checklist.new.title" = "New checklist";
+// Edit Checklist
+"checklist.edit.title.placeholder" = "New checklist title";
+"checklist.edit.title.section.title" = "Title";
+"checklist.edit.customIcon" = "Icon";
+"checklist.edit.title" = "New checklist";
+"checklist.edit.unnamed.title" = "Unnamed checklist";
 
 //  New Checklist Enty
 "checklist.entry.new.title.placeholder" = "Title";
@@ -244,13 +251,19 @@
 "checklist.details.section.checked" = "Checked";
 "checklist.details.addEntry.button" = "Add entry";
 
-// Widget
+// Recent Checklists Widget
 "recentChecklists.widget.title" = "Checklists";
 "recentChecklists.widget.description" = "Review list of recent checklists or easily create new one.";
 "recentChecklists.view.title" = "Recent checklists";
 "recentChecklists.button.add" = "Add...";
 "recentChecklists.noChecklists" = "No checklists";
 "recentChecklists.openAppToSync" = "Open app to update widget";
+
+// Checklist Widget
+"checklistEntries.widget.title" = "Checklist";
+"checklistEntries.widget.description" = "Keep an eye on important checklist.";
+"checklistEntries.noEntries" = "Checklist is empty";
+"checklistEntries.pickChecklist" = "Pick a checklist";
 
 // Photo Viewer
 "photoViewer.next.long" = "Next →";

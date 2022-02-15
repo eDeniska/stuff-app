@@ -19,4 +19,14 @@ extension L10n {
         case openAppToSync = "recentChecklists.openAppToSync" // "Open app to sync"
         case totalNumberOfChecklists = "recentChecklists.totalNumberOfChecklist"
     }
+
+    enum ChecklistEntries: String, Localizable {
+        case widgetTitle = "checklistEntries.widget.title" // "Checklist"
+        case widgetDescription = "checklistEntries.widget.description" // "Checklist display."
+        case noEntries = "checklistEntries.noEntries" // "No entries"
+        case pickChecklist = "checklistEntries.pickChecklist" // "Pick a checklist"
+        case checkedOfTotalEntries = "checklistEntries.checkedOfTotalEntries"
+        case totalNumberOfEntries = "checklistEntries.totalNumberOfEntries"
+    }
+
 }

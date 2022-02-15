@@ -11,8 +11,6 @@ import Combine
 import CoreData
 import Localization
 
-// TODO: add option to edit place info?..
-
 struct PlaceListRow: View {
     @Environment(\.managedObjectContext) private var viewContext
 

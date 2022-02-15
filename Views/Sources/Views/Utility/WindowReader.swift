@@ -19,9 +19,6 @@ struct WindowReader: UIViewRepresentable {
     func makeUIView(context: Context) -> UIView {
         let view = UIView()
         view.backgroundColor = .clear
-        DispatchQueue.main.async {
-            reader(view.window)
-        }
         return view
     }
 

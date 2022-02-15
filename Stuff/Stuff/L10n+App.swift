@@ -10,9 +10,16 @@ import Localization
 
 extension L10n {
     enum App: String, Localizable {
-        case showItems = "app.menu.showItems"
-        case showPlaces = "app.menu.showPlaces"
-        case showChecklists = "app.menu.showChecklists"
+        enum Menu: String, Localizable {
+            case newMenu = "app.menu.newMenu"
+            case newWindow = "app.menu.newWindow"
+            case newItem = "app.menu.newItem"
+            case newPlace = "app.menu.newPlace"
+            case newChecklist = "app.menu.newChecklist"
+            case showItems = "app.menu.showItems"
+            case showPlaces = "app.menu.showPlaces"
+            case showChecklists = "app.menu.showChecklists"
+        }
         case quickActionChecklist = "app.quickAction.openChecklist"
         case toolbarItems = "app.toolbar.items"
         case toolbarPlaces = "app.toolbar.places"

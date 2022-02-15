@@ -9,8 +9,6 @@ import SwiftUI
 import DataModel
 import Localization
 
-// TODO: add option to edit entry info?..
-
 public struct NewChecklistEntryView: View {
 
     @Environment(\.managedObjectContext) private var viewContext

@@ -10,6 +10,7 @@ import CoreData
 import Views
 import DataModel
 import Localization
+import WidgetKit
 
 @MainActor
 struct ContentView: View {
@@ -72,6 +73,9 @@ struct ContentView: View {
                     selectedChecklist = Checklist.checklist(with: checklistID, in: viewContext)
                 }
             }
+            .onReceive(NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange, object: nil).receive(on: DispatchQueue.main)) { _ in
+                WidgetCenter.shared.reloadAllTimelines()
+            }
             .background {
                 ItemCaptureView(createdItem: $createdItem, startItemCapture: $showItemCapture)
             }
@@ -90,7 +94,7 @@ struct ContentView: View {
                                                   icon: UIApplicationShortcutIcon(systemImageName: checklist.icon ?? "list.bullet.rectangle"),
                                                   userInfo: [ChecklistEntryListView.identifierKey: checklist.identifier.uuidString as NSString])
                     }
-                    WidgetDataManager.storeWidgetInfo(from: viewContext)
+                    WidgetCenter.shared.reloadAllTimelines()
                 }
             }
     }

@@ -23,7 +23,7 @@ public struct PersistenceController {
         return result
     }()
 
-    public let container: NSPersistentCloudKitContainer
+    public let container: NSPersistentContainer
 
     init(inMemory: Bool = false) {
         guard let model = NSManagedObjectModel.mergedModel(from: [Bundle.module]) else {
@@ -31,7 +31,9 @@ public struct PersistenceController {
         }
         container = NSPersistentCloudKitContainer(name: "Stuff", managedObjectModel: model)
         if inMemory {
-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+            container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+        } else {
+            container.persistentStoreDescriptions.first?.url = FileStorageManager.shared.appGroupContainer.appendingPathComponent("StuffData.sqlite")
         }
         container.loadPersistentStores { [container] (storeDescription, error) in
             if let error = error as NSError? {

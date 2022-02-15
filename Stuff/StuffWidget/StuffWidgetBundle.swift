@@ -13,6 +13,7 @@ import SwiftUI
 struct StuffWidgetBundle: WidgetBundle {
     
     @WidgetBundleBuilder var body: some Widget {
-        RecentChechlistsWidget()
+        RecentChecklistsWidget()
+        ChecklistEntriesWidget()
     }
 }

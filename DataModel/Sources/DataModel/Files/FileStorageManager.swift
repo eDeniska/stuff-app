@@ -11,6 +11,10 @@ import Combine
 
 public class FileStorageManager: ObservableObject {
 
+    private enum Constants {
+        static let appGroup = "group.com.tazetdinov.stuff.widget"
+    }
+
     private lazy var storageURL: URL = {
         Logger.default.info("iCloud integration is \(requiresCoordination), querying URL...")
         if requiresCoordination, let url = FileManager.default.url(forUbiquityContainerIdentifier: nil) {
@@ -23,6 +27,8 @@ public class FileStorageManager: ObservableObject {
         }
     }()
 
+    public let appGroupContainer: URL
+
     private var requiresCoordination: Bool
 
     public static let shared = FileStorageManager()
@@ -33,6 +39,11 @@ public class FileStorageManager: ObservableObject {
     private var querySubscriber: AnyCancellable?
 
     private init() {
+        guard let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroup) else {
+            Logger.default.error("failed to get widget container")
+            fatalError("failed to get widget container")
+        }
+        appGroupContainer = container
         requiresCoordination = FileManager.default.ubiquityIdentityToken != nil
 
         metadataQuery = NSMetadataQuery()

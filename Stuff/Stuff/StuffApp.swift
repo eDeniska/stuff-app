@@ -11,8 +11,8 @@ import Logger
 import Views
 import Localization
 
+
 // TODO: Apple Watch app – go through checklist, use only thumbnails, if needed
-// TODO: watchOS needs packages without UIKit and Vision - need to refactor DataModel to split logic and data model; localization should avoid UIKit, or again, split into separate modules
 // TODO: add Spotlight search support
 // TODO: add option to share checklists (and items)
 // TODO: add option to make reminders out of checklists
@@ -25,11 +25,12 @@ import Localization
 // TODO: add option to export and import data
 // TODO: add onSubmit actions for text fields where appropriate
 // TODO: Keyboard shortcuts for New Item, New Place, New Checklist and shortcuts for buttons in details view
-// TODO: remap new window command to other key?..
 // TODO: support undo in editing lists
 
-// TODO: add photo viewer
+// TODO: add app help
+// TODO: fill credits
 
+// TODO: seems that sort order for checklist entries might not be maintained
 // TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
 
 enum Tab: Int, Codable, Equatable, Hashable {
@@ -40,9 +41,9 @@ enum Tab: Int, Codable, Equatable, Hashable {
 
 @main
 struct StuffApp: App {
-    let persistenceController = PersistenceController.shared
+    private let persistenceController = PersistenceController.shared
 
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     @State private var selectedItem: Item?
     @State private var selectedPlace: ItemPlace?
@@ -107,23 +108,71 @@ struct StuffApp: App {
                 }
         }
         .commands {
-            CommandGroup(replacing: CommandGroupPlacement.toolbar) {
+            // TODO: consider opening "new..." forms from current tab
+            CommandGroup(replacing: .newItem) {
+                Menu {
+                    Button {
+                        requestedTab = .items
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: .newItemRequest, object: nil)
+                        }
+                    } label: {
+                        Label(L10n.App.Menu.newItem.localized, systemImage: "tag")
+                    }
+                    .keyboardShortcut("i", modifiers: [.command, .shift])
+                    Divider()
+                    Button {
+                        requestedTab = .places
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: .newPlaceRequest, object: nil)
+                        }
+                    } label: {
+                        Label(L10n.App.Menu.newPlace.localized, systemImage: "house")
+                    }
+                    .keyboardShortcut("p", modifiers: [.command, .shift])
+                    Divider()
+                    Button {
+                        requestedTab = .checklists
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: .newChecklistRequest, object: nil)
+                        }
+                    } label: {
+                        Label(L10n.App.Menu.newChecklist.localized, systemImage: "list.bullet.rectangle")
+                    }
+                    .keyboardShortcut("l", modifiers: [.command, .shift])
+                } label: {
+                    Label(L10n.App.Menu.newMenu.localized, systemImage: "plus")
+                }
+                Button {
+                    let activity = NSUserActivity(activityType: "com.tazetdinov.stuff.newWindow")
+                    activity.targetContentIdentifier = "com.tazetdinov.stuff.newWindow"
+                    UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil) { error in
+                        Logger.default.error("[SCENE] could not spawn scene \(error)")
+                    }
+                } label: {
+                    Label(L10n.App.Menu.newWindow.localized, systemImage: "square.on.square")
+                }
+                .keyboardShortcut("n", modifiers: [.command])
+
+            }
+
+            CommandGroup(replacing: .toolbar) {
                 Button {
                     requestedTab = .items
                 } label: {
-                    Label(L10n.App.showItems.localized, systemImage: "tag")
+                    Label(L10n.App.Menu.showItems.localized, systemImage: "tag")
                 }
                 .keyboardShortcut("1", modifiers: [.command])
                 Button {
                     requestedTab = .places
                 } label: {
-                    Label(L10n.App.showPlaces.localized, systemImage: "house")
+                    Label(L10n.App.Menu.showPlaces.localized, systemImage: "house")
                 }
                 .keyboardShortcut("2", modifiers: [.command])
                 Button {
                     requestedTab = .checklists
                 } label: {
-                    Label(L10n.App.showChecklists.localized, systemImage: "list.bullet.rectangle")
+                    Label(L10n.App.Menu.showChecklists.localized, systemImage: "list.bullet.rectangle")
                 }
                 .keyboardShortcut("3", modifiers: [.command])
             }

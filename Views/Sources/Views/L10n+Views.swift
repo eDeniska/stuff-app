@@ -89,11 +89,12 @@ extension L10n {
         case createNewButton = "place.welcome.createNew.button" // "Add new"
     }
 
-    enum NewPlace: String, Localizable {
-        case titlePlaceholder = "place.new.title.placeholder" // "New place title"
-        case titleSectionTitle = "place.new.title.section.title" // "Title"
-        case customIcon = "place.new.customIcon" // "Icon"
-        case title = "place.new.title" // "New place"
+    enum EditPlace: String, Localizable {
+        case titlePlaceholder = "place.edit.title.placeholder" // "New place title"
+        case titleSectionTitle = "place.edit.title.section.title" // "Title"
+        case customIcon = "place.edit.customIcon" // "Icon"
+        case title = "place.edit.title" // "New place"
+        case unnamedPlace = "place.edit.unnamed.title" // "Unnamed place"
     }
     
     enum PhotoViewer: String, Localizable {
@@ -126,11 +127,12 @@ extension L10n {
         case createNewButton = "checklist.welcome.createNew.button" // "Add new"
     }
 
-    enum NewChecklist: String, Localizable {
-        case titlePlaceholder = "checklist.new.title.placeholder" // "New checklist title"
-        case titleSectionTitle = "checklist.new.title.section.title" // "Title"
-        case customIcon = "checklist.new.customIcon" // "Icon"
-        case title = "checklist.new.title" // "New checklist"
+    enum EditChecklist: String, Localizable {
+        case titlePlaceholder = "checklist.edit.title.placeholder" // "New checklist title"
+        case titleSectionTitle = "checklist.edit.title.section.title" // "Title"
+        case customIcon = "checklist.edit.customIcon" // "Icon"
+        case title = "checklist.edit.title" // "New checklist"
+        case unnamedChecklist = "checklist.edit.unnamed.title" // "Unnamed checklist"
     }
 
     enum NewChecklistEnty: String, Localizable {

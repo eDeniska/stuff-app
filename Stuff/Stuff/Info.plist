@@ -6,11 +6,12 @@
 	<false/>
 	<key>NSUserActivityTypes</key>
 	<array>
+		<string>ChecklistEntriesConfigurationIntent</string>
 		<string>com.tazetdinov.stuff.checklist.scene</string>
-		<string>com.tazetdinov.stuff.item.scene</string>
-		<string>com.tazetdinov.stuff.place.scene</string>
 		<string>com.tazetdinov.stuff.checklist.view</string>
+		<string>com.tazetdinov.stuff.item.scene</string>
 		<string>com.tazetdinov.stuff.item.view</string>
+		<string>com.tazetdinov.stuff.place.scene</string>
 		<string>com.tazetdinov.stuff.place.view</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
