@@ -228,7 +228,7 @@
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
 							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>Pick item</string>
+							<string>Pick an item</string>
 							<key>INIntentParameterPromptDialogFormatStringID</key>
 							<string>RpbDXZ</string>
 							<key>INIntentParameterPromptDialogType</key>
@@ -277,11 +277,11 @@
 				<array>
 					<dict>
 						<key>INIntentResponseCodeConciseFormatString</key>
-						<string>${itemTitle} is located here –${placeTitle}.</string>
+						<string>${itemTitle} is located here – ${placeTitle}.</string>
 						<key>INIntentResponseCodeConciseFormatStringID</key>
 						<string>uMX73x</string>
 						<key>INIntentResponseCodeFormatString</key>
-						<string>${itemTitle} is located here –${placeTitle}.</string>
+						<string>${itemTitle} is located here – ${placeTitle}.</string>
 						<key>INIntentResponseCodeFormatStringID</key>
 						<string>lyL94K</string>
 						<key>INIntentResponseCodeName</key>
@@ -318,6 +318,8 @@
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
 				<integer>2</integer>
+				<key>INIntentResponseOutput</key>
+				<string>placeTitle</string>
 				<key>INIntentResponseParameters</key>
 				<array>
 					<dict>
