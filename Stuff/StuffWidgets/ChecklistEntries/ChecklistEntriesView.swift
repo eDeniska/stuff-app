@@ -1,6 +1,6 @@
 //
 //  ChecklistEntriesView.swift
-//  StuffWidgetExtension
+//  StuffWidgetsExtension
 //
 //  Created by Danis Tazetdinov on 15.02.2022.
 //
@@ -99,6 +99,7 @@ struct ChecklistEntriesView : View {
                 }
             }
         }
+        .privacySensitive()
         .widgetURL(details.url)
     }
 

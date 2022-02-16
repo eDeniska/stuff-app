@@ -1,6 +1,6 @@
 //
 //  ChecklistEntriesProvider.swift
-//  StuffWidgetExtension
+//  StuffWidgetsExtension
 //
 //  Created by Danis Tazetdinov on 15.02.2022.
 //
@@ -16,7 +16,7 @@ struct ChecklistEntriesProvider: IntentTimelineProvider {
     private let context = PersistenceController.shared.container.viewContext
 
     private enum Constants {
-        static let timelineRefreshInterval: TimeInterval = 15.0 * 60.0
+        static let timelineRefreshInterval: TimeInterval = 60.0 * 60.0
     }
 
     func placeholder(in context: Context) -> ChecklistEntriesEntry {
@@ -60,7 +60,9 @@ extension ChecklistEntriesProvider {
 
         let entries = checklist.entries
             .sorted {
-                if $0.isChecked && $1.isChecked {
+                if !$0.isChecked && $1.isChecked {
+                    return true
+                } else if $0.isChecked && !$1.isChecked {
                     return false
                 } else {
                     return $0.order < $1.order

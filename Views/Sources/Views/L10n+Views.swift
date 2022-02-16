@@ -37,6 +37,7 @@ extension L10n {
         case detailsSectionTitle = "item.details.section.details.title" // "Details"
         case noPlaceIsSet = "item.details.noPlaceIsSet" // "No place is set"
         case shouldRemoveImage = "item.details.shouldRemoveImage" // "Remove image?"
+        case showImageAccessibility = "item.details.showImageAccessibility" // "Show the image"
         case removeImageConfirmation = "item.details.removeImage.confirmation" // "Remove"
         case addPhotosTitle = "item.details.addPhotos.title" // "Add photos of the item"
         case takePhotoTitle = "item.details.takePhoto.title" // "Take photo..."

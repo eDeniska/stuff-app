@@ -1,6 +1,6 @@
 //
 //  RecentChecklistsProvider.swift
-//  Stuff
+//  StuffWidgetsExtension
 //
 //  Created by Данис Тазетдинов on 13.02.2022.
 //
@@ -14,7 +14,7 @@ struct RecentChecklistsProvider: TimelineProvider {
     private let context = PersistenceController.shared.container.viewContext
 
     private enum Constants {
-        static let timelineRefreshInterval: TimeInterval = 15.0 * 60.0
+        static let timelineRefreshInterval: TimeInterval = 60.0 * 60.0
     }
 
     func placeholder(in context: Context) -> RecentChecklistsEntry {
@@ -22,11 +22,11 @@ struct RecentChecklistsProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (RecentChecklistsEntry) -> ()) {
-        completion(entry())
+        completion(entry(widgetFamily: context.family))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<RecentChecklistsEntry>) -> ()) {
-        let timeline = Timeline(entries: [entry()],
+        let timeline = Timeline(entries: [entry(widgetFamily: context.family)],
                                 policy: .after(.now.addingTimeInterval(Constants.timelineRefreshInterval)))
         completion(timeline)
     }
@@ -34,15 +34,17 @@ struct RecentChecklistsProvider: TimelineProvider {
 
 // MARK: - Data fetching routines
 extension RecentChecklistsProvider {
-    func entry() -> RecentChecklistsEntry {
-        let recent = Checklist.recentChecklists(limit: 3, in: context).map { checklist in
-            ChecklistRow(identifier: checklist.identifier,
-                         title: checklist.title,
-                         icon: checklist.icon ?? "list.bullet.rectangle",
-                         entries: checklist.entries.count,
-                         url: WidgetURLHandler.url(for: checklist)
-                         )
-        }
+    func entry(widgetFamily: WidgetFamily) -> RecentChecklistsEntry {
+        let recent = Checklist.recentChecklists(limit: 3, in: context)
+            .prefix(widgetFamily  == .systemLarge ? 9 : 3)
+            .map { checklist in
+                ChecklistRow(identifier: checklist.identifier,
+                             title: checklist.title,
+                             icon: checklist.icon ?? "list.bullet.rectangle",
+                             entries: checklist.entries.count,
+                             url: WidgetURLHandler.url(for: checklist)
+                )
+            }
 
         return RecentChecklistsEntry(date: .now,
                                      rows: recent,

@@ -1,6 +1,6 @@
 //
 //  ChecklistEntriesConfigurationHandling.swift
-//  WidgetConfiguration
+//  StuffIntentHandlers
 //
 //  Created by Danis Tazetdinov on 15.02.2022.
 //
@@ -14,7 +14,6 @@ class ChecklistEntriesConfigurationHandler: NSObject, ChecklistEntriesConfigurat
     func resolveHideChecked(for intent: ChecklistEntriesConfigurationIntent) async -> INBooleanResolutionResult {
         .success(with: intent.hideChecked?.boolValue ?? false)
     }
-
 
     private let context = PersistenceController.shared.container.viewContext
 

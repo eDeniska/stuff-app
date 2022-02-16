@@ -9,6 +9,7 @@ import SwiftUI
 import CoreData
 import DataModel
 import Localization
+import AVFoundation
 
 struct ItemListRow: View {
 
@@ -117,6 +118,10 @@ public struct ItemListView: View {
         sectionIdentifier.isEmpty ? L10n.Category.unnamedCategory.localized : sectionIdentifier
     }
 
+    private func cameraAccessDisallowed() -> Bool {
+        AVCaptureDevice.authorizationStatus(for: .video) != .authorized && AVCaptureDevice.authorizationStatus(for: .video) != .notDetermined
+    }
+
     public var body: some View {
         NavigationView {
             List {
@@ -177,8 +182,9 @@ public struct ItemListView: View {
                         selectedItem = nil
                         showItemCapture = true
                     } label: {
-                        Label(L10n.ItemsList.addItemButton.localized, systemImage: "camera")
+                        Label(L10n.ItemDetails.takePhotoTitle.localized, systemImage: "camera")
                     }
+                    .disabled(cameraAccessDisallowed())
                     Button {
                         selectedItem = nil
                         showNewItemForm = true

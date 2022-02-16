@@ -24,13 +24,11 @@ import Localization
 // TODO: pin/biometric lock of the app access
 // TODO: add option to export and import data
 // TODO: add onSubmit actions for text fields where appropriate
-// TODO: Keyboard shortcuts for New Item, New Place, New Checklist and shortcuts for buttons in details view
 // TODO: support undo in editing lists
 
 // TODO: add app help
 // TODO: fill credits
 
-// TODO: seems that sort order for checklist entries might not be maintained
 // TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
 
 enum Tab: Int, Codable, Equatable, Hashable {

@@ -173,6 +173,7 @@
 "item.details.fetchingImages.title" = "Загрузка фото...";
 "item.details.button.addToChecklist" = "Добавить в список";
 "item.details.noLongerAvailable"  = "Эта вещь была удалена";
+"item.details.showImageAccessibility" = "Показать фото";
 
 // Item Welcome
 "item.welcome.chooseExisting" = "Выберите существующую вещь";

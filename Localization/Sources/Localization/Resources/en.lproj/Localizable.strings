@@ -170,7 +170,7 @@
 "item.details.fetchingImages.title" = "Fetching images...";
 "item.details.button.addToChecklist" = "Add to checklist";
 "item.details.noLongerAvailable"  = "Item is no longer available";
-
+"item.details.showImageAccessibility" = "Show the image";
 
 // Item Welcome
 "item.welcome.chooseExisting" = "Choose existing item";

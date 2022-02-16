@@ -1,6 +1,6 @@
 //
 //  ChecklistEntriesWidget.swift
-//  StuffWidgetExtension
+//  StuffWidgetsExtension
 //
 //  Created by Danis Tazetdinov on 15.02.2022.
 //

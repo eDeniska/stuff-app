@@ -1,6 +1,6 @@
 //
 //  RecentChecklistsView.swift
-//  Stuff
+//  StuffWidgetsExtension
 //
 //  Created by Данис Тазетдинов on 13.02.2022.
 //
@@ -35,6 +35,7 @@ struct RecentChecklistsView : View {
             }
             .font(.footnote)
             .padding(.vertical, 2)
+            .contentShape(Rectangle())
         }
     }
 

@@ -1,6 +1,6 @@
 //
-//  StuffWidgetBundle.swift
-//  StuffWidgetExtension
+//  StuffWidgetsBundle.swift
+//  StuffWidgetsExtension
 //
 //  Created by Данис Тазетдинов on 13.02.2022.
 //
@@ -10,7 +10,7 @@ import WidgetKit
 import SwiftUI
 
 @main
-struct StuffWidgetBundle: WidgetBundle {
+struct StuffWidgetsBundle: WidgetBundle {
     
     @WidgetBundleBuilder var body: some Widget {
         RecentChecklistsWidget()

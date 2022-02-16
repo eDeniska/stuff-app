@@ -1,6 +1,6 @@
 //
 //  IntentHandler.swift
-//  WidgetConfiguration
+//  StuffIntentHandlers
 //
 //  Created by Danis Tazetdinov on 15.02.2022.
 //

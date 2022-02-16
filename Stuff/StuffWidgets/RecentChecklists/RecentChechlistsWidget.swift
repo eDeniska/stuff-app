@@ -1,6 +1,6 @@
 //
-//  StuffWidget.swift
-//  StuffWidget
+//  RecentChecklistsWidget.swift
+//  StuffWidgetsExtension
 //
 //  Created by Данис Тазетдинов on 13.02.2022.
 //
@@ -17,7 +17,7 @@ struct RecentChecklistsWidget: Widget {
         StaticConfiguration(kind: kind, provider: RecentChecklistsProvider()) { entry in
             RecentChecklistsView(entry: entry)
         }
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
         .configurationDisplayName(L10n.RecentChecklists.widgetTitle.localized)
         .description(L10n.RecentChecklists.widgetDescription.localized)
     }

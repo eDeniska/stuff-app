@@ -344,12 +344,6 @@ struct ItemDetailsViewInternal: View {
                                         .clipped()
                                         .cornerRadius(8)
                                         .contentShape(Rectangle())
-                                        .onTapGesture {
-                                            // TODO: might need to add accessibility action here
-                                            if !isEditing {
-                                                presentedPhotoViewerIndex = itemDetails.images.firstIndex { $0.id == image.id }
-                                            }
-                                        }
                                         .onDrag {
                                             let itemProvider = NSItemProvider(object: image.image)
                                             itemProvider.suggestedName = image.suggestedName
@@ -372,7 +366,17 @@ struct ItemDetailsViewInternal: View {
                                                 .accessibilityLabel(Text(L10n.ItemDetails.shouldRemoveImage.localized))
 
                                             } else {
-                                                EmptyView()
+                                                Color.clear
+                                                    .contentShape(Rectangle())
+                                                    .onTapGesture {
+                                                        presentedPhotoViewerIndex = itemDetails.images.firstIndex { $0.id == image.id }
+                                                    }
+                                                    .accessibilityAction {
+                                                        presentedPhotoViewerIndex = itemDetails.images.firstIndex { $0.id == image.id }
+                                                    } label: {
+                                                        Text(L10n.ItemDetails.showImageAccessibility.localized)
+
+                                                    }
                                             }
                                         }
                                         .confirmationDialog(L10n.ItemDetails.shouldRemoveImage.localized, isPresented: Binding {
@@ -413,6 +417,7 @@ struct ItemDetailsViewInternal: View {
                                         } label: {
                                             Label(L10n.ItemDetails.takePhotoTitle.localized, systemImage: "camera")
                                         }
+                                        .disabled(!cameraAccessAllowed())
 
                                         Button {
                                             addPhoto()

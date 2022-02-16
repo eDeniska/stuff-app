@@ -1,6 +1,6 @@
 //
 //  L10n+StuffWidget.swift
-//  StuffWidgetExtension
+//  StuffWidgetsExtension
 //
 //  Created by Данис Тазетдинов on 13.02.2022.
 //
