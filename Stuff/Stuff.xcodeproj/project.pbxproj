@@ -43,7 +43,7 @@
 		0DE9887127BBD80C00EB2EA4 /* DataModel in Frameworks */ = {isa = PBXBuildFile; productRef = 0DE9887027BBD80C00EB2EA4 /* DataModel */; };
 		0DE9887327BBD80C00EB2EA4 /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = 0DE9887227BBD80C00EB2EA4 /* Localization */; };
 		0DE9887527BBD80C00EB2EA4 /* Logger in Frameworks */ = {isa = PBXBuildFile; productRef = 0DE9887427BBD80C00EB2EA4 /* Logger */; };
-		0DE9887727BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE9887627BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandling.swift */; };
+		0DE9887727BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE9887627BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandler.swift */; };
 		0DE9887827BBF9C200EB2EA4 /* StuffInents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0DE9887C27BBF9C200EB2EA4 /* StuffInents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
 		0DE9887927BBF9C200EB2EA4 /* StuffInents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0DE9887C27BBF9C200EB2EA4 /* StuffInents.intentdefinition */; };
 		0DE9887A27BBF9C200EB2EA4 /* StuffInents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0DE9887C27BBF9C200EB2EA4 /* StuffInents.intentdefinition */; };
@@ -179,7 +179,7 @@
 		0DE9886527BBD7C800EB2EA4 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		0DE9886727BBD7C800EB2EA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0DE9886B27BBD7C800EB2EA4 /* StuffIntentHandlers.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StuffIntentHandlers.entitlements; sourceTree = "<group>"; };
-		0DE9887627BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistEntriesConfigurationHandling.swift; sourceTree = "<group>"; };
+		0DE9887627BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistEntriesConfigurationHandler.swift; sourceTree = "<group>"; };
 		0DE9887B27BBF9C200EB2EA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = en; path = en.lproj/StuffInents.intentdefinition; sourceTree = "<group>"; };
 		0DFD4D15275F944000088631 /* Stuff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stuff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFD4D18275F944000088631 /* StuffApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuffApp.swift; sourceTree = "<group>"; };
@@ -311,7 +311,7 @@
 				0DE9886727BBD7C800EB2EA4 /* Info.plist */,
 				0DE9886B27BBD7C800EB2EA4 /* StuffIntentHandlers.entitlements */,
 				0DE9886527BBD7C800EB2EA4 /* IntentHandler.swift */,
-				0DE9887627BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandling.swift */,
+				0DE9887627BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandler.swift */,
 				0D2C690B27BD4B4D00F071A0 /* WhereIsItemIntentHandler.swift */,
 			);
 			path = StuffIntentHandlers;
@@ -656,7 +656,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0DE9887727BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandling.swift in Sources */,
+				0DE9887727BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandler.swift in Sources */,
 				0D2C690C27BD4B4D00F071A0 /* WhereIsItemIntentHandler.swift in Sources */,
 				0DE9886627BBD7C800EB2EA4 /* IntentHandler.swift in Sources */,
 				0DE9887A27BBF9C200EB2EA4 /* StuffInents.intentdefinition in Sources */,

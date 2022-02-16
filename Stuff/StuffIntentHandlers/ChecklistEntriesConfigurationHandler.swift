@@ -22,7 +22,7 @@ class ChecklistEntriesConfigurationHandler: NSObject, ChecklistEntriesConfigurat
         if let checklist = intent.checklist {
             return .success(with: checklist)
         } else {
-            return .confirmationRequired(with: intent.checklist)
+            return .needsValue()
         }
     }
 
