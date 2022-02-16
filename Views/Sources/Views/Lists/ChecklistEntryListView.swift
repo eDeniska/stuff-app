@@ -38,6 +38,7 @@ public struct ChecklistEntryListView: View {
 
     init(checklist: Checklist, allowOpenInSeparateWindow: Bool = true) {
         validObject = checklist.managedObjectContext != nil
+        Logger.default.info("[SORTBUG] \(checklist.title) -> date: \(checklist.lastModified)")
         self.checklist = checklist
         self.entriesRequest = SectionedFetchRequest(entity: ChecklistEntry.entity(),
                                                     sectionIdentifier: \ChecklistEntry.isChecked,
@@ -51,11 +52,7 @@ public struct ChecklistEntryListView: View {
     }
 
     func title(for sectionIdentifier: SectionedFetchResults<Bool, ChecklistEntry>.Section.ID) -> String {
-        if sectionIdentifier {
-            return L10n.ChecklistDetails.sectionChecked.localized
-        } else {
-            return L10n.ChecklistDetails.sectionPending.localized
-        }
+        sectionIdentifier ? L10n.ChecklistDetails.sectionChecked.localized : L10n.ChecklistDetails.sectionPending.localized
     }
 
     public var body: some View {
@@ -72,6 +69,7 @@ public struct ChecklistEntryListView: View {
                             ForEach(ChecklistIcon.allCases) { icon in
                                 Button {
                                     checklist.icon = icon.rawValue
+                                    checklist.lastModified = .now
                                     viewContext.saveOrRollback()
                                 } label: {
                                     Image(systemName: icon.rawValue)
@@ -124,12 +122,16 @@ public struct ChecklistEntryListView: View {
                 checklistTitle = checklist.title
             }
             .onChange(of: checklistTitle) { newValue in
+                Logger.default.info("[SORTBUG] onChange -> \(newValue)")
                 var title = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 if title.isEmpty {
                     title = L10n.EditChecklist.unnamedChecklist.localized
                 }
-                checklist.title = title
-                viewContext.saveOrRollback()
+                if checklist.title != title {
+                    checklist.title = title
+                    checklist.lastModified = .now
+                    viewContext.saveOrRollback()
+                }
             }
             .navigationTitle(checklist.title)
             // for some reason, after deleting the item app crashes on identifier access...

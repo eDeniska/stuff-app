@@ -273,3 +273,10 @@
 "photoViewer.previous.long" = "← Назад";
 "photoViewer.next.short" = "→";
 "photoViewer.previous.short" = "←";
+
+// WatchStuff
+"watch.checklists.title" = "Списки";
+"watch.checklists.noLists" = "Пока нет ни одного списка.";
+"watch.checklist.section.checked" = "Готово";
+"watch.checklist.section.pending" = "Ожидает";
+"watch.checklists.noEntries" = "Список пуст";

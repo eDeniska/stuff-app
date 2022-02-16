@@ -270,3 +270,10 @@
 "photoViewer.previous.long" = "← Previous";
 "photoViewer.next.short" = "→";
 "photoViewer.previous.short" = "←";
+
+// WatchStuff
+"watch.checklists.title" = "Checklists";
+"watch.checklists.noLists" = "No checklists are created yet.";
+"watch.checklist.section.checked" = "Checked";
+"watch.checklist.section.pending" = "Pending";
+"watch.checklists.noEntries" = "Checklist is empty";

@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 public enum L10n {
     public enum Common: String, Localizable {
@@ -13,14 +13,5 @@ public enum L10n {
         case buttonSeparateWindow = "button.separateWindow"
         case numberOfItems = "common.numberOfItems"
         case numberOfEntries = "common.element.numberOfEntries"
-
-        // edit button has shorter version on iPhone/iPad for Russian locale
-        public static var buttonEdit: Common {
-            if UIDevice.current.userInterfaceIdiom == .mac {
-                return .buttonEditMac
-            } else {
-                return .buttonEditPhone
-            }
-        }
     }
 }

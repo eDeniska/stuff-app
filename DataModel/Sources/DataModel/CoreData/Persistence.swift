@@ -10,22 +10,11 @@ import Logger
 
 public struct PersistenceController {
     public static let shared = PersistenceController()
-
-    public static var preview: PersistenceController = {
-        let result = PersistenceController(inMemory: true)
-        let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.identifier = UUID()
-            newItem.lastModified = Date()
-        }
-        viewContext.saveOrRollback()
-        return result
-    }()
+    public static let sharedLocal = PersistenceController(local: true)
 
     public let container: NSPersistentContainer
 
-    init(inMemory: Bool = false) {
+    init(inMemory: Bool = false, local: Bool = false) {
         guard let model = NSManagedObjectModel.mergedModel(from: [Bundle.module]) else {
             fatalError("could not locate data model")
         }
@@ -33,7 +22,9 @@ public struct PersistenceController {
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         } else {
-            container.persistentStoreDescriptions.first?.url = FileStorageManager.shared.appGroupContainer.appendingPathComponent("StuffData.sqlite")
+            if !local {
+                container.persistentStoreDescriptions.first?.url = AppGroupManager.shared.appGroupContainer.appendingPathComponent("StuffData.sqlite")
+            }
         }
         container.loadPersistentStores { [container] (storeDescription, error) in
             if let error = error as NSError? {

@@ -17,7 +17,10 @@ public extension ItemCategory {
             for category in categories {
                 if let appCategoryString = category.appCategory {
                     if let appCategory = AppCategory(rawValue: appCategoryString) {
-                        category.order = Int64(appCategory.sortOrder)
+                        let newOrder = Int64(appCategory.sortOrder)
+                        if category.order != newOrder {
+                            category.order = newOrder
+                        }
                     } else {
                         // invalid app category
                         category.appCategory = nil

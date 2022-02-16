@@ -9,6 +9,17 @@ import Foundation
 import Localization
 import UIKit
 
+extension L10n.Common {
+    // edit button has shorter version on iPhone/iPad for Russian locale
+    static var buttonEdit: L10n.Common {
+        if UIDevice.current.userInterfaceIdiom == .mac {
+            return .buttonEditMac
+        } else {
+            return .buttonEditPhone
+        }
+    }
+}
+
 extension L10n {
     
     enum Category: String, Localizable {

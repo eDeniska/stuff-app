@@ -52,7 +52,7 @@ struct ChecklistEntryView: View {
                 Spacer()
             }
         }
-        .toggleStyle(ChecklistToggleStyle())
+        .toggleStyle(.checklist)
         .contextMenu {
             if entry.item != nil {
                 Button {

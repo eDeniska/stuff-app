@@ -159,12 +159,3 @@ public struct CategoryPickerView: View {
         }
     }
 }
-
-struct CategoryPickerView_Previews: PreviewProvider {
-    static var previews: some View {
-        CategoryPickerView(category: .constant(.predefined(.other)), itemTitle: "Item")
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
-}
-
-

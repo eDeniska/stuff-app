@@ -7,6 +7,7 @@
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>ChecklistEntriesConfigurationIntent</string>
+		<string>WhereIsItemIntent</string>
 		<string>com.tazetdinov.stuff.checklist.scene</string>
 		<string>com.tazetdinov.stuff.checklist.view</string>
 		<string>com.tazetdinov.stuff.item.scene</string>

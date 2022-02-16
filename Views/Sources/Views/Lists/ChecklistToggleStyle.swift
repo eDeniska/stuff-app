@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+extension ToggleStyle where Self == ChecklistToggleStyle {
+
+    static var checklist: ChecklistToggleStyle { ChecklistToggleStyle() }
+}
+
 struct ChecklistToggleStyle: ToggleStyle {
 
     func makeBody(configuration: Configuration) -> some View {

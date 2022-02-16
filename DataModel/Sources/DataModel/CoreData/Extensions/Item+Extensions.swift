@@ -25,6 +25,18 @@ public extension Item {
         return UIImage(data: data)
     }
 #endif
+
+    static func all(in context: NSManagedObjectContext) -> [Item] {
+        let request = Item.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Item.title), ascending: false)]
+        do {
+            return try context.fetch(request)
+        } catch {
+            Logger.default.error("could lot load items: \(error)")
+            return []
+        }
+    }
+
     
     static func item(with url: URL, in context: NSManagedObjectContext) -> Item? {
         guard let objectId = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url),

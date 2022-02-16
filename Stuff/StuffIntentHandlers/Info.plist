@@ -7,12 +7,17 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>IntentsRestrictedWhileLocked</key>
-			<array/>
+			<array>
+				<string>WhereIsItemIntent</string>
+			</array>
 			<key>IntentsRestrictedWhileProtectedDataUnavailable</key>
-			<array/>
+			<array>
+				<string>WhereIsItemIntent</string>
+			</array>
 			<key>IntentsSupported</key>
 			<array>
 				<string>ChecklistEntriesConfigurationIntent</string>
+				<string>WhereIsItemIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>

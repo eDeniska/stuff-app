@@ -138,8 +138,10 @@ public struct PlaceDetailsView: View {
             if title.isEmpty {
                 title = L10n.EditPlace.unnamedPlace.localized
             }
-            place.title = title
-            viewContext.saveOrRollback()
+            if place.title != title {
+                place.title = title
+                viewContext.saveOrRollback()
+            }
         }
         .navigationTitle(place.title)
         .userActivity(Self.activityIdentifier, isActive: !place.isFault) { activity in

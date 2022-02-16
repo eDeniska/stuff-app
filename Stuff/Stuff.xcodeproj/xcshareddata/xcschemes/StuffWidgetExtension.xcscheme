@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8669BF7727B91A9300D09911"
-               BuildableName = "StuffWidgetExtension.appex"
+               BuildableName = "StuffWidgetsExtension.appex"
                BlueprintName = "StuffWidgetsExtension"
                ReferencedContainer = "container:Stuff.xcodeproj">
             </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8669BF7727B91A9300D09911"
-            BuildableName = "StuffWidgetExtension.appex"
+            BuildableName = "StuffWidgetsExtension.appex"
             BlueprintName = "StuffWidgetsExtension"
             ReferencedContainer = "container:Stuff.xcodeproj">
          </BuildableReference>

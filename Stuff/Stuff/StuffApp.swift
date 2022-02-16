@@ -12,7 +12,6 @@ import Views
 import Localization
 
 
-// TODO: Apple Watch app – go through checklist, use only thumbnails, if needed
 // TODO: add Spotlight search support
 // TODO: add option to share checklists (and items)
 // TODO: add option to make reminders out of checklists

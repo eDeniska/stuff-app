@@ -43,6 +43,7 @@ public struct ItemCaptureView: View {
                 }
             } content: {
                 CameraView(image: $image)
+                    .ignoresSafeArea()
             }
             .sheet(isPresented: Binding { startingImage != nil } set: { if !$0 { startingImage = nil } }) {
                 if let startingImage = startingImage {

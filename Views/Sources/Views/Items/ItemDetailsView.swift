@@ -596,6 +596,7 @@ struct ItemDetailsViewInternal: View {
         .navigationTitle(title)
         .fullScreenCover(isPresented: $showTakePhoto) {
             CameraView(image: $takenImage)
+                .ignoresSafeArea()
         }
         .sheet(isPresented: $showPhotoPicker) {
             PhotoPicker(images: $pickedImages, isFetchingImages: $isFetchingImages)

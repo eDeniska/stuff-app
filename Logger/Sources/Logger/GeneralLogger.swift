@@ -20,7 +20,7 @@ public class GeneralLogger: LoggerProtocol {
 
     private var _isEnabled: Bool
     
-    private let logQueue = DispatchQueue(label: "com.lifelog.logger", qos: .utility, attributes: [], autoreleaseFrequency: .workItem)
+    private let logQueue = DispatchQueue(label: "com.tazetdinov.logger", qos: .utility, attributes: [], autoreleaseFrequency: .workItem)
 
     public var isEnabled: Bool {
         get {

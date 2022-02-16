@@ -11,11 +11,12 @@ import DataModel
 
 class ChecklistEntriesConfigurationHandler: NSObject, ChecklistEntriesConfigurationIntentHandling {
 
+    private let context = PersistenceController.shared.container.viewContext
+
     func resolveHideChecked(for intent: ChecklistEntriesConfigurationIntent) async -> INBooleanResolutionResult {
         .success(with: intent.hideChecked?.boolValue ?? false)
     }
 
-    private let context = PersistenceController.shared.container.viewContext
 
     func resolveChecklist(for intent: ChecklistEntriesConfigurationIntent) async -> PickedChecklistResolutionResult {
         if let checklist = intent.checklist {
@@ -27,6 +28,13 @@ class ChecklistEntriesConfigurationHandler: NSObject, ChecklistEntriesConfigurat
 
     func provideChecklistOptionsCollection(for intent: ChecklistEntriesConfigurationIntent) async throws -> INObjectCollection<PickedChecklist> {
         INObjectCollection(items: Checklist.all(in: context).map { PickedChecklist(identifier: $0.identifier.uuidString, display: $0.title) })
+    }
+
+    func defaultChecklist(for intent: ChecklistEntriesConfigurationIntent) -> PickedChecklist? {
+        Checklist
+            .recentChecklists(limit: 1, in: context)
+            .map { PickedChecklist(identifier: $0.identifier.uuidString, display: $0.title) }
+            .first
     }
 
 }
