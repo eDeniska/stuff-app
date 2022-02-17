@@ -8,6 +8,7 @@
 import Foundation
 import Intents
 import DataModel
+import Localization
 
 class WhereIsItemIntentHandler: NSObject, WhereIsItemIntentHandling {
 
@@ -23,7 +24,7 @@ class WhereIsItemIntentHandler: NSObject, WhereIsItemIntentHandling {
             return .placeIsUnknown(itemTitle: item.title)
         }
 
-        return .success(itemTitle: item.title, placeTitle: place.title)
+        return .success(result: L10n.StuffIntentHandlers.itemIsLocatedAt.localized(with: item.title, place.title))
     }
 
     func resolveItem(for intent: WhereIsItemIntent) async -> PickedItemResolutionResult {

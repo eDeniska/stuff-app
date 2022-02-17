@@ -10,7 +10,8 @@ import CoreData
 import DataModel
 import Localization
 import AVFoundation
-
+import Intents
+import IntentsUI
 struct ItemListRow: View {
 
     @Environment(\.managedObjectContext) private var viewContext
@@ -165,7 +166,7 @@ public struct ItemListView: View {
                                                                  #keyPath(Item.details),
                                                                  #keyPath(Item.place.title),
                                                                  #keyPath(Item.category.title)].map { keyPath in
-                        NSPredicate(format: "%K CONTAINS[cd] %@", keyPath, text)
+                            .contains(keyPath: keyPath, text: text)
                     })
                 }
             }

@@ -280,3 +280,9 @@
 "watch.checklist.section.checked" = "Готово";
 "watch.checklist.section.pending" = "Ожидает";
 "watch.checklists.noEntries" = "Список пуст";
+
+// Intents
+"intents.place.itemIsLocatedAt" = "%@ находится здесь – %@";
+"intents.place.itemIsPlacedTo" = "%@ теперь здесь – %@";
+"intents.checklist.itemIsAddedTo" = "Вещь %@ добавлена в список %@";
+"intents.checklist.itemIsAlreadyIn" = "Вещь %@ уже есть в списке %@";

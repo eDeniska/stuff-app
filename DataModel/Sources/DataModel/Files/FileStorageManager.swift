@@ -52,7 +52,7 @@ public class FileStorageManager: ObservableObject {
         // Set up a metadata query to gather document changes in the iCloud container.
         metadataQuery.notificationBatchingInterval = 1
         metadataQuery.searchScopes = [NSMetadataQueryUbiquitousDataScope, NSMetadataQueryUbiquitousDocumentsScope]
-        metadataQuery.predicate = NSPredicate(format: "%K LIKE %@", NSMetadataItemFSNameKey, "*")
+        metadataQuery.predicate = .like(keyPath: NSMetadataItemFSNameKey, text: "*")
         metadataQuery.sortDescriptors = [NSSortDescriptor(key: NSMetadataItemFSNameKey, ascending: true)]
         metadataQuery.start()
     }

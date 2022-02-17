@@ -30,7 +30,7 @@ public extension Checklist {
     
     static func checklist(with identifier: UUID, in context: NSManagedObjectContext) -> Checklist? {
         let request = Checklist.fetchRequest()
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Checklist.identifier), identifier as CVarArg)
+        request.predicate = .equalsTo(keyPath: #keyPath(Checklist.identifier), object: identifier as CVarArg)
         request.fetchLimit = 1
         return try? context.fetch(request).first
     }
@@ -75,7 +75,7 @@ public extension Checklist {
         }
         let request = Checklist.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.lastModified), ascending: false)]
-        request.predicate = NSPredicate(format: "ANY \(#keyPath(Checklist.entries.item)) == %@", item)
+        request.predicate = .anyEqualsTo(keyPath: #keyPath(Checklist.entries.item), object: item)
         return (try? context.fetch(request)) ?? []
     }
 

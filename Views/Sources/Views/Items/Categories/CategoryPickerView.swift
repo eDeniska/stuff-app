@@ -25,7 +25,7 @@ public struct CategoryPickerView: View {
         sortDescriptors: [
             SortDescriptor(\ItemCategory.title)
                          ],
-        predicate: NSPredicate(format: "\(#keyPath(ItemCategory.appCategory)) == nil"),
+        predicate: .isNil(keyPath: #keyPath(ItemCategory.appCategory)),
         animation: .default)
     private var customCategories: FetchedResults<ItemCategory>
 

@@ -31,7 +31,7 @@ public enum DisplayedCategory: Equatable {
             let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
             let fetchRequest = ItemCategory.fetchRequest()
             fetchRequest.fetchLimit = 1
-            fetchRequest.predicate = NSPredicate(format: "\(#keyPath(ItemCategory.title)) == %@", trimmed)
+            fetchRequest.predicate = .equalsTo(keyPath: #keyPath(ItemCategory.title), object: trimmed)
             if let existing = (try? context.fetch(fetchRequest))?.first {
                 existing.order = 0
                 return existing
@@ -47,7 +47,7 @@ public enum DisplayedCategory: Equatable {
         case .predefined(let category):
             let fetchRequest = ItemCategory.fetchRequest()
             fetchRequest.fetchLimit = 1
-            fetchRequest.predicate = NSPredicate(format: "\(#keyPath(ItemCategory.appCategory)) == %@", category.rawValue)
+            fetchRequest.predicate = .equalsTo(keyPath: #keyPath(ItemCategory.appCategory), object: category.rawValue)
             if let existing = (try? context.fetch(fetchRequest))?.first {
                 // TODO: consider removing these later
                 existing.order = Int64(category.sortOrder)

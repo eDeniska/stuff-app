@@ -78,7 +78,7 @@ struct PlaceItemsAssingmentView: View {
                                                                 [#keyPath(Item.title),
                                                                  #keyPath(Item.details),
                                                                  #keyPath(Item.category.title)].map { keyPath in
-                        NSPredicate(format: "%K CONTAINS[cd] %@", keyPath, text)
+                            .contains(keyPath: keyPath, text: text)
                     })
                 }
             }

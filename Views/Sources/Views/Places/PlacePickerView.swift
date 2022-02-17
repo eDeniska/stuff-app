@@ -92,7 +92,7 @@ struct PlacePickerView: View {
                 } else {
                     places.nsPredicate = NSCompoundPredicate(orPredicateWithSubpredicates:
                                                                 [#keyPath(ItemPlace.title)].map { keyPath in
-                        NSPredicate(format: "%K CONTAINS[cd] %@", keyPath, text)
+                            .contains(keyPath: keyPath, text: text)
                     })
                 }
             }

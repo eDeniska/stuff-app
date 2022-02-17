@@ -1,0 +1,2 @@
+"NSCameraUsageDescription" = "Фотографируйте свои вещи, приложение постарается определить предмент по фото. Ни одна фотография не покидает ваше устройство.";
+"CFBundleDisplayName" = "StuffIntentHandlers";

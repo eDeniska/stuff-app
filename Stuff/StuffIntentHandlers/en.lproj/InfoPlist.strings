@@ -1,0 +1,2 @@
+"NSCameraUsageDescription" = "Take pictures of your items, app will try to detect the item by photo. No photos are leaving your device.";
+"CFBundleDisplayName" = "StuffIntentHandlers";

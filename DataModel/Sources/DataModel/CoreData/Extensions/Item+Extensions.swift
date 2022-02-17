@@ -48,7 +48,7 @@ public extension Item {
 
     static func item(with identifier: UUID, in context: NSManagedObjectContext) -> Item? {
         let request = Item.fetchRequest()
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Item.identifier), identifier as CVarArg)
+        request.predicate = .equalsTo(keyPath: #keyPath(Item.identifier), object: identifier as CVarArg)
         request.fetchLimit = 1
         return try? context.fetch(request).first
     }

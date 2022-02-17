@@ -13,6 +13,13 @@
 		0D2C690627BD07BE00F071A0 /* ChecklistEntriesListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2C690527BD07BE00F071A0 /* ChecklistEntriesListRow.swift */; };
 		0D2C690827BD17F400F071A0 /* L10n+WatchStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2C690727BD17F400F071A0 /* L10n+WatchStuff.swift */; };
 		0D2C690C27BD4B4D00F071A0 /* WhereIsItemIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2C690B27BD4B4D00F071A0 /* WhereIsItemIntentHandler.swift */; };
+		0D2C691127BE4EF200F071A0 /* StuffItnents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0D2C691527BE4EF200F071A0 /* StuffItnents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
+		0D2C691227BE4EF200F071A0 /* StuffItnents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0D2C691527BE4EF200F071A0 /* StuffItnents.intentdefinition */; };
+		0D2C691327BE4EF200F071A0 /* StuffItnents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0D2C691527BE4EF200F071A0 /* StuffItnents.intentdefinition */; };
+		0D2C692827BE510700F071A0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0D2C692A27BE510700F071A0 /* InfoPlist.strings */; };
+		0D2C692D27BE709300F071A0 /* PlaceItemIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2C692C27BE709300F071A0 /* PlaceItemIntentHandler.swift */; };
+		0D2C692F27BE770900F071A0 /* L10n+StuffIntentHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2C692E27BE770900F071A0 /* L10n+StuffIntentHandlers.swift */; };
+		0D2C693127BE7E4D00F071A0 /* AddItemToChecklistIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D2C693027BE7E4D00F071A0 /* AddItemToChecklistIntentHandler.swift */; };
 		0D847FE627BCF40900C4674E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D847FE527BCF40900C4674E /* Assets.xcassets */; };
 		0D847FEC27BCF40900C4674E /* WatchStuffExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0D847FEB27BCF40900C4674E /* WatchStuffExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0D847FF127BCF40900C4674E /* ChecklistsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D847FF027BCF40900C4674E /* ChecklistsListView.swift */; };
@@ -44,9 +51,6 @@
 		0DE9887327BBD80C00EB2EA4 /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = 0DE9887227BBD80C00EB2EA4 /* Localization */; };
 		0DE9887527BBD80C00EB2EA4 /* Logger in Frameworks */ = {isa = PBXBuildFile; productRef = 0DE9887427BBD80C00EB2EA4 /* Logger */; };
 		0DE9887727BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE9887627BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandler.swift */; };
-		0DE9887827BBF9C200EB2EA4 /* StuffInents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0DE9887C27BBF9C200EB2EA4 /* StuffInents.intentdefinition */; settings = {ATTRIBUTES = (no_codegen, ); }; };
-		0DE9887927BBF9C200EB2EA4 /* StuffInents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0DE9887C27BBF9C200EB2EA4 /* StuffInents.intentdefinition */; };
-		0DE9887A27BBF9C200EB2EA4 /* StuffInents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0DE9887C27BBF9C200EB2EA4 /* StuffInents.intentdefinition */; };
 		0DFD4D19275F944000088631 /* StuffApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFD4D18275F944000088631 /* StuffApp.swift */; };
 		0DFD4D1B275F944000088631 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DFD4D1A275F944000088631 /* ContentView.swift */; };
 		0DFD4D1D275F944200088631 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DFD4D1C275F944200088631 /* Assets.xcassets */; };
@@ -147,6 +151,14 @@
 		0D2C690527BD07BE00F071A0 /* ChecklistEntriesListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistEntriesListRow.swift; sourceTree = "<group>"; };
 		0D2C690727BD17F400F071A0 /* L10n+WatchStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "L10n+WatchStuff.swift"; sourceTree = "<group>"; };
 		0D2C690B27BD4B4D00F071A0 /* WhereIsItemIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhereIsItemIntentHandler.swift; sourceTree = "<group>"; };
+		0D2C691427BE4EF200F071A0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/StuffItnents.intentdefinition; sourceTree = "<group>"; };
+		0D2C692927BE510700F071A0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0D2C692B27BE510A00F071A0 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0D2C692C27BE709300F071A0 /* PlaceItemIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceItemIntentHandler.swift; sourceTree = "<group>"; };
+		0D2C692E27BE770900F071A0 /* L10n+StuffIntentHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "L10n+StuffIntentHandlers.swift"; sourceTree = "<group>"; };
+		0D2C693027BE7E4D00F071A0 /* AddItemToChecklistIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemToChecklistIntentHandler.swift; sourceTree = "<group>"; };
+		0D2C693F27BE99E500F071A0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/StuffItnents.strings; sourceTree = "<group>"; };
+		0D2C694127BE99E600F071A0 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/StuffItnents.strings; sourceTree = "<group>"; };
 		0D37951F279DA42E00E63290 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		0D4C94662798449200E59D09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0D847FE327BCF40700C4674E /* WatchStuff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchStuff.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -180,7 +192,6 @@
 		0DE9886727BBD7C800EB2EA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0DE9886B27BBD7C800EB2EA4 /* StuffIntentHandlers.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StuffIntentHandlers.entitlements; sourceTree = "<group>"; };
 		0DE9887627BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistEntriesConfigurationHandler.swift; sourceTree = "<group>"; };
-		0DE9887B27BBF9C200EB2EA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = en; path = en.lproj/StuffInents.intentdefinition; sourceTree = "<group>"; };
 		0DFD4D15275F944000088631 /* Stuff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stuff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFD4D18275F944000088631 /* StuffApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StuffApp.swift; sourceTree = "<group>"; };
 		0DFD4D1A275F944000088631 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -202,7 +213,6 @@
 		8669BFA027B93F3700D09911 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8669BFA227B93F3800D09911 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8669BFA327B9731000D09911 /* L10n+StuffWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "L10n+StuffWidget.swift"; sourceTree = "<group>"; };
-		8669BFA627BD67A100D09911 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/StuffInents.strings; sourceTree = "<group>"; };
 		8672FED727B8E3D300C436A6 /* ViewModels */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ViewModels; path = ../ViewModels; sourceTree = "<group>"; };
 		86B8D2F227B79AC500DAEE77 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86B8D2F427B79AD700DAEE77 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -310,9 +320,13 @@
 			children = (
 				0DE9886727BBD7C800EB2EA4 /* Info.plist */,
 				0DE9886B27BBD7C800EB2EA4 /* StuffIntentHandlers.entitlements */,
+				0D2C692A27BE510700F071A0 /* InfoPlist.strings */,
 				0DE9886527BBD7C800EB2EA4 /* IntentHandler.swift */,
 				0DE9887627BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandler.swift */,
 				0D2C690B27BD4B4D00F071A0 /* WhereIsItemIntentHandler.swift */,
+				0D2C692C27BE709300F071A0 /* PlaceItemIntentHandler.swift */,
+				0D2C693027BE7E4D00F071A0 /* AddItemToChecklistIntentHandler.swift */,
+				0D2C692E27BE770900F071A0 /* L10n+StuffIntentHandlers.swift */,
 			);
 			path = StuffIntentHandlers;
 			sourceTree = "<group>";
@@ -350,8 +364,8 @@
 			children = (
 				0D4C94662798449200E59D09 /* Info.plist */,
 				0DFD4D2B275F945C00088631 /* Stuff.entitlements */,
-				0DE9887C27BBF9C200EB2EA4 /* StuffInents.intentdefinition */,
 				86B8D2F327B79AC500DAEE77 /* InfoPlist.strings */,
+				0D2C691527BE4EF200F071A0 /* StuffItnents.intentdefinition */,
 				0DDA6B0727B54B270053E8F7 /* QuickAction.swift */,
 				0DE9884B27BA98AC00EB2EA4 /* LifeCycleDelegates.swift */,
 				0DFD4D18275F944000088631 /* StuffApp.swift */,
@@ -610,6 +624,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D2C692827BE510700F071A0 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -656,10 +671,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D2C693127BE7E4D00F071A0 /* AddItemToChecklistIntentHandler.swift in Sources */,
+				0D2C692F27BE770900F071A0 /* L10n+StuffIntentHandlers.swift in Sources */,
+				0D2C692D27BE709300F071A0 /* PlaceItemIntentHandler.swift in Sources */,
 				0DE9887727BBD87700EB2EA4 /* ChecklistEntriesConfigurationHandler.swift in Sources */,
 				0D2C690C27BD4B4D00F071A0 /* WhereIsItemIntentHandler.swift in Sources */,
+				0D2C691327BE4EF200F071A0 /* StuffItnents.intentdefinition in Sources */,
 				0DE9886627BBD7C800EB2EA4 /* IntentHandler.swift in Sources */,
-				0DE9887A27BBF9C200EB2EA4 /* StuffInents.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -670,10 +688,10 @@
 				0DFD4D1B275F944000088631 /* ContentView.swift in Sources */,
 				0DE9884C27BA98AC00EB2EA4 /* LifeCycleDelegates.swift in Sources */,
 				86E001C427B7DA54002E7F1E /* L10n+App.swift in Sources */,
-				0DE9887827BBF9C200EB2EA4 /* StuffInents.intentdefinition in Sources */,
 				0DFD4D19275F944000088631 /* StuffApp.swift in Sources */,
 				0DCBDBB627B2A8CF00A5BEB2 /* MacContentView.swift in Sources */,
 				0DDA6B0827B54B270053E8F7 /* QuickAction.swift in Sources */,
+				0D2C691127BE4EF200F071A0 /* StuffItnents.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -683,6 +701,7 @@
 			files = (
 				0DE9885327BBCFD700EB2EA4 /* ChecklistEntriesProvider.swift in Sources */,
 				0DE9885127BBCFCB00EB2EA4 /* ChecklistEntriesEntry.swift in Sources */,
+				0D2C691227BE4EF200F071A0 /* StuffItnents.intentdefinition in Sources */,
 				8669BF9A27B91DF000D09911 /* StuffWidgetsBundle.swift in Sources */,
 				0DE9885927BBD10600EB2EA4 /* ListLabelStyle.swift in Sources */,
 				0DE9885527BBCFE800EB2EA4 /* ChecklistEntriesView.swift in Sources */,
@@ -691,7 +710,6 @@
 				8669BF7F27B91A9300D09911 /* RecentChechlistsWidget.swift in Sources */,
 				8669BF9827B91BF200D09911 /* RecentChecklistsView.swift in Sources */,
 				8669BF9327B91BAD00D09911 /* RecentChecklistsProvider.swift in Sources */,
-				0DE9887927BBF9C200EB2EA4 /* StuffInents.intentdefinition in Sources */,
 				8669BFA427B9731000D09911 /* L10n+StuffWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -723,13 +741,23 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		0DE9887C27BBF9C200EB2EA4 /* StuffInents.intentdefinition */ = {
+		0D2C691527BE4EF200F071A0 /* StuffItnents.intentdefinition */ = {
 			isa = PBXVariantGroup;
 			children = (
-				0DE9887B27BBF9C200EB2EA4 /* en */,
-				8669BFA627BD67A100D09911 /* ru */,
+				0D2C691427BE4EF200F071A0 /* Base */,
+				0D2C693F27BE99E500F071A0 /* en */,
+				0D2C694127BE99E600F071A0 /* ru */,
 			);
-			name = StuffInents.intentdefinition;
+			name = StuffItnents.intentdefinition;
+			sourceTree = "<group>";
+		};
+		0D2C692A27BE510700F071A0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0D2C692927BE510700F071A0 /* en */,
+				0D2C692B27BE510A00F071A0 /* ru */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		8669BFA127B93F3700D09911 /* InfoPlist.strings */ = {

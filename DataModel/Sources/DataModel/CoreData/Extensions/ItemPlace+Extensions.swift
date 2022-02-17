@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import Logger
 
 public extension ItemPlace {
 
@@ -18,14 +19,15 @@ public extension ItemPlace {
         return entry
     }
 
-    static func places(for item: Item) -> [ItemPlace] {
-        guard let context = item.managedObjectContext else {
+    static func all(in context: NSManagedObjectContext) -> [ItemPlace] {
+        let request = ItemPlace.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(ItemPlace.title), ascending: false)]
+        do {
+            return try context.fetch(request)
+        } catch {
+            Logger.default.error("could lot load places: \(error)")
             return []
         }
-        let request = ItemPlace.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(ItemPlace.title), ascending: true)]
-        request.predicate = NSPredicate(format: "ANY %K == %@", #keyPath(ItemPlace.items), item)
-        return (try? context.fetch(request)) ?? []
     }
 
     static func place(with url: URL, in context: NSManagedObjectContext) -> ItemPlace? {
@@ -38,7 +40,7 @@ public extension ItemPlace {
 
     static func place(with identifier: UUID, in context: NSManagedObjectContext) -> ItemPlace? {
         let request = ItemPlace.fetchRequest()
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(ItemPlace.identifier), identifier as CVarArg)
+        request.predicate = .equalsTo(keyPath: #keyPath(ItemPlace.identifier), object: identifier as CVarArg)
         request.fetchLimit = 1
         return try? context.fetch(request).first
     }

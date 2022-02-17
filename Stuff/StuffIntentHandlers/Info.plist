@@ -8,15 +8,21 @@
 		<dict>
 			<key>IntentsRestrictedWhileLocked</key>
 			<array>
+				<string>AddItemToChecklistIntent</string>
+				<string>PlaceItemIntent</string>
 				<string>WhereIsItemIntent</string>
 			</array>
 			<key>IntentsRestrictedWhileProtectedDataUnavailable</key>
 			<array>
+				<string>AddItemToChecklistIntent</string>
+				<string>PlaceItemIntent</string>
 				<string>WhereIsItemIntent</string>
 			</array>
 			<key>IntentsSupported</key>
 			<array>
+				<string>AddItemToChecklistIntent</string>
 				<string>ChecklistEntriesConfigurationIntent</string>
+				<string>PlaceItemIntent</string>
 				<string>WhereIsItemIntent</string>
 			</array>
 		</dict>

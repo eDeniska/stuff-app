@@ -22,10 +22,18 @@ public struct PersistenceController {
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         } else {
+            guard let storeDescription = container.persistentStoreDescriptions.first else {
+                return
+            }
+
+            storeDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            storeDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+
             if !local {
-                container.persistentStoreDescriptions.first?.url = AppGroupManager.shared.appGroupContainer.appendingPathComponent("StuffData.sqlite")
+                storeDescription.url = AppGroupManager.shared.appGroupContainer.appendingPathComponent("StuffData.sqlite")
             }
         }
+
         container.loadPersistentStores { [container] (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.

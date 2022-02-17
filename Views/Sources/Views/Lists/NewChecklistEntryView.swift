@@ -44,7 +44,7 @@ public struct NewChecklistEntryView: View {
                                                          #keyPath(Item.details),
                                                          #keyPath(Item.place.title),
                                                          #keyPath(Item.category.title)].map { keyPath in
-                NSPredicate(format: "%K CONTAINS[cd] %@", keyPath, text)
+                    .contains(keyPath: keyPath, text: text)
             })
             items.nsPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [searchPredicate, Self.excludePredicate(checklist: checklist)])
         }

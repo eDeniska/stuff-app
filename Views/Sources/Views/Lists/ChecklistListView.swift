@@ -149,12 +149,12 @@ public struct ChecklistListView: View {
                     lists.nsPredicate = nil
                 } else {
                     lists.nsPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [
-                        NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Checklist.title), text),
-                        NSPredicate(format: "ANY %K CONTAINS[cd] %@", #keyPath(Checklist.entries.title), text),
-                        NSPredicate(format: "ANY %K CONTAINS[cd] %@", #keyPath(Checklist.entries.item.title), text),
-                        NSPredicate(format: "ANY %K CONTAINS[cd] %@", #keyPath(Checklist.entries.item.details), text),
-                        NSPredicate(format: "ANY %K CONTAINS[cd] %@", #keyPath(Checklist.entries.item.place.title), text),
-                        NSPredicate(format: "ANY %K CONTAINS[cd] %@", #keyPath(Checklist.entries.item.category.title), text),
+                        .contains(keyPath: #keyPath(Checklist.title), text: text),
+                        .anyContains(keyPath: #keyPath(Checklist.entries.title), text: text),
+                        .anyContains(keyPath: #keyPath(Checklist.entries.item.title), text: text),
+                        .anyContains(keyPath: #keyPath(Checklist.entries.item.details), text: text),
+                        .anyContains(keyPath: #keyPath(Checklist.entries.item.place.title), text: text),
+                        .anyContains(keyPath: #keyPath(Checklist.entries.item.category.title), text: text),
                     ])
                 }
             }

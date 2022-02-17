@@ -45,7 +45,7 @@ public struct PlaceDetailsView: View {
                                                 NSSortDescriptor(key: #keyPath(Item.category.title), ascending: true),
                                                 NSSortDescriptor(key: #keyPath(Item.lastModified), ascending: true)
                                              ],
-                                             predicate: NSPredicate(format: "\(#keyPath(Item.place)) == %@", place),
+                                             predicate: .equalsTo(keyPath: #keyPath(Item.place), object: place),
                                              animation: .default)
         self.allowOpenInSeparateWindow = UIApplication.shared.supportsMultipleScenes && allowOpenInSeparateWindow
     }

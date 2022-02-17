@@ -277,3 +277,10 @@
 "watch.checklist.section.checked" = "Checked";
 "watch.checklist.section.pending" = "Pending";
 "watch.checklists.noEntries" = "Checklist is empty";
+
+// Intents
+"intents.place.itemIsLocatedAt" = "%@ is located at %@";
+"intents.place.itemIsPlacedTo" = "%@ is placed to %@";
+"intents.checklist.itemIsAddedTo" = "%@ is added to checklist %@";
+"intents.checklist.itemIsAlreadyIn" = "%@ is already in checklist %@";
+

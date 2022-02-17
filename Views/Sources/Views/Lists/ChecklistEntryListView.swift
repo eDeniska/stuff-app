@@ -46,7 +46,7 @@ public struct ChecklistEntryListView: View {
                                                         NSSortDescriptor(key: #keyPath(ChecklistEntry.isChecked), ascending: true),
                                                         NSSortDescriptor(key: #keyPath(ChecklistEntry.order), ascending: true)],
                                                     predicate:
-                                                        NSPredicate(format: "\(#keyPath(ChecklistEntry.checklist)) == %@", checklist),
+                                                            .equalsTo(keyPath: #keyPath(ChecklistEntry.checklist), object: checklist),
                                                     animation: .default)
         self.allowOpenInSeparateWindow = UIApplication.shared.supportsMultipleScenes && allowOpenInSeparateWindow
     }
