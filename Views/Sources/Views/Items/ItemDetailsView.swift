@@ -23,8 +23,6 @@ public extension Notification.Name {
 
 public struct ItemDetailsView: View {
 
-    public static let activityIdentifier = "com.tazetdinov.stuff.item.view"
-    public static let identifierKey = "itemID"
 
     @Binding private var item: Item?
     private let hasDismissButton: Bool
@@ -608,13 +606,13 @@ struct ItemDetailsViewInternal: View {
                 itemDetails.addImage(startingImage)
             }
         }
-        .userActivity(ItemDetailsView.activityIdentifier, isActive: !(item?.isFault ?? true)) { activity in
+        .userActivity(UserActivityRegistry.ItemView.activityType, isActive: !(item?.isFault ?? true)) { activity in
             guard let item = item, !item.isFault && !item.isDeleted else {
                 return
             }
 
             activity.title = itemDetails.title
-            activity.userInfo = [ItemDetailsView.identifierKey: item.identifier]
+            activity.userInfo = [UserActivityRegistry.ItemView.identifierKey: item.identifier]
             activity.isEligibleForHandoff = true
             activity.isEligibleForPrediction = true
         }

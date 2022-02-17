@@ -11,9 +11,11 @@ import DataModel
 import Localization
 import Logger
 
-// TODO: add user activity to get back to proper place of the app
-
 class PlaceItemIntentHandler: NSObject, PlaceItemIntentHandling {
+
+    private func errorUserActivity() -> NSUserActivity {
+        NSUserActivity(activityType: UserActivityRegistry.PlacesView.activityType)
+    }
 
     private let context = PersistenceController.shared.container.viewContext
 
@@ -25,7 +27,7 @@ class PlaceItemIntentHandler: NSObject, PlaceItemIntentHandling {
               let placeIdentifier = UUID(uuidString: placeIdentifierString),
               let place = ItemPlace.place(with: placeIdentifier, in: context)
         else {
-            return PlaceItemIntentResponse(code: .failure, userActivity: nil)
+            return PlaceItemIntentResponse(code: .failure, userActivity: errorUserActivity())
         }
         do {
             item.place = place
@@ -33,7 +35,7 @@ class PlaceItemIntentHandler: NSObject, PlaceItemIntentHandling {
             return .success(result: L10n.StuffIntentHandlers.itemIsPlacedTo.localized(with: item.title, place.title))
         } catch {
             Logger.default.error("cannot place item: \(error)")
-            return PlaceItemIntentResponse(code: .failure, userActivity: nil)
+            return PlaceItemIntentResponse(code: .failure, userActivity: errorUserActivity())
         }
     }
 

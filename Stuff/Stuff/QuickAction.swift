@@ -7,6 +7,7 @@
 
 import UIKit
 import Views
+import DataModel
 
 enum QuickAction: String {
     case itemCapture = "action.capture.item"
@@ -19,12 +20,12 @@ enum QuickAction: String {
             NotificationCenter.default.post(name: .itemCaptureRequest, object: nil)
 
         case .checklistSelected:
-            guard let identifier = item.userInfo?[ChecklistEntryListView.identifierKey] as? String,
+            guard let identifier = item.userInfo?[UserActivityRegistry.ChecklistView.identifierKey] as? String,
                   let uuid = UUID(uuidString: identifier) else {
                       return
                   }
             let notification = Notification(name: .checklistSelected, object: nil, userInfo: [
-                ChecklistEntryListView.identifierKey: uuid
+                UserActivityRegistry.ChecklistView.identifierKey: uuid
             ])
             NotificationCenter.default.post(notification)
         }

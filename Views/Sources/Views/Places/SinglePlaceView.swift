@@ -14,13 +14,10 @@ import WidgetKit
 
 public struct SinglePlaceView: View {
 
-    private static let placeIDKey = "placeID"
-    public static let activityIdentifier = "com.tazetdinov.stuff.place.scene"
-
     static func activateSession(place: ItemPlace) {
-        let activity = NSUserActivity(activityType: activityIdentifier)
-        activity.targetContentIdentifier = activityIdentifier
-        activity.userInfo = [placeIDKey: place.objectID.uriRepresentation()]
+        let activity = NSUserActivity(activityType: UserActivityRegistry.PlaceScene.activityType)
+        activity.targetContentIdentifier = UserActivityRegistry.PlaceScene.activityType
+        activity.userInfo = [UserActivityRegistry.PlaceScene.identifierKey: place.objectID.uriRepresentation()]
         UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil) { error in
             Logger.default.error("[SCENE] could not spawn scene \(error)")
         }
@@ -29,7 +26,7 @@ public struct SinglePlaceView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.scenePhase) private var scenePhase
 
-    @SceneStorage(SinglePlaceView.placeIDKey) private var placeID = ""
+    @SceneStorage(UserActivityRegistry.PlaceScene.identifierKey) private var placeID = ""
     @State private var scene: UIWindowScene?
 
     public init() {
@@ -84,15 +81,15 @@ public struct SinglePlaceView: View {
             scene = window?.windowScene
         }
         .navigationViewStyle(.stack)
-        .onContinueUserActivity(SinglePlaceView.activityIdentifier) { activity in
-            placeID = (activity.userInfo?[SinglePlaceView.placeIDKey] as? URL)?.absoluteString ?? ""
+        .onContinueUserActivity(UserActivityRegistry.PlaceScene.activityType) { activity in
+            placeID = (activity.userInfo?[UserActivityRegistry.PlaceScene.identifierKey] as? URL)?.absoluteString ?? ""
             Logger.default.info("[SCENE] got activity \(activity)")
             Logger.default.info("[SCENE] got userInfo \(activity.userInfo ?? [:])")
         }
-        .userActivity(SinglePlaceView.activityIdentifier) { activity in
-            activity.targetContentIdentifier = SinglePlaceView.activityIdentifier
+        .userActivity(UserActivityRegistry.PlaceScene.activityType) { activity in
+            activity.targetContentIdentifier = UserActivityRegistry.PlaceScene.activityType
             if let url = URL(string: placeID) {
-                activity.userInfo = [SinglePlaceView.placeIDKey: url]
+                activity.userInfo = [UserActivityRegistry.PlaceScene.identifierKey: url]
             } else {
                 Logger.default.info("[SCENE] no URL")
             }

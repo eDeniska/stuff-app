@@ -69,7 +69,7 @@ struct ContentView: View {
                 showItemCapture = true
             }
             .onReceive(NotificationCenter.default.publisher(for: .checklistSelected, object: nil).receive(on: DispatchQueue.main)) { notification in
-                if let checklistID = notification.userInfo?[ChecklistEntryListView.identifierKey] as? UUID {
+                if let checklistID = notification.userInfo?[UserActivityRegistry.ChecklistView.identifierKey] as? UUID {
                     selectedChecklist = Checklist.checklist(with: checklistID, in: viewContext)
                 }
             }
@@ -92,7 +92,7 @@ struct ContentView: View {
                                                   localizedTitle: checklist.title,
                                                   localizedSubtitle: L10n.App.quickActionChecklist.localized,
                                                   icon: UIApplicationShortcutIcon(systemImageName: checklist.icon ?? "list.bullet.rectangle"),
-                                                  userInfo: [ChecklistEntryListView.identifierKey: checklist.identifier.uuidString as NSString])
+                                                  userInfo: [UserActivityRegistry.ChecklistView.identifierKey: checklist.identifier.uuidString as NSString])
                     }
                     WidgetCenter.shared.reloadAllTimelines()
                 }

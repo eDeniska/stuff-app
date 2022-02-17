@@ -14,13 +14,10 @@ import WidgetKit
 
 public struct SingleChecklistView: View {
 
-    private static let checklistIDKey = "checklistID"
-    public static let activityIdentifier = "com.tazetdinov.stuff.checklist.scene"
-
     static func activateSession(checklist: Checklist) {
-        let activity = NSUserActivity(activityType: activityIdentifier)
-        activity.targetContentIdentifier = activityIdentifier
-        activity.userInfo = [checklistIDKey: checklist.objectID.uriRepresentation()]
+        let activity = NSUserActivity(activityType: UserActivityRegistry.ChecklistScene.activityType)
+        activity.targetContentIdentifier = UserActivityRegistry.ChecklistScene.activityType
+        activity.userInfo = [UserActivityRegistry.ChecklistScene.identifierKey: checklist.objectID.uriRepresentation()]
         UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil) { error in
             Logger.default.error("[SCENE] could not spawn scene \(error)")
         }
@@ -29,7 +26,7 @@ public struct SingleChecklistView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.scenePhase) private var scenePhase
 
-    @SceneStorage(SingleChecklistView.checklistIDKey) private var checklistID = ""
+    @SceneStorage(UserActivityRegistry.ChecklistScene.identifierKey) private var checklistID = ""
     @State private var scene: UIWindowScene?
 
     public init() {
@@ -84,15 +81,15 @@ public struct SingleChecklistView: View {
             scene = window?.windowScene
         }
         .navigationViewStyle(.stack)
-        .onContinueUserActivity(SingleChecklistView.activityIdentifier) { activity in
-            checklistID = (activity.userInfo?[SingleChecklistView.checklistIDKey] as? URL)?.absoluteString ?? ""
+        .onContinueUserActivity(UserActivityRegistry.ChecklistScene.activityType) { activity in
+            checklistID = (activity.userInfo?[UserActivityRegistry.ChecklistScene.identifierKey] as? URL)?.absoluteString ?? ""
             Logger.default.info("[SCENE] got activity \(activity)")
             Logger.default.info("[SCENE] got userInfo \(activity.userInfo ?? [:])")
         }
-        .userActivity(SingleChecklistView.activityIdentifier) { activity in
-            activity.targetContentIdentifier = SingleChecklistView.activityIdentifier
+        .userActivity(UserActivityRegistry.ChecklistScene.activityType) { activity in
+            activity.targetContentIdentifier = UserActivityRegistry.PlaceScene.activityType
             if let url = URL(string: checklistID) {
-                activity.userInfo = [SingleChecklistView.checklistIDKey: url]
+                activity.userInfo = [UserActivityRegistry.ChecklistScene.identifierKey: url]
             } else {
                 Logger.default.info("[SCENE] no URL")
             }

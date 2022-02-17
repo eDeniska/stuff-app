@@ -13,9 +13,6 @@ import Localization
 
 public struct PlaceDetailsView: View {
 
-    public static let activityIdentifier = "com.tazetdinov.stuff.place.view"
-    public static let identifierKey = "placeID"
-
     @ObservedObject private var place: ItemPlace
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.editMode) private var editMode
@@ -144,9 +141,9 @@ public struct PlaceDetailsView: View {
             }
         }
         .navigationTitle(place.title)
-        .userActivity(Self.activityIdentifier, isActive: !place.isFault) { activity in
+        .userActivity(UserActivityRegistry.PlaceView.activityType, isActive: !place.isFault) { activity in
             activity.title = place.title
-            activity.userInfo = [Self.identifierKey: place.identifier]
+            activity.userInfo = [UserActivityRegistry.PlaceView.identifierKey: place.identifier]
             activity.isEligibleForHandoff = true
             activity.isEligibleForPrediction = true
         }

@@ -17,6 +17,8 @@ import Localization
 // TODO: add option to make reminders out of checklists
 // TODO: Siri/Shortcuts intents to manage lists
 
+// TODO: put edit button for lists under dots/circle menu - ellipsis.circle
+
 // TODO: smart checklists for lost items, items without a place, damaged items - you can't "complete" them
 
 // TODO: onboarding
@@ -58,30 +60,39 @@ struct StuffApp: App {
                     persistenceController.container.viewContext.saveOrRollback()
                 }
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .onContinueUserActivity(ItemDetailsView.activityIdentifier) { activity in
+                .onContinueUserActivity(UserActivityRegistry.ItemsView.activityType) { _ in
+                    requestedTab = .items
+                }
+                .onContinueUserActivity(UserActivityRegistry.PlacesView.activityType) { _ in
+                    requestedTab = .places
+                }
+                .onContinueUserActivity(UserActivityRegistry.ChecklistsView.activityType) { _ in
+                    requestedTab = .checklists
+                }
+                .onContinueUserActivity(UserActivityRegistry.ItemView.activityType) { activity in
                     Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
                     Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
-                    guard let identifier = activity.userInfo?[ItemDetailsView.identifierKey] as? UUID else {
+                    guard let identifier = activity.userInfo?[UserActivityRegistry.ItemView.identifierKey] as? UUID else {
                         Logger.default.error("[HANDOFF] could not build the identifier")
                         return
                     }
                     selectedItem = Item.item(with: identifier, in: persistenceController.container.viewContext)
                     Logger.default.info("[HANDOFF] got item = [\(selectedItem?.title ?? "<>")]")
                 }
-                .onContinueUserActivity(PlaceDetailsView.activityIdentifier) { activity in
+                .onContinueUserActivity(UserActivityRegistry.PlaceView.activityType) { activity in
                     Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
                     Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
-                    guard let identifier = activity.userInfo?[PlaceDetailsView.identifierKey] as? UUID else {
+                    guard let identifier = activity.userInfo?[UserActivityRegistry.PlaceView.identifierKey] as? UUID else {
                         Logger.default.error("[HANDOFF] could not build the identifier")
                         return
                     }
                     selectedPlace = ItemPlace.place(with: identifier, in: persistenceController.container.viewContext)
                     Logger.default.info("[HANDOFF] got checklist = [\(selectedChecklist?.title ?? "<>")]")
                 }
-                .onContinueUserActivity(ChecklistEntryListView.activityIdentifier) { activity in
+                .onContinueUserActivity(UserActivityRegistry.ChecklistView.activityType) { activity in
                     Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
                     Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
-                    guard let identifier = activity.userInfo?[ChecklistEntryListView.identifierKey] as? UUID else {
+                    guard let identifier = activity.userInfo?[UserActivityRegistry.ChecklistView.identifierKey] as? UUID else {
                         Logger.default.error("[HANDOFF] could not build the identifier")
                         return
                     }
@@ -179,18 +190,18 @@ struct StuffApp: App {
             SingleItemDetailsView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
-        .handlesExternalEvents(matching: [SingleItemDetailsView.activityIdentifier])
+        .handlesExternalEvents(matching: [UserActivityRegistry.ItemScene.activityType])
 
         WindowGroup(L10n.App.windowPlaces.localized) {
             SinglePlaceView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
-        .handlesExternalEvents(matching: [SinglePlaceView.activityIdentifier])
+        .handlesExternalEvents(matching: [UserActivityRegistry.PlaceScene.activityType])
 
         WindowGroup(L10n.App.windowChecklists.localized) {
             SingleChecklistView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
-        .handlesExternalEvents(matching: [SingleChecklistView.activityIdentifier])
+        .handlesExternalEvents(matching: [UserActivityRegistry.ChecklistScene.activityType])
     }
 }

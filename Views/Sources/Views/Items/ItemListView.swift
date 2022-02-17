@@ -170,6 +170,11 @@ public struct ItemListView: View {
                     })
                 }
             }
+            .userActivity(UserActivityRegistry.ItemsView.activityType) { activity in
+                activity.title = L10n.ItemsList.listTitle.localized
+                activity.isEligibleForHandoff = true
+                activity.isEligibleForPrediction = true
+            }
             .searchable(text: $searchText, prompt: Text(L10n.ItemsList.searchPlaceholder.localized))
             .navigationTitle(L10n.ItemsList.listTitle.localized)
             .sheet(isPresented: $showNewItemForm) {

@@ -162,6 +162,11 @@ public struct ChecklistListView: View {
                 selectedChecklist = nil
                 shouldAddNew = true
             }
+            .userActivity(UserActivityRegistry.ChecklistsView.activityType) { activity in
+                activity.title = L10n.ChecklistsList.listTitle.localized
+                activity.isEligibleForHandoff = true
+                activity.isEligibleForPrediction = true
+            }
             .searchable(text: $searchText, prompt: Text(L10n.ChecklistsList.searchPlaceholder.localized))
             .navigationTitle(L10n.ChecklistsList.listTitle.localized)
             .toolbar {

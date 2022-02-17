@@ -135,6 +135,11 @@ public struct PlaceListView: View {
             .sheet(isPresented: $shouldAddNew) {
                 NewPlaceView(createdPlace: $selectedPlace)
             }
+            .userActivity(UserActivityRegistry.PlacesView.activityType) { activity in
+                activity.title = L10n.PlacesList.listTitle.localized
+                activity.isEligibleForHandoff = true
+                activity.isEligibleForPrediction = true
+            }
             .searchable(text: $searchText, prompt: Text(L10n.PlacesList.searchPlaceholder.localized))
             .onChange(of: searchText) { newValue in
                 let text = newValue.trimmingCharacters(in: .whitespacesAndNewlines)

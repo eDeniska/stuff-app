@@ -13,9 +13,11 @@ import DataModel
 import Localization
 import Logger
 
-// TODO: add user activity to get back to proper place of the app
-
 class AddItemToChecklistIntentHandler: NSObject, AddItemToChecklistIntentHandling {
+
+    private func errorUserActivity() -> NSUserActivity {
+        NSUserActivity(activityType: UserActivityRegistry.ChecklistsView.activityType)
+    }
 
     private let context = PersistenceController.shared.container.viewContext
 
@@ -27,7 +29,7 @@ class AddItemToChecklistIntentHandler: NSObject, AddItemToChecklistIntentHandlin
               let checklistIdentifier = UUID(uuidString: checklistIdentifierString),
               let checklist = Checklist.checklist(with: checklistIdentifier, in: context)
         else {
-            return AddItemToChecklistIntentResponse(code: .failure, userActivity: nil)
+            return AddItemToChecklistIntentResponse(code: .failure, userActivity: errorUserActivity())
         }
         do {
             if item.isListed(in: checklist) {
@@ -39,7 +41,7 @@ class AddItemToChecklistIntentHandler: NSObject, AddItemToChecklistIntentHandlin
             return .success(result: L10n.StuffIntentHandlers.itemIsAddedToChecklist.localized(with: item.title, checklist.title))
         } catch {
             Logger.default.error("cannot place item: \(error)")
-            return AddItemToChecklistIntentResponse(code: .failure, userActivity: nil)
+            return AddItemToChecklistIntentResponse(code: .failure, userActivity: errorUserActivity())
         }
     }
 

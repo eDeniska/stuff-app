@@ -12,13 +12,17 @@ import Localization
 
 class WhereIsItemIntentHandler: NSObject, WhereIsItemIntentHandling {
 
+    private func errorUserActivity() -> NSUserActivity {
+        NSUserActivity(activityType: UserActivityRegistry.ItemsView.activityType)
+    }
+
     private let context = PersistenceController.shared.container.viewContext
 
     func handle(intent: WhereIsItemIntent) async -> WhereIsItemIntentResponse {
         guard let identifierString = intent.item?.identifier,
               let identifier = UUID(uuidString: identifierString),
               let item = Item.item(with: identifier, in: context) else {
-                  return WhereIsItemIntentResponse(code: .failure, userActivity: nil)
+                  return WhereIsItemIntentResponse(code: .failure, userActivity: errorUserActivity())
         }
         guard let place = item.place else {
             return .placeIsUnknown(itemTitle: item.title)

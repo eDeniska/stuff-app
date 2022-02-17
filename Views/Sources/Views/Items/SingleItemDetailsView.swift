@@ -14,13 +14,10 @@ import WidgetKit
 
 public struct SingleItemDetailsView: View {
 
-    private static let itemIDKey = "itemID"
-    public static let activityIdentifier = "com.tazetdinov.stuff.item.scene"
-
     static func activateSession(item: Item) {
-        let activity = NSUserActivity(activityType: activityIdentifier)
-        activity.targetContentIdentifier = activityIdentifier
-        activity.userInfo = [itemIDKey: item.objectID.uriRepresentation()]
+        let activity = NSUserActivity(activityType: UserActivityRegistry.ItemScene.activityType)
+        activity.targetContentIdentifier = UserActivityRegistry.ItemScene.activityType
+        activity.userInfo = [UserActivityRegistry.ItemScene.identifierKey: item.objectID.uriRepresentation()]
         UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil) { error in
             Logger.default.error("[SCENE] could not spawn scene \(error)")
         }
@@ -29,7 +26,7 @@ public struct SingleItemDetailsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.scenePhase) private var scenePhase
 
-    @SceneStorage(SingleItemDetailsView.itemIDKey) private var itemID = ""
+    @SceneStorage(UserActivityRegistry.ItemScene.identifierKey) private var itemID = ""
     @State private var scene: UIWindowScene?
 
     public init() {
@@ -84,15 +81,15 @@ public struct SingleItemDetailsView: View {
             scene = window?.windowScene
         }
         .navigationViewStyle(.stack)
-        .onContinueUserActivity(SingleItemDetailsView.activityIdentifier) { activity in
-            itemID = (activity.userInfo?[SingleItemDetailsView.itemIDKey] as? URL)?.absoluteString ?? ""
+        .onContinueUserActivity(UserActivityRegistry.ItemScene.activityType) { activity in
+            itemID = (activity.userInfo?[UserActivityRegistry.ItemScene.identifierKey] as? URL)?.absoluteString ?? ""
             Logger.default.info("[SCENE] got activity \(activity)")
             Logger.default.info("[SCENE] got userInfo \(activity.userInfo ?? [:])")
         }
-        .userActivity(SingleItemDetailsView.activityIdentifier) { activity in
-            activity.targetContentIdentifier = SingleItemDetailsView.activityIdentifier
+        .userActivity(UserActivityRegistry.ItemScene.activityType) { activity in
+            activity.targetContentIdentifier = UserActivityRegistry.ItemScene.activityType
             if let url = URL(string: itemID) {
-                activity.userInfo = [SingleItemDetailsView.itemIDKey: url]
+                activity.userInfo = [UserActivityRegistry.ItemScene.identifierKey: url]
             } else {
                 Logger.default.info("[SCENE] no URL")
             }

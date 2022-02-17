@@ -13,9 +13,6 @@ import Logger
 
 public struct ChecklistEntriesListView: View {
 
-    public static let activityIdentifier = "com.tazetdinov.stuff.checklist.view"
-    public static let identifierKey = "checklistID"
-
     @ObservedObject private var checklist: Checklist
     @Environment(\.managedObjectContext) private var viewContext
 
@@ -63,10 +60,10 @@ public struct ChecklistEntriesListView: View {
                     }
                 }
                 .navigationTitle(checklist.title)
-                .userActivity(Self.activityIdentifier, isActive: !checklist.isFault) { activity in
+                .userActivity(UserActivityRegistry.ChecklistView.activityType, isActive: !checklist.isFault) { activity in
                     activity.title = checklist.title
                     Logger.default.info("checklist -> '\(checklist)")
-                    activity.userInfo = [Self.identifierKey: checklist.identifier]
+                    activity.userInfo = [UserActivityRegistry.ChecklistView.identifierKey: checklist.identifier]
                     activity.isEligibleForHandoff = true
                     activity.isEligibleForPrediction = true
                 }
