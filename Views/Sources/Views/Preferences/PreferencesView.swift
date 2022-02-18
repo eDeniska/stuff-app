@@ -186,6 +186,12 @@ public struct PreferencesView: View {
                     Logger.default.error("could open file: \(error)")
                 }
             }
+            .sheet(isPresented: $showImportSuccess) {
+                ConfirmationView(title: "Operation failed!", details: "Import was not completed successfully, archive file might be broken.", imageName: "checkmark.circle.fill", imageColor: .red)
+            }
+            .sheet(isPresented: $showImportError) {
+                ConfirmationView(title: "Successful operation!", details: "Import is successfully completed.", imageName: "checkmark.circle.fill", imageColor: .green)
+            }
             .navigationTitle(L10n.Preferences.title.localized)
         }
         .navigationViewStyle(.stack)
