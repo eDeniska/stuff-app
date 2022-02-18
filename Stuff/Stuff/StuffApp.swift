@@ -17,13 +17,12 @@ import Localization
 // TODO: add option to make reminders out of checklists
 // TODO: Siri/Shortcuts intents to manage lists
 
-// TODO: put edit button for lists under dots/circle menu - ellipsis.circle
+// TODO: put edit and sort buttons for lists under dots/circle menu - ellipsis.circle
 
 // TODO: smart checklists for lost items, items without a place, damaged items - you can't "complete" them
 
 // TODO: onboarding
 // TODO: pin/biometric lock of the app access
-// TODO: add option to export and import data
 // TODO: add onSubmit actions for text fields where appropriate
 // TODO: support undo in editing lists
 
@@ -36,6 +35,7 @@ enum Tab: Int, Codable, Equatable, Hashable {
     case items = 0
     case places = 1
     case checklists = 2
+    case preferences = 3
 }
 
 @main
@@ -52,6 +52,10 @@ struct StuffApp: App {
 
     @State private var sceneDelegate = SceneDelegate()
 
+    init() {
+        FileStorageManager.shared.initialize()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView(selectedItem: $selectedItem, selectedPlace: $selectedPlace, selectedChecklist: $selectedChecklist, requestedTab: $requestedTab)
@@ -60,6 +64,7 @@ struct StuffApp: App {
                     persistenceController.container.viewContext.saveOrRollback()
                 }
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.persistentContainer, persistenceController.container)
                 .onContinueUserActivity(UserActivityRegistry.ItemsView.activityType) { _ in
                     requestedTab = .items
                 }
@@ -116,7 +121,24 @@ struct StuffApp: App {
                 }
         }
         .commands {
-            // TODO: consider opening "new..." forms from current tab
+            // TODO: consider opening "new..." forms from current tab (or in new window on iPad and Mac)
+            CommandGroup(replacing: .appSettings) {
+                Button {
+                    if UIDevice.current.isMac {
+                        let activity = NSUserActivity(activityType: UserActivityRegistry.SettingsScene.activityType)
+                        activity.targetContentIdentifier = UserActivityRegistry.SettingsScene.activityType
+                        UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil) { error in
+                            Logger.default.error("[SCENE] could not spawn scene \(error)")
+                        }
+                    } else {
+                        Logger.default.info("show settings")
+                    }
+
+                } label: {
+                    Label(L10n.App.Menu.preferences.localized, systemImage: "gear")
+                }
+                .keyboardShortcut(",", modifiers: [.command])
+            }
             CommandGroup(replacing: .newItem) {
                 Menu {
                     Button {
@@ -189,19 +211,35 @@ struct StuffApp: App {
         WindowGroup(L10n.App.windowItems.localized) {
             SingleItemDetailsView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.persistentContainer, persistenceController.container)
         }
         .handlesExternalEvents(matching: [UserActivityRegistry.ItemScene.activityType])
 
         WindowGroup(L10n.App.windowPlaces.localized) {
             SinglePlaceView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.persistentContainer, persistenceController.container)
         }
         .handlesExternalEvents(matching: [UserActivityRegistry.PlaceScene.activityType])
 
         WindowGroup(L10n.App.windowChecklists.localized) {
             SingleChecklistView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.persistentContainer, persistenceController.container)
         }
         .handlesExternalEvents(matching: [UserActivityRegistry.ChecklistScene.activityType])
+
+        WindowGroup(L10n.App.windowPreferences.localized) {
+            PreferencesView()
+                .onContinueUserActivity(UserActivityRegistry.SettingsScene.activityType) { userActivity in
+                    Logger.default.info("got activity - \(userActivity)")
+                }
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.persistentContainer, persistenceController.container)
+                .handlesExternalEvents(preferring: [UserActivityRegistry.SettingsScene.activityType], allowing: ["*"])
+        }
+        .handlesExternalEvents(matching: [UserActivityRegistry.SettingsScene.activityType])
+
+
     }
 }

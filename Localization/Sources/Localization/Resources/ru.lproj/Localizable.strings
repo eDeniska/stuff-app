@@ -115,14 +115,17 @@
 "app.window.items" = "Вещи";
 "app.window.places" = "Места";
 "app.window.checklists" = "Списки";
+"app.window.preferences" = "Настройки";
 "app.title.items" = "Stuff – Вещи";
 "app.title.places" = "Stuff – Места";
 "app.title.checklists" = "Stuff – Списки";
+"app.title.preferences" = "Stuff – Настройки";
 "app.menu.newMenu" = "Добавить";
 "app.menu.newWindow" = "Новое окно";
 "app.menu.newItem" = "Новая вещь...";
 "app.menu.newPlace" = "Новое место...";
 "app.menu.newChecklist" = "Новый список...";
+"app.menu.preferences" = "Настройки...";
 
 // Category
 "category.section.title" = "Категория";
@@ -286,3 +289,16 @@
 "intents.place.itemIsPlacedTo" = "%@ теперь здесь – %@";
 "intents.checklist.itemIsAddedTo" = "Вещь %@ добавлена в список %@";
 "intents.checklist.itemIsAlreadyIn" = "Вещь %@ уже есть в списке %@";
+
+// Preferences
+"preferences.title" = "Настройки";
+"preferences.exportImport.title" = "Экспорт и импорт";
+"preferences.export.title" = "Экспорт";
+"preferences.import.title" = "Импорт";
+"preferences.exportButton.title" = "Экспорт...";
+"preferences.importButton.title" = "Импорт...";
+"preferences.export.action" = "Сохраните данные в резрезвной копии";
+"preferences.import.action" = "Загрузите экспортированные данные";
+"preferences.importingData" = "Импорт данных...";
+"preferences.exportingData" = "Экспорт данных...";
+

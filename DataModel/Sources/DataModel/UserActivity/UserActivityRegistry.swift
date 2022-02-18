@@ -55,7 +55,12 @@ public enum UserActivityRegistry {
         public static let activityType = "com.tazetdinov.stuff.item.scene"
     }
 
+    public enum SettingsView: UserActivityDefinition {
+        public static let activityType = "com.tazetdinov.stuff.settings.view"
+    }
 
-
+    public enum SettingsScene: UserActivityDefinition {
+        public static let activityType = "com.tazetdinov.stuff.settings.scene"
+    }
 
 }

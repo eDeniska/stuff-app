@@ -507,11 +507,11 @@ struct ItemDetailsViewInternal: View {
         })
         .overlay(ZStack(alignment: .center) {
             if isPredicting || isFetchingImages {
-                VStack {
+                VStack(spacing: 20) {
                     ProgressView(isPredicting ? L10n.ItemDetails.predictingTitle.localized : L10n.ItemDetails.fetchingImagesTitle.localized)
                         .progressViewStyle(.circular)
                 }
-                .padding()
+                .padding(40)
                 .background(Material.regular)
                 .cornerRadius(8)
             }

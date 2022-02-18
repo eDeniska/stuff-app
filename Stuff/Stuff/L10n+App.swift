@@ -19,6 +19,7 @@ extension L10n {
             case showItems = "app.menu.showItems"
             case showPlaces = "app.menu.showPlaces"
             case showChecklists = "app.menu.showChecklists"
+            case preferences = "app.menu.preferences"
         }
         case quickActionChecklist = "app.quickAction.openChecklist"
         case toolbarItems = "app.toolbar.items"
@@ -27,8 +28,10 @@ extension L10n {
         case windowItems = "app.window.items"
         case windowPlaces = "app.window.places"
         case windowChecklists = "app.window.checklists"
+        case windowPreferences = "app.window.preferences"
         case titleItems = "app.title.items"
         case titlePlaces = "app.title.places"
         case titleChecklists = "app.title.checklists"
+        case titlePreferences = "app.title.preferences"
     }
 }

@@ -39,6 +39,8 @@ struct ContentView: View {
                     .tag(Tab.places)
                 ChecklistListView(selectedChecklist: $selectedChecklist)
                     .tag(Tab.checklists)
+                PreferencesView()
+                    .tag(Tab.preferences)
             }
             .onChange(of: requestedTab) { newValue in
                 if let tab = newValue {

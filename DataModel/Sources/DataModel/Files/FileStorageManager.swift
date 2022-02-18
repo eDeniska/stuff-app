@@ -62,24 +62,40 @@ public class FileStorageManager: ObservableObject {
         metadataQuery.stop()
     }
 
+    public func initialize() {
+    }
+
     public func urls(withPrefix filePrefix: String) -> [URL] {
         items.filter { $0.lastPathComponent.hasPrefix(filePrefix) }.sorted { $0.absoluteString < $1.absoluteString }
     }
 
     public func removeItems(withPrefix filePrefix: String) {
         let urls = urls(withPrefix: filePrefix)
-        do {
-            try urls.forEach {
-                try FileManager.default.removeItem(at: $0)
-            }
-        } catch {
-            Logger.default.error("failed to remove items with prefix \(filePrefix): \(error)")
-        }
+        urls.forEach(removeItem)
     }
 
     public func removeItem(at url: URL) {
         do {
+            if requiresCoordination {
+                let coordinator = NSFileCoordinator()
+                var error: NSError?
+                var deleteError: Error?
+                coordinator.coordinate(writingItemAt: url, options: .forDeleting, error: &error) { coordinatedURL in
+                    do {
+                        try FileManager.default.removeItem(at: coordinatedURL)
+                    } catch {
+                        deleteError = error
+                    }
+                }
+                if let error = error {
+                    throw error
+                }
+                if let error = deleteError {
+                    throw error
+                }
+            } else {
                 try FileManager.default.removeItem(at: url)
+            }
         } catch {
             Logger.default.error("failed to remove items at \(url): \(error)")
         }
@@ -88,7 +104,26 @@ public class FileStorageManager: ObservableObject {
     public func rename(at url: URL, to fileName: String) {
         let destinationURL = storageURL.appendingPathComponent(fileName)
         do {
-            try FileManager.default.moveItem(at: url, to: destinationURL)
+            if requiresCoordination {
+                let coordinator = NSFileCoordinator()
+                var error: NSError?
+                var moveError: Error?
+                coordinator.coordinate(writingItemAt: url, options: .forMoving, error: &error) { coordinatedURL in
+                    do {
+                        try FileManager.default.moveItem(at: coordinatedURL, to: destinationURL)
+                    } catch {
+                        moveError = error
+                    }
+                }
+                if let error = error {
+                    throw error
+                }
+                if let error = moveError {
+                    throw error
+                }
+            } else {
+                try FileManager.default.moveItem(at: url, to: destinationURL)
+            }
         } catch {
             Logger.default.error("failed to move items from \(url) to \(destinationURL): \(error)")
         }
@@ -140,6 +175,32 @@ public class FileStorageManager: ObservableObject {
             }
         }
     }
+
+    public func copyFile(at url: URL, to destinationURL: URL) throws {
+        if requiresCoordination {
+            let coordinator = NSFileCoordinator()
+            var coordinatorError: NSError?
+            var thrownError: Error?
+            coordinator.coordinate(readingItemAt: url, options: .withoutChanges, error: &coordinatorError) { coordinatedURL in
+                do {
+                    try FileManager.default.copyItem(at: coordinatedURL, to: destinationURL)
+                } catch {
+                    thrownError = error
+
+                }
+            }
+            if let error = coordinatorError {
+                throw error
+            }
+            if let error = thrownError {
+                throw error
+            }
+        } else {
+            try FileManager.default.copyItem(at: url, to: destinationURL)
+        }
+    }
+
+
 
     // TODO: clear cache locally, clear cache via iCloud
 

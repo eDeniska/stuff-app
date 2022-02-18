@@ -34,4 +34,23 @@ public extension ItemCategory {
             Logger.default.error("could not fetch categories: \(error)")
         }
     }
+
+    static func all(in context: NSManagedObjectContext) -> [ItemCategory] {
+        let request = ItemCategory.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(ItemCategory.title), ascending: false)]
+        do {
+            return try context.fetch(request)
+        } catch {
+            Logger.default.error("could lot load items: \(error)")
+            return []
+        }
+    }
+
+
+    static func category(with identifier: UUID, in context: NSManagedObjectContext) -> ItemCategory? {
+        let request = ItemCategory.fetchRequest()
+        request.predicate = .equalsTo(keyPath: #keyPath(ItemCategory.identifier), object: identifier as CVarArg)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
+    }
 }

@@ -108,4 +108,8 @@ public extension Item {
             add(to: added)
         }
     }
+
+    func images() -> [URL] {
+        FileStorageManager.shared.urls(withPrefix: identifier.uuidString)
+    }
 }

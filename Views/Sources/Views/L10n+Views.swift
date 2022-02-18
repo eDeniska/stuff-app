@@ -166,4 +166,17 @@ extension L10n {
         case addEntryButton = "checklist.details.addEntry.button" // "Add entry"
     }
 
+    enum Preferences: String, Localizable {
+        case title = "preferences.title" // "Preferences"
+        case exportImportTitle = "preferences.exportImport.title" // "Export and import"
+        case exportTitle = "preferences.export.title" // "Export"
+        case importTitle = "preferences.import.title" // "Import"
+        case exportButtonTitle = "preferences.exportButton.title" // "Export..."
+        case importButtonTitle = "preferences.importButton.title" // "Import..."
+        case exportAction = "preferences.export.action" // "Export data for backup"
+        case importAction = "preferences.import.action" // "Import previously exported data"
+        case importingData = "preferences.importingData" // "Importing data..."
+        case exportingData = "preferences.exportingData" // "Exporting data..."
+    }
+
 }

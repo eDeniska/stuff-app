@@ -19,6 +19,8 @@
 		<string>com.tazetdinov.stuff.places.view</string>
 		<string>com.tazetdinov.stuff.items.view</string>
 		<string>com.tazetdinov.stuff.checklists.view</string>
+		<string>com.tazetdinov.stuff.settings.scene</string>
+		<string>com.tazetdinov.stuff.settings.view</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

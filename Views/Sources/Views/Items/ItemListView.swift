@@ -11,7 +11,7 @@ import DataModel
 import Localization
 import AVFoundation
 import Intents
-import IntentsUI
+
 struct ItemListRow: View {
 
     @Environment(\.managedObjectContext) private var viewContext
@@ -94,6 +94,7 @@ struct ItemListRow: View {
 
 public struct ItemListView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.editMode) private var editMode
 
     @SectionedFetchRequest(
         sectionIdentifier: \Item.categoryTitle,
@@ -182,6 +183,7 @@ public struct ItemListView: View {
                     ItemDetailsView(item: $selectedItem)
                 }
             }
+
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {

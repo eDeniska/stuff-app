@@ -121,6 +121,8 @@ struct MacContentView: View {
             scene?.title = L10n.App.titlePlaces.localized
         case .checklists:
             scene?.title = L10n.App.titleChecklists.localized
+        case .preferences:
+            scene?.title = L10n.App.titlePreferences.localized
         }
     }
 
