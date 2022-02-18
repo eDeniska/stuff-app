@@ -30,7 +30,6 @@ struct ConfirmationView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: .infinity)
                 .foregroundColor(imageColor)
-                .imageScale(.large)
             
             if let details = details {
                 Spacer()

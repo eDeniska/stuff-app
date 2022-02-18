@@ -301,4 +301,8 @@
 "preferences.import.action" = "Загрузите экспортированные данные";
 "preferences.importingData" = "Импорт данных...";
 "preferences.exportingData" = "Экспорт данных...";
+"preferences.import.success.title" = "Успешный импорт";
+"preferences.import.success.details" = "Импорт данных успешно завершён. Ваши вещи, места и списки обновлены данными из файла архива.";
+"preferences.import.failure.title" = "Ошибка при импорте";
+"preferences.import.failure.details" = "Проблемы с файлом архива прерятствуют его загрузке. Проверьте файл или экспортируйте данные заново..";
 

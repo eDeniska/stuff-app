@@ -298,4 +298,7 @@
 "preferences.import.action" = "Import previously exported data";
 "preferences.importingData" = "Importing data...";
 "preferences.exportingData" = "Exporting data...";
-
+"preferences.import.success.title" = "Successful import";
+"preferences.import.success.details" = "Import is completed successfully. Your items, places and checklists are updated with information from archive file.";
+"preferences.import.failure.title" = "Import failed";
+"preferences.import.failure.details" = "There are issues with archive file preventing data to be imported. Check contents of the file, or export data again.";

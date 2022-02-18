@@ -177,6 +177,11 @@ extension L10n {
         case importAction = "preferences.import.action" // "Import previously exported data"
         case importingData = "preferences.importingData" // "Importing data..."
         case exportingData = "preferences.exportingData" // "Exporting data..."
+        
+        case importSuccessTitle = "preferences.import.success.title"
+        case importSuccessTitle = "preferences.import.success.details"
+        case importSuccessTitle = "preferences.import.failure.title"
+        case importSuccessTitle = "preferences.import.failure.details"
     }
 
 }
