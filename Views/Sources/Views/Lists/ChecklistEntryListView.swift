@@ -35,7 +35,6 @@ public struct ChecklistEntryListView: View {
 
     init(checklist: Checklist, allowOpenInSeparateWindow: Bool = true) {
         validObject = checklist.managedObjectContext != nil
-        Logger.default.info("[SORTBUG] \(checklist.title) -> date: \(checklist.lastModified)")
         self.checklist = checklist
         self.entriesRequest = SectionedFetchRequest(entity: ChecklistEntry.entity(),
                                                     sectionIdentifier: \ChecklistEntry.isChecked,

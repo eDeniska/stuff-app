@@ -29,6 +29,14 @@ public struct PreferencesView: View {
     @State private var scene: UIWindowScene? = nil
 
     public init() { }
+    
+    private func exportFileName() -> String {
+        let dateString = Date().formatted(.dateTime)
+            .replacingOccurrences(of: "/", with: "-")
+            .replacingOccurrences(of: ":", with: "-")
+            .replacingOccurrences(of: "\\", with: "-")
+        return "StuffExport-\(dateString).aar"
+    }
 
     private func createArchive() async {
         ongoingExport = true
@@ -36,7 +44,10 @@ public struct PreferencesView: View {
         do {
             var document: ArchiveDocument? = nil
             try await context.perform {
-                let tempName = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".aar")
+                let tempFolder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+                try FileManager.default.createDirectory(at: tempFolder, withIntermediateDirectories: true)
+                let tempName = tempFolder.appendingPathComponent(exportFileName())
+                
                 let archive = Archive(context: viewContext)
                 let archiveURL = try archive.saveArchive()
                 try CompressionRoutines.compress(source: archiveURL, to: tempName)
@@ -63,7 +74,9 @@ public struct PreferencesView: View {
         let context = container.newBackgroundContext()
         do {
             try await context.perform {
-                let archive = try Archive(url: url)
+                let tempName = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+                try CompressionRoutines.decompress(source: url, to: tempName)
+                let archive = try Archive(url: tempName)
                 archive.extract(to: context)
                 try context.save()
             }
@@ -164,7 +177,7 @@ public struct PreferencesView: View {
                     Logger.default.error("could open file: \(error)")
                 }
             }
-            .fileExporter(isPresented: $showExport, document: archiveDocument, contentType: .appleArchive, defaultFilename: "StuffImport") { result in
+            .fileExporter(isPresented: $showExport, document: archiveDocument, contentType: .appleArchive, defaultFilename: "StuffExport.aar") { result in
                 switch result {
                 case .success(let url):
                     Logger.default.info("saving url -> \(url)")
