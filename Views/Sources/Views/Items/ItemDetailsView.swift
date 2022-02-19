@@ -15,8 +15,6 @@ import AVFoundation
 import Localization
 import ViewModels
 
-// TODO: add onSubmit action to save on enter press?
-
 public extension Notification.Name {
     static let itemCaptureRequest = Notification.Name("ItemCaptureRequestNotification")
 }

@@ -24,18 +24,25 @@ public struct PreferencesView: View {
     @State private var ongoingImport = false
     @State private var showImportSuccess = false
     @State private var showImportError = false
+    @State private var showExportError = false
 
     @State private var archiveDocument: ArchiveDocument? = nil
     @State private var scene: UIWindowScene? = nil
 
     public init() { }
     
+    private func appVersion() -> String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "-"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "-"
+        return L10n.Preferences.versionFormat.localized(with: version, build)
+    }
+    
     private func exportFileName() -> String {
         let dateString = Date().formatted(.dateTime)
-            .replacingOccurrences(of: "/", with: "-")
-            .replacingOccurrences(of: ":", with: "-")
-            .replacingOccurrences(of: "\\", with: "-")
-        return "StuffExport-\(dateString).aar"
+            .replacingOccurrences(of: "/", with: ".")
+            .replacingOccurrences(of: ":", with: ".")
+            .replacingOccurrences(of: "\\", with: ".")
+        return "StuffExport \(dateString).aar"
     }
 
     private func createArchive() async {
@@ -129,6 +136,9 @@ public struct PreferencesView: View {
                         .foregroundColor(.secondary)
                 }
                 Spacer()
+                Text(appVersion())
+                    .foregroundColor(.secondary)
+                    .font(.footnote)
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -187,10 +197,22 @@ public struct PreferencesView: View {
                 }
             }
             .sheet(isPresented: $showImportSuccess) {
-                ConfirmationView(title: "Operation failed!", details: "Import was not completed successfully, archive file might be broken.", imageName: "checkmark.circle.fill", imageColor: .red)
+                ConfirmationView(title: L10n.Preferences.importSuccessTitle.localized,
+                                 details: L10n.Preferences.importSuccessDetails.localized,
+                                 imageName: "checkmark.circle.fill",
+                                 imageColor: .green)
             }
             .sheet(isPresented: $showImportError) {
-                ConfirmationView(title: "Successful operation!", details: "Import is successfully completed.", imageName: "checkmark.circle.fill", imageColor: .green)
+                ConfirmationView(title: L10n.Preferences.importFailureTitle.localized,
+                                 details: L10n.Preferences.importFailureDetails.localized,
+                                 imageName: "xmark.circle.fill",
+                                 imageColor: .red)
+            }
+            .sheet(isPresented: $showExportError) {
+                ConfirmationView(title: L10n.Preferences.exportFailureTitle.localized,
+                                 details: L10n.Preferences.exportFailureDetails.localized,
+                                 imageName: "xmark.circle.fill",
+                                 imageColor: .red)
             }
             .navigationTitle(L10n.Preferences.title.localized)
         }

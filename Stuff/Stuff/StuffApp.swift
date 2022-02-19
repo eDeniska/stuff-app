@@ -30,6 +30,7 @@ import Localization
 // TODO: fill credits
 
 // TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
+// TODO: fix settings window being opened multiple times on Catalyst
 
 enum Tab: Int, Codable, Equatable, Hashable {
     case items = 0

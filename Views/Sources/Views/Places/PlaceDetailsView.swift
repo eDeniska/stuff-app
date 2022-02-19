@@ -152,7 +152,7 @@ public struct PlaceDetailsView: View {
                 Button {
                     showItemAssignment = true
                 } label: {
-                    Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus") // TODO: consider other icon
+                    Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus")
                 }
                 .disabled(itemsUnavailable)
                 if allowOpenInSeparateWindow {

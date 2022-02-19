@@ -302,3 +302,6 @@
 "preferences.import.success.details" = "Import is completed successfully. Your items, places and checklists are updated with information from archive file.";
 "preferences.import.failure.title" = "Import failed";
 "preferences.import.failure.details" = "There are issues with archive file preventing data to be imported. Check contents of the file, or export data again.";
+"preferences.export.failure.title" = "Export failed";
+"preferences.export.failure.details" = "There are issues during export process. Please, contact developers to resolve these issues.";
+"preferences.versionFormat" = "Stuff v%@ (%@)";

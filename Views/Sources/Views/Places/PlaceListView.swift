@@ -32,7 +32,7 @@ struct PlaceListRow: View {
             Button {
                 showItemAssignment = true
             } label: {
-                Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus") // TODO: consider other icon
+                Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus")
             }
             .disabled(itemsUnavailable)
             Button(role: .destructive) {
@@ -50,7 +50,7 @@ struct PlaceListRow: View {
             Button {
                 showItemAssignment = true
             } label: {
-                Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus") // TODO: consider other icon
+                Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus")
             }
             .tint(.indigo)
             .disabled(itemsUnavailable)

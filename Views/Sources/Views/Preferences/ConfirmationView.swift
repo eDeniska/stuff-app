@@ -18,7 +18,7 @@ struct ConfirmationView: View {
     let imageColor: Color
     
     var body: some View {
-        
+        GeometryReader { proxy in
         VStack(spacing: 40) {
             Spacer()
             Text(title)
@@ -28,7 +28,7 @@ struct ConfirmationView: View {
             Image(systemName: imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: proxy.size.width / 3)
                 .foregroundColor(imageColor)
             
             if let details = details {
@@ -48,6 +48,6 @@ struct ConfirmationView: View {
             .frame(maxWidth: .infinity)
         }
         .padding()
-        
+        }
     }
 }
