@@ -49,9 +49,6 @@ public enum DisplayedCategory: Equatable {
             fetchRequest.fetchLimit = 1
             fetchRequest.predicate = .equalsTo(keyPath: #keyPath(ItemCategory.appCategory), object: category.rawValue)
             if let existing = (try? context.fetch(fetchRequest))?.first {
-                // TODO: consider removing these later
-                existing.order = Int64(category.sortOrder)
-                existing.title = category.localizedTitle
                 return existing
             } else {
                 let newCategory = ItemCategory(context: context)
