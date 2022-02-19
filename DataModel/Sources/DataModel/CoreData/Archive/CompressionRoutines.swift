@@ -13,9 +13,22 @@ import Logger
 public struct CompressionRoutines {
 
     public enum Errors: LocalizedError {
+        case couldNotOpenArchive
         case incorrectPath
         case streamOperationFailed
 
+        public var errorDescription: String? {
+            switch self {
+            case .couldNotOpenArchive:
+                return "Could not open archive file."
+
+            case .incorrectPath:
+                return "Incorrect path for archive data."
+
+            case .streamOperationFailed:
+                return "Data processing failed due to internal error."
+            }
+        }
     }
 
     public static func compress(source: URL, to url: URL) throws {
@@ -52,49 +65,80 @@ public struct CompressionRoutines {
     }
 
     public static func decompress(source: URL, to url: URL) throws {
-        guard let decompressFilePath = FilePath(url), let sourceFilePath = FilePath(source) else {
-            throw Errors.incorrectPath
-        }
+        let coordinator = NSFileCoordinator()
+        var error: NSError?
+        var innerError: Error?
+        coordinator.coordinate(readingItemAt: source, options: .withoutChanges, error: &error) { coordinatedURL in
 
-        guard let readFileStream = ArchiveByteStream.fileStream(path: sourceFilePath,
-                                                                mode: .readOnly,
-                                                                options: [ ],
-                                                                permissions: [ .groupRead, .otherRead, .ownerRead, .ownerWrite ]) else {
-            throw Errors.streamOperationFailed
-        }
-        defer {
-            try? readFileStream.close()
-        }
+            guard coordinatedURL.startAccessingSecurityScopedResource() else {
+                innerError = Errors.couldNotOpenArchive
+                return
 
-        guard let decompressStream = ArchiveByteStream.decompressionStream(readingFrom: readFileStream) else {
-            throw Errors.streamOperationFailed
-        }
+            }
+            defer {
+                coordinatedURL.stopAccessingSecurityScopedResource()
+            }
 
-        defer {
-            try? decompressStream.close()
-        }
 
-        guard let decodeStream = ArchiveStream.decodeStream(readingFrom: decompressStream) else {
-            throw Errors.streamOperationFailed
-        }
+            guard let decompressFilePath = FilePath(url), let sourceFilePath = FilePath(coordinatedURL) else {
+                innerError = Errors.incorrectPath
+                return
+            }
 
-        defer {
-            try? decodeStream.close()
-        }
+            guard let readFileStream = ArchiveByteStream.fileStream(path: sourceFilePath,
+                                                                    mode: .readOnly,
+                                                                    options: [ ],
+                                                                    permissions: [ .groupRead, .otherRead, .ownerRead, .ownerWrite ]) else {
+                innerError = Errors.streamOperationFailed
+                return
+            }
+            defer {
+                try? readFileStream.close()
+            }
 
-        if !FileManager.default.fileExists(atPath: url.path) {
-            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-        }
+            guard let decompressStream = ArchiveByteStream.decompressionStream(readingFrom: readFileStream) else {
+                innerError = Errors.streamOperationFailed
+                return
+            }
 
-        guard let extractStream = ArchiveStream.extractStream(extractingTo: decompressFilePath,
-                                                              flags: [ .ignoreOperationNotPermitted ]) else {
-            throw Errors.streamOperationFailed
-        }
-        defer {
-            try? extractStream.close()
-        }
+            defer {
+                try? decompressStream.close()
+            }
 
-        let totalBytes = try ArchiveStream.process(readingFrom: decodeStream, writingTo: extractStream)
-        Logger.default.debug("processed \(totalBytes) bytes.")
+            guard let decodeStream = ArchiveStream.decodeStream(readingFrom: decompressStream) else {
+                innerError = Errors.streamOperationFailed
+                return
+            }
+
+            defer {
+                try? decodeStream.close()
+            }
+
+            do {
+                if !FileManager.default.fileExists(atPath: url.path) {
+                    try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+                }
+                
+                guard let extractStream = ArchiveStream.extractStream(extractingTo: decompressFilePath,
+                                                                      flags: [ .ignoreOperationNotPermitted ]) else {
+                    innerError = Errors.streamOperationFailed
+                    return
+                }
+                defer {
+                    try? extractStream.close()
+                }
+                
+                let totalBytes = try ArchiveStream.process(readingFrom: decodeStream, writingTo: extractStream)
+                Logger.default.debug("processed \(totalBytes) bytes.")
+            } catch {
+                innerError = error
+            }
+        }
+        if let error = error {
+            throw error
+        }
+        if let innerError = innerError {
+            throw innerError
+        }
     }
 }
