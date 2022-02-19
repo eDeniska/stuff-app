@@ -58,121 +58,124 @@ public struct PlaceDetailsView: View {
 
     public var body: some View {
         if validObject {
-        List {
-            if editMode?.wrappedValue == .active {
-                Section {
-                    TextField(L10n.EditPlace.titlePlaceholder.localized, text: $placeTitle)
-                } header: {
-                    Text(L10n.EditPlace.titleSectionTitle.localized)
+            List {
+                if editMode?.wrappedValue == .active {
+                    Section {
+                        TextField(L10n.EditPlace.titlePlaceholder.localized, text: $placeTitle)
+                    } header: {
+                        Text(L10n.EditPlace.titleSectionTitle.localized)
+                    }
+                    Section {
+                        LazyVGrid(columns: gridItemLayout) {
+                            ForEach(PlaceIcon.allCases) { icon in
+                                Button {
+                                    place.icon = icon.rawValue
+                                    viewContext.saveOrRollback()
+                                } label: {
+                                    Image(systemName: icon.rawValue)
+                                        .font(.title3)
+                                        .padding()
+                                        .frame(width: 60, height: 60, alignment: .center)
+                                        .overlay(icon.rawValue == place.icon ? RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor) : nil)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .id(icon)
+                            }
+                        }
+                    } header: {
+                        Text(L10n.EditPlace.customIcon.localized)
+                    }
                 }
-                Section {
-                    LazyVGrid(columns: gridItemLayout) {
-                        ForEach(PlaceIcon.allCases) { icon in
+                ForEach(items) { section in
+                    Section {
+                        ForEach(section) { item in
                             Button {
-                                place.icon = icon.rawValue
-                                viewContext.saveOrRollback()
+                                presentedItem = item
                             } label: {
-                                Image(systemName: icon.rawValue)
-                                    .font(.title3)
-                                    .padding()
-                                    .frame(width: 60, height: 60, alignment: .center)
-                                    .overlay(icon.rawValue == place.icon ? RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor) : nil)
-                                    .contentShape(Rectangle())
+                                HStack {
+                                    ItemListElement(item: item, displayPlace: false, displayCondition: true)
+                                    Spacer()
+                                }
+                                .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
-                            .id(icon)
                         }
-                    }
-                } header: {
-                    Text(L10n.EditPlace.customIcon.localized)
-                }
-            }
-            ForEach(items) { section in
-                Section(header: Text(title(for: section.id))) {
-                    ForEach(section) { item in
-                        Button {
-                            presentedItem = item
-                        } label: {
-                            HStack {
-                                ItemListElement(item: item)
-                                Spacer()
+                        .onDelete { indexSets in
+                            withAnimation {
+                                indexSets.map { section[$0] }.forEach { item in
+                                    item.place = nil
+                                }
+                                viewContext.saveOrRollback()
                             }
-                            .contentShape(Rectangle())
                         }
-                        .buttonStyle(.plain)
-                    }
-                    .onDelete { indexSets in
-                        withAnimation {
-                            indexSets.map { section[$0] }.forEach { item in
-                                item.place = nil
+                        .sheet(item: $presentedItem) { item in
+                            NavigationView {
+                                ItemDetailsView(item: item, hasDismissButton: true)
                             }
-                            viewContext.saveOrRollback()
                         }
-                    }
-                    .sheet(item: $presentedItem) { item in
-                        NavigationView {
-                            ItemDetailsView(item: item, hasDismissButton: true)
-                        }
+                    } header: {
+                        Text(title(for: section.id))
                     }
                 }
             }
-        }
-        .overlay {
-            if items.isEmpty && editMode?.wrappedValue != .active {
-                Text(L10n.PlaceDetails.placeIsEmpty.localized)
-                    .font(.title)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .sheet(isPresented: $showItemAssignment) {
-            PlaceItemsAssingmentView(place: place)
-        }
-        .onAppear {
-            placeTitle = place.title
-        }
-        .onChange(of: placeTitle) { newValue in
-            var title = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-            if title.isEmpty {
-                title = L10n.EditPlace.unnamedPlace.localized
-            }
-            if place.title != title {
-                place.title = title
-                viewContext.saveOrRollback()
-            }
-        }
-        .navigationTitle(place.title)
-        .userActivity(UserActivityRegistry.PlaceView.activityType, isActive: !place.isFault) { activity in
-            activity.title = place.title
-            activity.userInfo = [UserActivityRegistry.PlaceView.identifierKey: place.identifier]
-            activity.isEligibleForHandoff = true
-            activity.isEligibleForPrediction = true
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showItemAssignment = true
-                } label: {
-                    Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus")
+            .overlay {
+                if items.isEmpty && editMode?.wrappedValue != .active {
+                    Text(L10n.PlaceDetails.placeIsEmpty.localized)
+                        .font(.title)
+                        .foregroundColor(.secondary)
                 }
-                .disabled(itemsUnavailable)
-                if allowOpenInSeparateWindow {
+            }
+            .sheet(isPresented: $showItemAssignment) {
+                PlaceItemsAssingmentView(place: place)
+            }
+            .onAppear {
+                placeTitle = place.title
+                itemsUnavailable = Item.isEmpty(in: viewContext)
+            }
+            .onDisappear {
+                editMode?.wrappedValue = .inactive
+            }
+            .onChange(of: placeTitle) { newValue in
+                var title = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                if title.isEmpty {
+                    title = L10n.EditPlace.unnamedPlace.localized
+                }
+                if place.title != title {
+                    place.title = title
+                    viewContext.saveOrRollback()
+                }
+            }
+            .navigationTitle(place.title)
+            .userActivity(UserActivityRegistry.PlaceView.activityType, isActive: !place.isFault) { activity in
+                activity.title = place.title
+                activity.userInfo = [UserActivityRegistry.PlaceView.identifierKey: place.identifier]
+                activity.isEligibleForHandoff = true
+                activity.isEligibleForPrediction = true
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        SinglePlaceView.activateSession(place: place)
+                        showItemAssignment = true
                     } label: {
-                        Label(L10n.Common.buttonSeparateWindow.localized, systemImage: "square.on.square")
+                        Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus")
+                    }
+                    .disabled(itemsUnavailable)
+                    if allowOpenInSeparateWindow {
+                        Button {
+                            SinglePlaceView.activateSession(place: place)
+                        } label: {
+                            Label(L10n.Common.buttonSeparateWindow.localized, systemImage: "square.on.square")
+                        }
                     }
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                EditButton()
+            .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil).receive(on: DispatchQueue.main)) { _ in
+                itemsUnavailable = Item.isEmpty(in: viewContext)
             }
-        }
-        .onAppear {
-            itemsUnavailable = Item.isEmpty(in: viewContext)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil).receive(on: DispatchQueue.main)) { _ in
-            itemsUnavailable = Item.isEmpty(in: viewContext)
-        }
         } else {
             PlaceDetailsWelcomeView()
         }

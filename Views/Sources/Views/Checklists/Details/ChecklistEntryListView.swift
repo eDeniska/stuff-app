@@ -117,6 +117,9 @@ public struct ChecklistEntryListView: View {
             .onAppear {
                 checklistTitle = checklist.title
             }
+            .onDisappear {
+                editMode?.wrappedValue = .inactive
+            }
             .onChange(of: checklistTitle) { newValue in
                 Logger.default.info("[SORTBUG] onChange -> \(newValue)")
                 var title = newValue.trimmingCharacters(in: .whitespacesAndNewlines)

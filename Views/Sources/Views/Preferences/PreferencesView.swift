@@ -113,8 +113,11 @@ public struct PreferencesView: View {
                             }
                         } label: {
                             Label(L10n.Preferences.exportButtonTitle.localized, systemImage: "square.and.arrow.up")
+                                .contentShape(Rectangle())
                         }
                     }
+                    .font(.title3)
+                    .padding(8)
                 } label: {
                     Text(L10n.Preferences.exportTitle.localized)
                         .font(.subheadline)
@@ -128,8 +131,11 @@ public struct PreferencesView: View {
                             showImport = true
                         } label: {
                             Label(L10n.Preferences.importButtonTitle.localized, systemImage: "square.and.arrow.down")
+                                .contentShape(Rectangle())
                         }
                     }
+                    .font(.title3)
+                    .padding(8)
                 } label: {
                     Text(L10n.Preferences.importTitle.localized)
                         .font(.subheadline)

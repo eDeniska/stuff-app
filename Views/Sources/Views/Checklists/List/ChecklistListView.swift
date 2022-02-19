@@ -10,109 +10,84 @@ import DataModel
 import CoreData
 import Localization
 
-struct ChecklistListRow: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    @ObservedObject var checklist: Checklist
-
-    @State private var showDeleteConfirmation = false
-    @State private var showItemAssignment = false
-
-    @State private var itemsUnavailable = false
-
-    @State private var detailsOpen = false
-
-    private func element() -> some View {
-        NavigationLink(isActive: $detailsOpen) {
-            ChecklistEntryListView(checklist: checklist)
-        } label: {
-            ChecklistListElement(checklist: checklist)
-        }
-        .contextMenu {
-            Button {
-                showItemAssignment = true
-            } label: {
-                Label(L10n.ChecklistsList.addItemsButton.localized, systemImage: "text.badge.plus")
-            }
-            .disabled(itemsUnavailable)
-            Button(role: .destructive) {
-                showDeleteConfirmation = true
-            } label: {
-                Label(L10n.Common.buttonDeleteEllipsis.localized, systemImage: "trash")
-            }
-        }
-        .swipeActions {
-            Button(role: .destructive) {
-                showDeleteConfirmation = true
-            } label: {
-                Label(L10n.Common.buttonDeleteEllipsis.localized, systemImage: "trash")
-            }
-            Button {
-                showItemAssignment = true
-            } label: {
-                Label(L10n.ChecklistsList.addItemsButton.localized, systemImage: "text.badge.plus")
-            }
-            .tint(.indigo)
-            .disabled(itemsUnavailable)
-        }
-        .confirmationDialog(L10n.ChecklistsList.shouldDeleteChecklist.localized(with: checklist.title), isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
-            Button(role: .destructive) {
-                viewContext.delete(checklist)
-                viewContext.saveOrRollback()
-            } label: {
-                Text(L10n.Common.buttonDelete.localized)
-            }
-            .keyboardShortcut(.defaultAction)
-            Button(role: .cancel) {
-            } label: {
-                Text(L10n.Common.buttonCancel.localized)
-            }
-            .keyboardShortcut(.cancelAction)
-        }
-        .sheet(isPresented: $showItemAssignment) {
-            ChecklistItemsAssingmentView(checklist: checklist)
-        }
-        .onAppear {
-            itemsUnavailable = Item.isEmpty(in: viewContext)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil).receive(on: DispatchQueue.main)) { _ in
-            itemsUnavailable = Item.isEmpty(in: viewContext)
-        }
-        .onChange(of: checklist) { newValue in
-            if checklist.isFault || checklist.isDeleted {
-                detailsOpen = false
-            }
-        }
-    }
-
-    var body: some View {
-        if itemsUnavailable {
-            element()
-        } else {
-            element()
-        }
-    }
-}
-
 public struct ChecklistListView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [
-            SortDescriptor(\Checklist.title)
-                         ],
-        animation: .default)
-    private var lists: FetchedResults<Checklist>
-
-    @State private var searchText: String = ""
-    @State private var shouldAddNew = false
+    
+    enum SortType: String, Hashable, Identifiable, CaseIterable {
+        case byTitle
+        case byLastModified
+        
+        var id: Self {
+            self
+        }
+        
+        var localizedTitle: String {
+            switch self {
+            case .byTitle:
+                return L10n.ChecklistsList.Sort.byTitle.localized
+            case .byLastModified:
+                return L10n.ChecklistsList.Sort.byLastModified.localized
+            }
+        }
+    }
+    
+    @SceneStorage("checklistSortType") private var sortType: SortType = .byTitle
 
     @Binding private var selectedChecklist: Checklist?
 
     public init(selectedChecklist: Binding<Checklist?>) {
         _selectedChecklist = selectedChecklist
     }
-
+    
     public var body: some View {
+        ChecklistListViewInternal(selectedChecklist: $selectedChecklist, sortType: $sortType)
+    }
+
+}
+
+struct ChecklistListViewInternal: View {
+    @Environment(\.managedObjectContext) private var viewContext
+
+//    @FetchRequest(
+//        sortDescriptors: [
+//            SortDescriptor(\Checklist.title)
+//                         ],
+//        animation: .default)
+
+    private var listsRequest: FetchRequest<Checklist>
+    private var lists: FetchedResults<Checklist> { listsRequest.wrappedValue }
+
+    @State private var searchText: String = ""
+    @State private var shouldAddNew = false
+
+    @Binding private var selectedChecklist: Checklist?
+    @Binding private var sortType: ChecklistListView.SortType
+
+    init(selectedChecklist: Binding<Checklist?>, sortType: Binding<ChecklistListView.SortType>) {
+        _selectedChecklist = selectedChecklist
+        _sortType = sortType
+        let sortDescriptors: [NSSortDescriptor]
+        switch sortType.wrappedValue {
+        case .byTitle:
+            sortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.title), ascending: true)]
+        case .byLastModified:
+            sortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.lastModified), ascending: false)]
+        }
+        listsRequest = FetchRequest(entity: Checklist.entity(),
+                                    sortDescriptors: sortDescriptors,
+                                    predicate: nil,
+                                    animation: .default)
+    }
+    
+    private func updateSortType(sortType: ChecklistListView.SortType) {
+        switch sortType {
+        case .byTitle:
+            listsRequest.wrappedValue.nsSortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.title), ascending: true)]
+        case .byLastModified:
+            listsRequest.wrappedValue.nsSortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.lastModified), ascending: false)]
+        }
+    }
+
+    var body: some View {
         NavigationView {
             List {
                 ForEach(lists) { list in
@@ -169,17 +144,31 @@ public struct ChecklistListView: View {
             }
             .searchable(text: $searchText, prompt: Text(L10n.ChecklistsList.searchPlaceholder.localized))
             .navigationTitle(L10n.ChecklistsList.listTitle.localized)
+            .onChange(of: sortType) { newValue in
+                updateSortType(sortType: newValue)
+            }
             .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    EditButton()
-//                }
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
                         selectedChecklist = nil
                         shouldAddNew = true
                     } label: {
                         Label(L10n.ChecklistsList.addChecklistButton.localized, systemImage: "plus")
                     }
+                    Menu {
+                        Picker(selection: $sortType) {
+                            ForEach(ChecklistListView.SortType.allCases) { sort in
+                                Text(sort.localizedTitle)
+                                    .tag(sort)
+                            }
+                        } label: {
+                            EmptyView()
+                        }
+                        .pickerStyle(.inline)
+                    } label: {
+                        Label(L10n.ChecklistsList.menu.localized, systemImage: "ellipsis.circle")
+                    }
+                    .menuStyle(.borderlessButton)
                 }
             }
             ChecklistListWelcomeView()

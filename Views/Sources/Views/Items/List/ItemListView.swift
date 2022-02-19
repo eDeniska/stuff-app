@@ -11,8 +11,7 @@ import DataModel
 import Localization
 import AVFoundation
 import Intents
-
-
+import Logger
 
 public struct ItemListView: View {
     
@@ -37,7 +36,7 @@ public struct ItemListView: View {
         }
     }
     
-    @SceneStorage("groupingType") private var groupingType: GroupingType = .byCategory
+    @SceneStorage("itemGroupingType") private var groupingType: GroupingType = .byCategory
     @Binding private var selectedItem: Item?
 
     public init(selectedItem: Binding<Item?>) {
@@ -87,6 +86,7 @@ struct ItemListViewInternal: View {
                                                  sectionIdentifier: \Item.categoryTitle,
                                                  sortDescriptors: [
                                                     NSSortDescriptor(key: #keyPath(Item.category.order), ascending: false),
+                                                    NSSortDescriptor(key: #keyPath(Item.category.title), ascending: true),
                                                     NSSortDescriptor(key: #keyPath(Item.title), ascending: true)],
                                                  predicate: nil,
                                                  animation: .default)
@@ -110,6 +110,7 @@ struct ItemListViewInternal: View {
             itemsRequest.projectedValue.wrappedValue.sectionIdentifier = \Item.categoryTitle
             itemsRequest.projectedValue.wrappedValue.nsSortDescriptors = [
                 NSSortDescriptor(key: #keyPath(Item.category.order), ascending: false),
+                NSSortDescriptor(key: #keyPath(Item.category.title), ascending: true),
                 NSSortDescriptor(key: #keyPath(Item.title), ascending: true)]
         }
     }
@@ -118,7 +119,7 @@ struct ItemListViewInternal: View {
         if sectionIdentifier.isEmpty {
             switch groupingType {
             case .byPlace:
-                return L10n.EditPlace.unnamedPlace.localized
+                return L10n.ItemDetails.noPlaceIsSet.localized
                 
             case .byCondition:
                 return L10n.ItemCondition.unknown.localized
@@ -130,6 +131,24 @@ struct ItemListViewInternal: View {
             return sectionIdentifier
         }
     }
+    
+    // this is workaround for section title not being updated on place title editing
+    // this fix does not solve the sorting issue, items need to be re-sorted again
+    // grouping needs to be togged in order to refresh the view
+    private func title(for section: SectionedFetchResults<String, Item>.Element) -> String {
+        switch groupingType {
+        case .byPlace:
+            let title = section.first?.place?.title ?? ""
+            return title.isEmpty ? L10n.ItemDetails.noPlaceIsSet.localized : title
+            
+        case .byCondition:
+            return section.id.isEmpty ? L10n.ItemCondition.unknown.localized : section.id
+            
+        case .byCategory:
+            return section.id.isEmpty ? L10n.Category.unnamedCategory.localized : section.id
+        }
+
+    }
 
     private func cameraAccessDisallowed() -> Bool {
         AVCaptureDevice.authorizationStatus(for: .video) != .authorized && AVCaptureDevice.authorizationStatus(for: .video) != .notDetermined
@@ -139,7 +158,7 @@ struct ItemListViewInternal: View {
         NavigationView {
             List {
                 ForEach(items) { section in
-                    Section(header: Text(title(for: section.id))) {
+                    Section {
                         ForEach(section) { item in
                             ItemListRow(item: item,
                                         displayPlace: groupingType != .byPlace,
@@ -153,6 +172,8 @@ struct ItemListViewInternal: View {
                                 viewContext.saveOrRollback()
                             }
                         }
+                    } header: {
+                        Text(title(for: section))
                     }
                 }
             }
@@ -210,6 +231,7 @@ struct ItemListViewInternal: View {
                     }
                     .disabled(cameraAccessDisallowed())
                     Button {
+                        itemsRequest.update()
                         selectedItem = nil
                         showNewItemForm = true
                     } label: {

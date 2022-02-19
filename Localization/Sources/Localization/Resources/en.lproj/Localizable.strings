@@ -238,6 +238,9 @@
 "checklists.list.addChecklist.button" = "Add checklist";
 "checklists.list.assignItemsTo.title" = "Add items to %@";
 "checklists.list.filterItems.placeholder" = "Filter items...";
+"checklists.list.menu" = "Menu";
+"checklists.list.sort.byTitle" = "Sort by title";
+"checklists.list.sort.byLastModified" = "Sort by modification date";
 
 // Checklist Welcome
 "checklist.welcome.chooseExisting" = "Choose existing checklist";

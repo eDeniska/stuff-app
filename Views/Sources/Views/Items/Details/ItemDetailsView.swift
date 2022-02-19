@@ -21,7 +21,6 @@ public extension Notification.Name {
 
 public struct ItemDetailsView: View {
 
-
     @Binding private var item: Item?
     private let hasDismissButton: Bool
     private let allowOpenInSeparateWindow: Bool
@@ -589,6 +588,7 @@ struct ItemDetailsViewInternal: View {
                 }
             }
         }
+        .id(item?.identifier)
         .navigationTitle(title)
         .fullScreenCover(isPresented: $showTakePhoto) {
             CameraView(image: $takenImage)
@@ -603,6 +603,9 @@ struct ItemDetailsViewInternal: View {
             if let startingImage = startingImage {
                 itemDetails.addImage(startingImage)
             }
+        }
+        .onDisappear {
+            isEditing = false
         }
         .userActivity(UserActivityRegistry.ItemView.activityType, isActive: !(item?.isFault ?? true)) { activity in
             guard let item = item, !item.isFault && !item.isDeleted else {

@@ -137,6 +137,11 @@ extension L10n {
         case addChecklistButton = "checklists.list.addChecklist.button" // "Add checklist"
         case assignItemsToTitle = "checklists.list.assignItemsTo.title" // "Add items to
         case filterItemsPlaceholder = "checklists.list.filterItems.placeholder" // "Filter items..."
+        case menu = "checklists.list.menu"
+        enum Sort: String, Localizable {
+            case byTitle = "checklists.list.sort.byTitle"
+            case byLastModified = "checklists.list.sort.byLastModified"
+        }
     }
     
     enum ChecklistWelcome: String, Localizable {

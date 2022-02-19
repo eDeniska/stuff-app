@@ -234,12 +234,15 @@
 
 // Checklists list
 "checklists.list.searchPlaceholder" = "Искать списки...";
- "checklists.list.title" = "Списки";
- "checklists.list.addItems.button" = "Добавить вещи...";
- "checklists.list.shouldDeleteChecklist" = "Удалить %@?";
- "checklists.list.addChecklist.button" = "Добавить список";
- "checklists.list.assignItemsTo.title" = "Добавить ввещи в %@";
- "checklists.list.filterItems.placeholder" = "Отобрать вещи...";
+"checklists.list.title" = "Списки";
+"checklists.list.addItems.button" = "Добавить вещи...";
+"checklists.list.shouldDeleteChecklist" = "Удалить %@?";
+"checklists.list.addChecklist.button" = "Добавить список";
+"checklists.list.assignItemsTo.title" = "Добавить ввещи в %@";
+"checklists.list.filterItems.placeholder" = "Отобрать вещи...";
+"checklists.list.menu" = "Меню";
+"checklists.list.sort.byTitle" = "Сортировать по названию";
+"checklists.list.sort.byLastModified" = "Сортировать по дате изменения";
 
 // Checklist Welcome
 "checklist.welcome.chooseExisting" = "Выберите существующий список";
