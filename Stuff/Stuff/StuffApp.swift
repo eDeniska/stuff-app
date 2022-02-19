@@ -17,10 +17,6 @@ import Localization
 // TODO: add option to make reminders out of checklists
 // TODO: Siri/Shortcuts intents to manage lists
 
-// TODO: put edit and sort buttons for lists under dots/circle menu - ellipsis.circle
-
-// TODO: smart checklists for lost items, items without a place, damaged items - you can't "complete" them
-
 // TODO: onboarding
 // TODO: pin/biometric lock of the app access
 // TODO: add onSubmit actions for text fields where appropriate
@@ -31,6 +27,8 @@ import Localization
 
 // TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
 // TODO: fix settings window being opened multiple times on Catalyst
+
+// TODO: when renaming places, item list is not refreshed, place titles are not changed
 
 enum Tab: Int, Codable, Equatable, Hashable {
     case items = 0
@@ -61,6 +59,7 @@ struct StuffApp: App {
         WindowGroup {
             ContentView(selectedItem: $selectedItem, selectedPlace: $selectedPlace, selectedChecklist: $selectedChecklist, requestedTab: $requestedTab)
                 .onAppear {
+                    Item.performHousekeeping(in: persistenceController.container.viewContext)
                     ItemCategory.performHousekeeping(in: persistenceController.container.viewContext)
                     persistenceController.container.viewContext.saveOrRollback()
                 }

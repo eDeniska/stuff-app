@@ -87,7 +87,7 @@ extension Archive.Item {
             item = Item(context: context)
         }
         item.details = details
-        item.condition = condition
+        item.condition = ItemCondition(storedValue: condition).rawValue
         item.isLost = isLost
         item.lastModified = lastModified
         item.title = title

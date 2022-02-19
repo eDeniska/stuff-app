@@ -170,10 +170,10 @@ public struct ChecklistListView: View {
             .searchable(text: $searchText, prompt: Text(L10n.ChecklistsList.searchPlaceholder.localized))
             .navigationTitle(L10n.ChecklistsList.listTitle.localized)
             .toolbar {
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    EditButton()
+//                }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
                     Button {
                         selectedChecklist = nil
                         shouldAddNew = true

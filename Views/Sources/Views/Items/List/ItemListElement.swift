@@ -10,17 +10,24 @@ import DataModel
 import Combine
 import UIKit
 import Logger
+import Localization
 
 public struct ItemListElement: View {
     @ObservedObject private var item: Item
     private let displayPlace: Bool
     private let displayCategory: Bool
+    private let displayCondition: Bool
     private let isChecked: Bool
 
-    public init(item: Item, displayPlace: Bool = true, displayCategory: Bool = false, isChecked: Bool = false) {
+    public init(item: Item,
+                displayPlace: Bool = true,
+                displayCategory: Bool = false,
+                displayCondition: Bool = false,
+                isChecked: Bool = false) {
         self.item = item
         self.displayPlace = displayPlace
         self.displayCategory = displayCategory
+        self.displayCondition = displayCondition
         self.isChecked = isChecked
     }
 
@@ -70,12 +77,17 @@ public struct ItemListElement: View {
         if displayPlace, let place = item.place?.title {
             components.append(place)
         }
+        
+        let condition = ItemCondition(storedValue: item.condition)
+        if displayCondition, condition != .unknown {
+            components.append(condition.fullLocalizedTitle)
+        }
 
         guard !components.isEmpty else {
             return nil
         }
 
-        return components.joined(separator: ", ")
+        return components.joined(separator: "; ")
     }
 
     private func iconName() -> String {

@@ -95,7 +95,8 @@ public struct CategoryPickerView: View {
                             presentationMode.wrappedValue.dismiss()
                         } label: {
                             HStack {
-                                Text(customCategory.title)
+                                Label(customCategory.title,
+                                      systemImage: customCategory.icon.isEmpty ? "tag" : customCategory.icon)
                                 Spacer()
                                 if case let .custom(categoryTitle) = category, categoryTitle == customCategory.title {
                                     Image(systemName: "checkmark")

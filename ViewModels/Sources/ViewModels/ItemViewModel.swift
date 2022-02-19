@@ -65,11 +65,7 @@ public class ItemViewModel: ObservableObject {
         } else {
             category = .predefined(.other)
         }
-        if let conditionString = item?.condition, let itemCondition = ItemCondition(rawValue: conditionString) {
-            condition = itemCondition
-        } else {
-            condition = .unknown
-        }
+        condition = ItemCondition(storedValue: item?.condition)
         place = item?.place
         isLost = item?.isLost ?? false
         images = []
@@ -216,11 +212,7 @@ public class ItemViewModel: ObservableObject {
         } else {
             category = .predefined(.other)
         }
-        if let conditionString = item?.condition, let itemCondition = ItemCondition(rawValue: conditionString) {
-            condition = itemCondition
-        } else {
-            condition = .unknown
-        }
+        condition = ItemCondition(storedValue: item?.condition)
         place = item?.place
         isLost = item?.isLost ?? false
         images = []

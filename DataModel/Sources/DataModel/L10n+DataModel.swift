@@ -9,7 +9,7 @@ import Foundation
 import Localization
 
 extension L10n {
-    enum AppCategory: String, Localizable {
+    public enum AppCategory: String, Localizable {
         case pets = "appCategory.pets"
         case clothes = "appCategory.clothes"
         case shoes = "appCategory.shoes"
@@ -109,7 +109,16 @@ extension L10n {
         case trashBin = "detectedItem.trashBin"
     }
     
-    enum ItemCondition: String, Localizable {
+    public enum ItemCondition: String, Localizable {
+        public enum Full: String, Localizable {
+            case unknown = "condition.full.unknown"
+            case brandNew = "condition.full.brandNew"
+            case excellent = "condition.full.excellent"
+            case good = "condition.full.good"
+            case moderate = "condition.full.moderate"
+            case poor = "condition.full.poor"
+            case damaged = "condition.full.damaged"
+        }
         case unknown = "condition.unknown"
         case brandNew = "condition.brandNew"
         case excellent = "condition.excellent"

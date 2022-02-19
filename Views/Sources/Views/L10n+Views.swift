@@ -74,6 +74,12 @@ extension L10n {
         case shouldDeleteItem = "items.list.shouldDeleteItem" // "Delete \(item.title)?"
         case searchPlaceholder = "items.list.searchPlaceholder" // "Search for items..."
         case addItemButton = "items.list.addItem.button" // "Add item"
+        case menu = "items.list.menu"
+        enum Grouping: String, Localizable {
+            case byCategory = "items.list.group.byCategory"
+            case byPlace = "items.list.group.byPlace"
+            case byCondition = "items.list.group.byCondition"
+        }
     }
     
     enum PlaceDetails: String, Localizable {

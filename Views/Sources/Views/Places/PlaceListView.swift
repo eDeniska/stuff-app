@@ -158,10 +158,10 @@ public struct PlaceListView: View {
                 shouldAddNew = true
             }
             .toolbar {
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    EditButton()
+//                }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
                     Button {
                         selectedPlace = nil
                         shouldAddNew = true

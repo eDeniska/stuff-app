@@ -17,6 +17,9 @@ public extension ItemCategory {
             for category in categories {
                 if let appCategoryString = category.appCategory {
                     if let appCategory = AppCategory(rawValue: appCategoryString) {
+                        if category.title != appCategory.localizedTitle {
+                            category.title = appCategory.localizedTitle
+                        }
                         let newOrder = Int64(appCategory.sortOrder)
                         if category.order != newOrder {
                             category.order = newOrder

@@ -11,20 +11,20 @@
 "button.separateWindow" = "Open in separate window";
 
 // AppCategory
-"appCategory.pets" = "pets";
-"appCategory.clothes" = "clothes";
-"appCategory.shoes" = "shoes";
-"appCategory.gadgets" = "gadgets";
-"appCategory.tableware" = "tableware";
-"appCategory.jewelry" = "jewelry";
-"appCategory.accessories" = "accessories";
-"appCategory.books" = "books";
-"appCategory.appliances" = "appliances";
-"appCategory.furniture" = "furniture";
-"appCategory.sports" = "sports";
-"appCategory.tools" = "tools";
-"appCategory.music" = "music";
-"appCategory.other" = "other";
+"appCategory.pets" = "Pets";
+"appCategory.clothes" = "Clothes";
+"appCategory.shoes" = "Shoes";
+"appCategory.gadgets" = "Gadgets";
+"appCategory.tableware" = "Tableware";
+"appCategory.jewelry" = "Jewelry";
+"appCategory.accessories" = "Accessories";
+"appCategory.books" = "Books";
+"appCategory.appliances" = "Appliances";
+"appCategory.furniture" = "Furniture";
+"appCategory.sports" = "Sports";
+"appCategory.tools" = "Tools";
+"appCategory.music" = "Music";
+"appCategory.other" = "Other";
 
 // DetectedItem
 "detectedItem.other" = "Other item";
@@ -140,13 +140,23 @@
 "condition.tile.forItem" = "%@ – condition";
 
 // Item Condition
-"condition.unknown" = "unknown";
-"condition.brandNew" = "brand new";
-"condition.excellent" = "excellent";
-"condition.good" = "good";
-"condition.moderate" = "moderate";
-"condition.poor" = "poor";
-"condition.damaged" = "damaged";
+"condition.unknown" = "Unknown";
+"condition.brandNew" = "Brand new";
+"condition.excellent" = "Excellent";
+"condition.good" = "Good";
+"condition.moderate" = "Moderate";
+"condition.poor" = "Poor";
+"condition.damaged" = "Damaged";
+
+// Item Condition Full
+"condition.full.unknown" = "Unknown condition";
+"condition.full.brandNew" = "Brand new condition";
+"condition.full.excellent" = "Excellent condition";
+"condition.full.good" = "Good condition";
+"condition.full.moderate" = "Moderate condition";
+"condition.full.poor" = "Poor condition";
+"condition.full.damaged" = "Damaged";
+
 
 // Item
 "item.unnamed" = "Unnamed item";
@@ -186,6 +196,10 @@
 "items.list.shouldDeleteItem" = "Delete %@?";
 "items.list.searchPlaceholder" = "Search for items...";
 "items.list.addItem.button" = "Add item";
+"items.list.menu" = "Menu";
+"items.list.group.byCategory" = "Group by category";
+"items.list.group.byPlace" = "Group by place";
+"items.list.group.byCondition" = "Group by condition";
 
 // Place details
 "place.details.title" = "Place";

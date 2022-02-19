@@ -17,6 +17,14 @@ public extension Item {
         category?.title ?? ""
     }
 
+    @objc var placeTitle: String {
+        place?.title ?? ""
+    }
+
+    @objc var conditionTitle: String {
+        ItemCondition(storedValue: condition).fullLocalizedTitle
+    }
+
 #if canImport(UIKit)
     var thumbnail: UIImage? {
         guard let data = thumbnailData else {
@@ -111,5 +119,20 @@ public extension Item {
 
     func images() -> [URL] {
         FileStorageManager.shared.urls(withPrefix: identifier.uuidString)
+    }
+    
+    static func performHousekeeping(in context: NSManagedObjectContext) {
+        let request = Self.fetchRequest()
+        do {
+            let items = try context.fetch(request)
+            for item in items {
+                let condition = ItemCondition(storedValue: item.condition)
+                if item.condition != condition.rawValue {
+                    item.condition = condition.rawValue
+                }
+            }
+        } catch {
+            Logger.default.error("could not fetch items: \(error)")
+        }
     }
 }
