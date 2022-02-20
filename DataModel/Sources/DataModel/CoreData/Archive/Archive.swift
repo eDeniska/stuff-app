@@ -119,7 +119,6 @@ extension Archive.Place {
             place.identifier = identifier
         }
         place.icon = icon
-        place.identifier = identifier
         place.title = title
 
         return place
@@ -145,7 +144,6 @@ extension Archive.Category {
             category.identifier = identifier
         }
         category.icon = icon
-        category.identifier = identifier
         category.title = title
         category.order = Int64(order)
         category.appCategory = appCategory
@@ -170,9 +168,8 @@ extension Archive.Checklist.Entry {
         entry.order = Int64(order)
         entry.title = title
         entry.isChecked = isChecked
-        if let itemIdentifier = itemIdentifier,
-           let item = Item.item(with: itemIdentifier, in: context) {
-            entry.item = item
+        if let itemIdentifier = itemIdentifier {
+            entry.item = .item(with: itemIdentifier, in: context)
         }
         return entry
     }
@@ -199,7 +196,6 @@ extension Archive.Checklist {
             checklist.identifier = identifier
         }
         checklist.details = details
-        checklist.identifier = identifier
         checklist.icon = icon
         checklist.lastModified = lastModified
         checklist.title = title
