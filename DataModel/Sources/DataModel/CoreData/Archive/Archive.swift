@@ -160,6 +160,7 @@ extension Archive.Checklist.Entry {
         order = Int(entry.order)
         title = entry.title
         isChecked = entry.isChecked
+        itemIdentifier = entry.item?.identifier
     }
 
     @discardableResult
@@ -169,6 +170,10 @@ extension Archive.Checklist.Entry {
         entry.order = Int64(order)
         entry.title = title
         entry.isChecked = isChecked
+        if let itemIdentifier = itemIdentifier,
+           let item = Item.item(with: itemIdentifier, in: context) {
+            entry.item = item
+        }
         return entry
     }
 }
