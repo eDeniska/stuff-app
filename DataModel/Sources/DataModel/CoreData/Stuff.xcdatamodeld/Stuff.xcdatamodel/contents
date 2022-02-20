@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D49" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Checklist" representedClassName="Checklist" syncable="YES">
         <attribute name="details" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
+        <attribute name="entriesCount" optional="YES" attributeType="Integer 64" derived="YES" derivationExpression="entries.@count" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
         <attribute name="icon" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
         <attribute name="identifier" optional="YES" attributeType="UUID" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
         <attribute name="lastModified" attributeType="Date" defaultDateTimeInterval="33600" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
@@ -40,14 +41,15 @@
     <entity name="ItemPlace" representedClassName="ItemPlace" syncable="YES">
         <attribute name="icon" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
         <attribute name="identifier" optional="YES" attributeType="UUID" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
+        <attribute name="itemsCount" optional="YES" attributeType="Integer 64" derived="YES" derivationExpression="items.@count" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
         <attribute name="title" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="place" inverseEntity="Item"/>
     </entity>
     <elements>
-        <element name="Checklist" positionX="-45" positionY="72" width="128" height="119"/>
+        <element name="Checklist" positionX="-45" positionY="72" width="128" height="134"/>
         <element name="ChecklistEntry" positionX="-54" positionY="63" width="128" height="119"/>
         <element name="Item" positionX="-63" positionY="-18" width="128" height="194"/>
         <element name="ItemCategory" positionX="-54" positionY="0" width="128" height="119"/>
-        <element name="ItemPlace" positionX="-63" positionY="-9" width="128" height="89"/>
+        <element name="ItemPlace" positionX="-63" positionY="-9" width="128" height="104"/>
     </elements>
 </model>

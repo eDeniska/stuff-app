@@ -10,5 +10,6 @@ import Combine
 
 public class ObservableText: ObservableObject {
     @Published public var text = ""
+    public init() { }
 }
 

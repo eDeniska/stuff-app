@@ -217,6 +217,9 @@
 "places.list.filterItems.placeholder" = "Filter items...";
 "places.list.addNewPlace.button" = "Add new place...";
 "places.list.placeForItem" = "%@ – place";
+"places.list.menu" = "Menu";
+"places.list.sort.byTitle" = "Sort by title";
+"places.list.sort.byItemsCount" = "Sort by number of items";
 
 //  Place Welcome
 "place.welcome.chooseExisting" = "Choose existing place";
@@ -241,6 +244,7 @@
 "checklists.list.menu" = "Menu";
 "checklists.list.sort.byTitle" = "Sort by title";
 "checklists.list.sort.byLastModified" = "Sort by modification date";
+"checklists.list.sort.byEntriesCount" = "Sort by number of entries";
 
 // Checklist Welcome
 "checklist.welcome.chooseExisting" = "Choose existing checklist";

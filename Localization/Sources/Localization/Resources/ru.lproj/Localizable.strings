@@ -219,6 +219,9 @@
 "places.list.filterItems.placeholder" = "Отобрать вещи...";
 "places.list.addNewPlace.button" = "Добавить новое место...";
 "places.list.placeForItem" = "%@ – место";
+"places.list.menu" = "Меню";
+"places.list.sort.byTitle" = "Сортировать по названию";
+"places.list.sort.byItemsCount" = "Сортировать по количеству вещей";
 
 //  Place Welcome
 "place.welcome.chooseExisting" = "Выберите существующее место";
@@ -243,6 +246,7 @@
 "checklists.list.menu" = "Меню";
 "checklists.list.sort.byTitle" = "Сортировать по названию";
 "checklists.list.sort.byLastModified" = "Сортировать по дате изменения";
+"checklists.list.sort.byEntriesCount" = "Сортировать по количеству пунктов";
 
 // Checklist Welcome
 "checklist.welcome.chooseExisting" = "Выберите существующий список";

@@ -99,6 +99,11 @@ extension L10n {
         case filterItemsPlaceholder = "places.list.filterItems.placeholder" // "Filter items..."
         case addNewPlaceButton = "places.list.addNewPlace.button" // "Add new place..."
         case placeForItem = "places.list.placeForItem"
+        case menu = "places.list.menu"
+        enum Sort: String, Localizable {
+            case byTitle = "places.list.sort.byTitle"
+            case byItemsCount = "places.list.sort.byItemsCount"
+        }
     }
     
     enum PlaceWelcome: String, Localizable {
@@ -141,6 +146,7 @@ extension L10n {
         enum Sort: String, Localizable {
             case byTitle = "checklists.list.sort.byTitle"
             case byLastModified = "checklists.list.sort.byLastModified"
+            case byEntriesCount = "checklists.list.sort.byEntriesCount"
         }
     }
     

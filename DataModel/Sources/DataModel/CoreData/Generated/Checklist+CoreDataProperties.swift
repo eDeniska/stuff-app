@@ -21,6 +21,7 @@ extension Checklist {
     @NSManaged public var icon: String?
     @NSManaged public var lastModified: Date
     @NSManaged public var title: String
+    @NSManaged public var entriesCount: Int64
     @NSManaged public var entries: Set<ChecklistEntry>
 
 }

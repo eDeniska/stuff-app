@@ -11,103 +11,79 @@ import Combine
 import CoreData
 import Localization
 
-struct PlaceListRow: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @ObservedObject var place: ItemPlace
-    @State private var showDeleteConfirmation = false
-    @State private var showItemAssignment = false
-
-    @State private var itemsUnavailable = true
-
-    @State private var detailsOpen = false
-
-    private func element() -> some View {
-        NavigationLink(isActive: $detailsOpen) {
-            PlaceDetailsView(place: place)
-        } label: {
-            PlaceListElement(place: place)
-        }
-        .contextMenu {
-            Button {
-                showItemAssignment = true
-            } label: {
-                Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus")
-            }
-            .disabled(itemsUnavailable)
-            Button(role: .destructive) {
-                showDeleteConfirmation = true
-            } label: {
-                Label(L10n.Common.buttonDeleteEllipsis.localized, systemImage: "trash")
-            }
-        }
-        .swipeActions {
-            Button(role: .destructive) {
-                showDeleteConfirmation = true
-            } label: {
-                Label(L10n.Common.buttonDeleteEllipsis.localized, systemImage: "trash")
-            }
-            Button {
-                showItemAssignment = true
-            } label: {
-                Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus")
-            }
-            .tint(.indigo)
-            .disabled(itemsUnavailable)
-        }
-        .confirmationDialog(L10n.PlacesList.shouldDeletePlace.localized(with: place.title), isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
-            Button(role: .destructive) {
-                viewContext.delete(place)
-                viewContext.saveOrRollback()
-            } label: {
-                Text(L10n.Common.buttonDelete.localized)
-            }
-            .keyboardShortcut(.defaultAction)
-            Button(role: .cancel) {
-            } label: {
-                Text(L10n.Common.buttonCancel.localized)
-            }
-            .keyboardShortcut(.cancelAction)
-        }
-        .sheet(isPresented: $showItemAssignment) {
-            PlaceItemsAssingmentView(place: place)
-        }
-        .onAppear {
-            itemsUnavailable = Item.isEmpty(in: viewContext)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave, object: nil).receive(on: DispatchQueue.main)) { _ in
-            itemsUnavailable = Item.isEmpty(in: viewContext)
-        }
-    }
-
-    var body: some View {
-        if itemsUnavailable {
-            element()
-        } else {
-            element()
-        }
-    }
-}
 
 public struct PlaceListView: View {
-    @Environment(\.managedObjectContext) private var viewContext
 
-    @FetchRequest(
-        sortDescriptors: [
-            SortDescriptor(\ItemPlace.title)
-                         ],
-        animation: .default) private var places: FetchedResults<ItemPlace>
+    enum SortType: String, Hashable, Identifiable, CaseIterable {
+        case byTitle
+        case byItemsCount
 
-    @State private var searchText: String = ""
-    @State private var shouldAddNew = false
+        var id: Self {
+            self
+        }
+        
+        var localizedTitle: String {
+            switch self {
+            case .byTitle:
+                return L10n.PlacesList.Sort.byTitle.localized
+            case .byItemsCount:
+                return L10n.PlacesList.Sort.byItemsCount.localized
+            }
+        }
+    }
+    
+    @SceneStorage("placeSortType") private var sortType: SortType = .byTitle
 
     @Binding private var selectedPlace: ItemPlace?
 
     public init(selectedPlace: Binding<ItemPlace?>) {
         _selectedPlace = selectedPlace
     }
-
+    
     public var body: some View {
+        PlaceListViewInternal(selectedPlace: $selectedPlace, sortType: $sortType)
+    }
+}
+
+struct PlaceListViewInternal: View {
+    @Environment(\.managedObjectContext) private var viewContext
+
+    private var placesRequest: FetchRequest<ItemPlace>
+    private var places: FetchedResults<ItemPlace> { placesRequest.wrappedValue }
+
+    @State private var searchText: String = ""
+    @State private var shouldAddNew = false
+
+    @Binding private var selectedPlace: ItemPlace?
+    @Binding private var sortType: PlaceListView.SortType
+
+
+    init(selectedPlace: Binding<ItemPlace?>, sortType: Binding<PlaceListView.SortType>) {
+        _selectedPlace = selectedPlace
+        _sortType = sortType
+        let sortDescriptors: [NSSortDescriptor]
+        switch sortType.wrappedValue {
+        case .byTitle:
+            sortDescriptors = [NSSortDescriptor(key: #keyPath(ItemPlace.title), ascending: true)]
+        case .byItemsCount:
+            sortDescriptors = [NSSortDescriptor(key: #keyPath(ItemPlace.itemsCount), ascending: false)]
+        }
+        placesRequest = FetchRequest(entity: ItemPlace.entity(),
+                                     sortDescriptors: sortDescriptors,
+                                     predicate: nil,
+                                     animation: .default)
+    }
+
+    private func updateSortType(sortType: PlaceListView.SortType) {
+        switch sortType {
+        case .byTitle:
+            placesRequest.wrappedValue.nsSortDescriptors = [NSSortDescriptor(key: #keyPath(ItemPlace.title), ascending: true)]
+        case .byItemsCount:
+            placesRequest.wrappedValue.nsSortDescriptors = [NSSortDescriptor(key: #keyPath(ItemPlace.itemsCount), ascending: false)]
+        }
+    }
+
+    var body: some View {
         NavigationView {
             List {
                 ForEach(places) { place in
@@ -158,16 +134,27 @@ public struct PlaceListView: View {
                 shouldAddNew = true
             }
             .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    EditButton()
-//                }
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
                         selectedPlace = nil
                         shouldAddNew = true
                     } label: {
                         Label(L10n.PlacesList.addPlaceButton.localized, systemImage: "plus")
                     }
+                    Menu {
+                        Picker(selection: $sortType) {
+                            ForEach(PlaceListView.SortType.allCases) { sort in
+                                Text(sort.localizedTitle)
+                                    .tag(sort)
+                            }
+                        } label: {
+                            EmptyView()
+                        }
+                        .pickerStyle(.inline)
+                    } label: {
+                        Label(L10n.PlacesList.menu.localized, systemImage: "ellipsis.circle")
+                    }
+                    .menuStyle(.borderlessButton)
                 }
             }
             PlaceDetailsWelcomeView()

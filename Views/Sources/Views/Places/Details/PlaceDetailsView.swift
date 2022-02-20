@@ -7,6 +7,7 @@
 
 import SwiftUI
 import DataModel
+import ViewModels
 import CoreData
 import Logger
 import Localization

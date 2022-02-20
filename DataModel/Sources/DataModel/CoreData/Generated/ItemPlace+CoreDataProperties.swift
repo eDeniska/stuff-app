@@ -19,6 +19,7 @@ extension ItemPlace {
     @NSManaged public var icon: String
     @NSManaged public var identifier: UUID
     @NSManaged public var title: String
+    @NSManaged public var itemsCount: Int64
     @NSManaged public var items: Set<Item>
 
 }

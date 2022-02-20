@@ -14,8 +14,9 @@ public struct ChecklistListView: View {
     
     enum SortType: String, Hashable, Identifiable, CaseIterable {
         case byTitle
+        case byEntriesCount
         case byLastModified
-        
+
         var id: Self {
             self
         }
@@ -24,6 +25,8 @@ public struct ChecklistListView: View {
             switch self {
             case .byTitle:
                 return L10n.ChecklistsList.Sort.byTitle.localized
+            case .byEntriesCount:
+                return L10n.ChecklistsList.Sort.byEntriesCount.localized
             case .byLastModified:
                 return L10n.ChecklistsList.Sort.byLastModified.localized
             }
@@ -47,12 +50,6 @@ public struct ChecklistListView: View {
 struct ChecklistListViewInternal: View {
     @Environment(\.managedObjectContext) private var viewContext
 
-//    @FetchRequest(
-//        sortDescriptors: [
-//            SortDescriptor(\Checklist.title)
-//                         ],
-//        animation: .default)
-
     private var listsRequest: FetchRequest<Checklist>
     private var lists: FetchedResults<Checklist> { listsRequest.wrappedValue }
 
@@ -69,6 +66,8 @@ struct ChecklistListViewInternal: View {
         switch sortType.wrappedValue {
         case .byTitle:
             sortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.title), ascending: true)]
+        case .byEntriesCount:
+            sortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.entriesCount), ascending: false)]
         case .byLastModified:
             sortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.lastModified), ascending: false)]
         }
@@ -82,6 +81,8 @@ struct ChecklistListViewInternal: View {
         switch sortType {
         case .byTitle:
             listsRequest.wrappedValue.nsSortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.title), ascending: true)]
+        case .byEntriesCount:
+            listsRequest.wrappedValue.nsSortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.entriesCount), ascending: false)]
         case .byLastModified:
             listsRequest.wrappedValue.nsSortDescriptors = [NSSortDescriptor(key: #keyPath(Checklist.lastModified), ascending: false)]
         }
