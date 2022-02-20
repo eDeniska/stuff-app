@@ -125,7 +125,7 @@ public struct ChecklistEntryListView: View {
             }
             .onReceive(checklistTitle
                         .$text
-                        .debounce(for: 0.3, scheduler: DispatchQueue.main)) { newValue in
+                        .debounce(for: 0.2, scheduler: DispatchQueue.main)) { newValue in
                 var title = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 if title.isEmpty {
                     title = L10n.EditChecklist.unnamedChecklist.localized
