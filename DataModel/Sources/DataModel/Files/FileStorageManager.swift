@@ -11,9 +11,28 @@ import Combine
 
 public class FileStorageManager: ObservableObject {
 
+    
+    private let folderPrefix: String = {
+#if DEBUG
+        return "debug"
+#else
+        return ""
+#endif
+    }()
+    
     private lazy var storageURL: URL = {
         Logger.default.info("iCloud integration is \(requiresCoordination), querying URL...")
-        if requiresCoordination, let url = FileManager.default.url(forUbiquityContainerIdentifier: nil) {
+        if requiresCoordination, var url = FileManager.default.url(forUbiquityContainerIdentifier: nil) {
+            if !folderPrefix.isEmpty {
+                url.appendPathComponent(folderPrefix)
+                do {
+                    if !FileManager.default.fileExists(atPath: url.path) {
+                        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+                    }
+                } catch {
+                    Logger.default.error("could not create directory for files: \(error)")
+                }
+            }
             Logger.default.info("iCloud storage URL: \(url)")
             return url
         } else {
@@ -23,7 +42,6 @@ public class FileStorageManager: ObservableObject {
         }
     }()
 
-
     private var requiresCoordination: Bool
 
     public static let shared = FileStorageManager()
@@ -32,7 +50,6 @@ public class FileStorageManager: ObservableObject {
 
     private let metadataQuery: NSMetadataQuery
     private var querySubscriber: AnyCancellable?
-
 
     // file failes to run on Apple Watch on NSMetadataQuery
 

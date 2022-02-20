@@ -18,7 +18,14 @@ public struct PersistenceController {
         guard let model = NSManagedObjectModel.mergedModel(from: [Bundle.module]) else {
             fatalError("could not locate data model")
         }
-        container = NSPersistentCloudKitContainer(name: "Stuff", managedObjectModel: model)
+        let storeName: String
+#if DEBUG
+        storeName = "Stuff-debug"
+#else
+        storeName = "Stuff"
+#endif
+
+        container = NSPersistentCloudKitContainer(name: storeName, managedObjectModel: model)
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         } else {
@@ -30,7 +37,7 @@ public struct PersistenceController {
             storeDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
             if !local {
-                storeDescription.url = AppGroupManager.shared.appGroupContainer.appendingPathComponent("StuffData.sqlite")
+                storeDescription.url = AppGroupManager.shared.appGroupContainer.appendingPathComponent("\(storeName).sqlite")
             }
         }
 

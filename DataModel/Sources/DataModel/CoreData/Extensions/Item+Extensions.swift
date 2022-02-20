@@ -67,11 +67,6 @@ public extension Item {
         return ((try? context.count(for: request)) ?? 0) == 0
     }
 
-    func delete() {
-        managedObjectContext?.delete(self)
-        managedObjectContext?.saveOrRollback()
-    }
-
     func isListed(in checklist: Checklist) -> Bool {
         checklist.entries.compactMap(\.item).contains(self)
     }
@@ -119,6 +114,10 @@ public extension Item {
 
     func images() -> [URL] {
         FileStorageManager.shared.urls(withPrefix: identifier.uuidString)
+    }
+    
+    func removeImages() {
+        FileStorageManager.shared.removeItems(withPrefix: identifier.uuidString)
     }
     
     static func performHousekeeping(in context: NSManagedObjectContext) {

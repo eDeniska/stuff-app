@@ -28,8 +28,6 @@ import Localization
 // TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
 // TODO: fix settings window being opened multiple times on Catalyst
 
-// TODO: when renaming places, item list is not refreshed, place titles are not changed
-
 enum Tab: Int, Codable, Equatable, Hashable {
     case items = 0
     case places = 1

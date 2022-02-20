@@ -168,7 +168,10 @@ struct ItemListViewInternal: View {
                         .onDelete { indexSets in
                             // this one is used by edit mode seemingly
                             withAnimation {
-                                indexSets.map { section[$0] }.forEach(viewContext.delete)
+                                indexSets.map { section[$0] }.forEach {
+                                    $0.removeImages()
+                                    viewContext.delete($0)
+                                }
                                 viewContext.saveOrRollback()
                             }
                         }

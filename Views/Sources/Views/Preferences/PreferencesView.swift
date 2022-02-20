@@ -34,7 +34,11 @@ public struct PreferencesView: View {
     private func appVersion() -> String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "-"
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "-"
+#if DEBUG
+        return L10n.Preferences.versionFormat.localized(with: version, build) + " - DEBUG"
+#else
         return L10n.Preferences.versionFormat.localized(with: version, build)
+#endif
     }
     
     private func exportFileName() -> String {

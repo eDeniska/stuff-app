@@ -63,6 +63,7 @@ struct ItemListRow: View {
         }
         .confirmationDialog(L10n.ItemsList.shouldDeleteItem.localized(with: item.title), isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button(role: .destructive) {
+                item.removeImages()
                 viewContext.delete(item)
                 viewContext.saveOrRollback()
             } label: {
