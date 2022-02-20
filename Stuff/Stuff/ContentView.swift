@@ -76,6 +76,7 @@ struct ContentView: View {
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: .NSPersistentStoreRemoteChange, object: nil).receive(on: DispatchQueue.main)) { _ in
+                viewContext.registeredObjects.forEach { $0.objectWillChange.send() }
                 WidgetCenter.shared.reloadAllTimelines()
             }
             .background {

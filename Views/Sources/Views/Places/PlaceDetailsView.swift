@@ -10,6 +10,7 @@ import DataModel
 import CoreData
 import Logger
 import Localization
+import Combine
 
 public struct PlaceDetailsView: View {
 
@@ -25,7 +26,7 @@ public struct PlaceDetailsView: View {
     @State private var showItemAssignment = false
     @State private var itemsUnavailable = true
 
-    @State private var placeTitle = ""
+    @StateObject private var placeTitle = ObservableText()
 
     private let gridItemLayout = [GridItem(.adaptive(minimum: 80))]
 
@@ -61,7 +62,10 @@ public struct PlaceDetailsView: View {
             List {
                 if editMode?.wrappedValue == .active {
                     Section {
-                        TextField(L10n.EditPlace.titlePlaceholder.localized, text: $placeTitle)
+                        TextField(L10n.EditPlace.titlePlaceholder.localized, text: $placeTitle.text)
+                            .onSubmit {
+                                editMode?.wrappedValue = .inactive
+                            }
                     } header: {
                         Text(L10n.EditPlace.titleSectionTitle.localized)
                     }
@@ -130,13 +134,15 @@ public struct PlaceDetailsView: View {
                 PlaceItemsAssingmentView(place: place)
             }
             .onAppear {
-                placeTitle = place.title
+                placeTitle.text = place.title
                 itemsUnavailable = Item.isEmpty(in: viewContext)
             }
             .onDisappear {
                 editMode?.wrappedValue = .inactive
             }
-            .onChange(of: placeTitle) { newValue in
+            .onReceive(placeTitle
+                        .$text
+                        .debounce(for: 0.3, scheduler: DispatchQueue.main)) { newValue in
                 var title = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 if title.isEmpty {
                     title = L10n.EditPlace.unnamedPlace.localized
@@ -144,8 +150,23 @@ public struct PlaceDetailsView: View {
                 if place.title != title {
                     place.title = title
                     viewContext.saveOrRollback()
+                    viewContext
+                        .registeredObjects
+                        .compactMap { $0 as? Item }
+                        .forEach { $0.objectWillChange.send() }
                 }
             }
+//            .onChange(of: placeTitle) { newValue in
+//                var title = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+//                if title.isEmpty {
+//                    title = L10n.EditPlace.unnamedPlace.localized
+//                }
+//                if place.title != title {
+//                    place.title = title
+//                    viewContext.saveOrRollback()
+//                    viewContext.registeredObjects.forEach { $0.objectWillChange.send() }
+//                }
+//            }
             .navigationTitle(place.title)
             .userActivity(UserActivityRegistry.PlaceView.activityType, isActive: !place.isFault) { activity in
                 activity.title = place.title
@@ -154,13 +175,7 @@ public struct PlaceDetailsView: View {
                 activity.isEligibleForPrediction = true
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showItemAssignment = true
-                    } label: {
-                        Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus")
-                    }
-                    .disabled(itemsUnavailable)
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     if allowOpenInSeparateWindow {
                         Button {
                             SinglePlaceView.activateSession(place: place)
@@ -168,8 +183,12 @@ public struct PlaceDetailsView: View {
                             Label(L10n.Common.buttonSeparateWindow.localized, systemImage: "square.on.square")
                         }
                     }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
+//                    Button {
+//                        showItemAssignment = true
+//                    } label: {
+//                        Label(L10n.PlacesList.placeItemsButton.localized, systemImage: "text.badge.plus")
+//                    }
+//                    .disabled(itemsUnavailable)
                     EditButton()
                 }
             }

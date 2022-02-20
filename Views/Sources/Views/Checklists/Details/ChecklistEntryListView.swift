@@ -27,7 +27,7 @@ public struct ChecklistEntryListView: View {
     private var entries: SectionedFetchResults<Bool, ChecklistEntry> { entriesRequest.wrappedValue }
 
     @State private var addEntry = false
-    @State private var checklistTitle = ""
+    @StateObject private var checklistTitle = ObservableText()
 
     private let allowOpenInSeparateWindow: Bool
     private let validObject: Bool
@@ -56,7 +56,10 @@ public struct ChecklistEntryListView: View {
             List {
                 if editMode?.wrappedValue == .active {
                     Section {
-                        TextField(L10n.EditChecklist.titlePlaceholder.localized, text: $checklistTitle)
+                        TextField(L10n.EditChecklist.titlePlaceholder.localized, text: $checklistTitle.text)
+                            .onSubmit {
+                                editMode?.wrappedValue = .inactive
+                            }
                     } header: {
                         Text(L10n.EditChecklist.titleSectionTitle.localized)
                     }
@@ -115,13 +118,14 @@ public struct ChecklistEntryListView: View {
                 }
             }
             .onAppear {
-                checklistTitle = checklist.title
+                checklistTitle.text = checklist.title
             }
             .onDisappear {
                 editMode?.wrappedValue = .inactive
             }
-            .onChange(of: checklistTitle) { newValue in
-                Logger.default.info("[SORTBUG] onChange -> \(newValue)")
+            .onReceive(checklistTitle
+                        .$text
+                        .debounce(for: 0.3, scheduler: DispatchQueue.main)) { newValue in
                 var title = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 if title.isEmpty {
                     title = L10n.EditChecklist.unnamedChecklist.localized
@@ -142,7 +146,7 @@ public struct ChecklistEntryListView: View {
                 activity.isEligibleForPrediction = true
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     if allowOpenInSeparateWindow {
                         Button {
                             SingleChecklistView.activateSession(checklist: checklist)
@@ -150,16 +154,12 @@ public struct ChecklistEntryListView: View {
                             Label(L10n.Common.buttonSeparateWindow.localized, systemImage: "square.on.square")
                         }
                     }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
                     Button {
                         addEntry = true
                     } label: {
                         Label(L10n.ChecklistDetails.addEntryButton.localized, systemImage: "plus")
                     }
+                    EditButton()
                 }
             }
             .sheet(isPresented: $addEntry) {

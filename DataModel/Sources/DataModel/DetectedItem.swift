@@ -461,7 +461,6 @@ public enum DetectedItem: String, CustomStringConvertible {
             "modem", // gadget
             "magnetic compass", // gadget
             "joystick", // gadget
-            "loupe, jeweler's loupe", // gadget
             "radio, wireless", // gadget
             "radio telescope, radio reflector", // gadget
             "remote control, remote", // gadget
@@ -709,6 +708,7 @@ public enum DetectedItem: String, CustomStringConvertible {
             "slide rule, slipstick",
             "thimble",
             "torch",
+            "loupe, jeweler's loupe", // gadget
             "chain saw, chainsaw":
             self = .tool
 
