@@ -26,6 +26,14 @@ struct ChecklistsListView: View {
         NavigationView {
             if !lists.isEmpty {
                 List {
+                    #if DEBUG
+                    HStack {
+                        Spacer()
+                        Text("<debug mode>")
+                            .foregroundColor(.pink)
+                        Spacer()
+                    }
+                    #endif
                     ForEach(lists) { list in
                         NavigationLink {
                             ChecklistEntriesListView(checklist: list)

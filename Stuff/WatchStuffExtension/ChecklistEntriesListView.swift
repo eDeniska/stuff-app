@@ -45,7 +45,7 @@ public struct ChecklistEntriesListView: View {
     public var body: some View {
         if validObject {
             if entries.isEmpty {
-                Text(L10n.WatchStuff.noLists.localized)
+                Text(L10n.WatchStuff.noEntries.localized)
                     .padding()
                     .font(.title3)
                     .navigationTitle(checklist.title)
