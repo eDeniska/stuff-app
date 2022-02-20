@@ -12,4 +12,8 @@ extension L10n {
     enum Item: String, Localizable {
         case unnamed = "item.unnamed"
     }
+    
+    enum Protection: String, Localizable {
+        case biometryReason = "protection.biometry.reason"
+    }
 }

@@ -79,7 +79,7 @@ public struct PreferencesView: View {
         archiveDocument = document
         showExport = true
     }
-
+    
     private func extractData(url: URL) async {
         ongoingImport = true
         let context = container.newBackgroundContext()

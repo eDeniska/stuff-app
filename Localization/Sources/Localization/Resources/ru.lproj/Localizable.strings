@@ -328,3 +328,6 @@
 "preferences.export.failure.title" = "Ошибка при экспорте";
 "preferences.export.failure.details" = "Проблемы при экспорте мешают завершению процесса. Свяжитесь с разработчиками, чтобы исправить эту ситуацию.";
 "preferences.versionFormat" = "Stuff v%@ (%@)";
+
+// Protection
+"protection.biometry.reason" = "Подтвердите свою личность, чтобы получить доступ к данным.";

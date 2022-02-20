@@ -1093,6 +1093,7 @@
 				INFOPLIST_FILE = Stuff/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Take pictures of your things";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "App uses Face ID to authenticate the user.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
@@ -1131,6 +1132,7 @@
 				INFOPLIST_FILE = Stuff/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Take pictures of your things";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "App uses Face ID to authenticate the user.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;

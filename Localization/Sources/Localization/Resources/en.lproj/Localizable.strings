@@ -326,3 +326,6 @@
 "preferences.export.failure.title" = "Export failed";
 "preferences.export.failure.details" = "There are issues during export process. Please, contact developers to resolve these issues.";
 "preferences.versionFormat" = "Stuff v%@ (%@)";
+
+// Protection
+"protection.biometry.reason" = "Authenticate to access application.";

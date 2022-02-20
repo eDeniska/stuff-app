@@ -9,3 +9,4 @@
 "title.capture.item" = "Capture an item...";
 "subtitle.capture.item" = "Add item with photo";
 "NSCameraUsageDescription" = "Take pictures of your items, app will try to detect the item by photo. No photos are leaving your device.";
+"NSFaceIDUsageDescription" = "Stuff protects access to your information using Face ID.";
