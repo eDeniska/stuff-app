@@ -21,7 +21,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.tazetdinov.stuff.widget</string>
+		<string>group.com.tazetdinov.stuff.appData</string>
 	</array>
 	<key>com.apple.security.network.client</key>
 	<true/>

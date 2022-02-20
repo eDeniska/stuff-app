@@ -85,6 +85,7 @@ extension Archive.Item {
             item = existingItem
         } else {
             item = Item(context: context)
+            item.identifier = identifier
         }
         item.details = details
         item.condition = ItemCondition(storedValue: condition).rawValue
@@ -115,6 +116,7 @@ extension Archive.Place {
             place = existingPlace
         } else {
             place = ItemPlace(context: context)
+            place.identifier = identifier
         }
         place.icon = icon
         place.identifier = identifier
@@ -140,6 +142,7 @@ extension Archive.Category {
             category = existingCategory
         } else {
             category = ItemCategory(context: context)
+            category.identifier = identifier
         }
         category.icon = icon
         category.identifier = identifier
@@ -188,6 +191,7 @@ extension Archive.Checklist {
             checklist.entries.forEach(context.delete)
         } else {
             checklist = Checklist(context: context)
+            checklist.identifier = identifier
         }
         checklist.details = details
         checklist.identifier = identifier

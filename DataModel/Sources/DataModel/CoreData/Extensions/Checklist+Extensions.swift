@@ -10,6 +10,18 @@ import Logger
 
 public extension Checklist {
 
+    static func performHousekeeping(in context: NSManagedObjectContext) {
+        let emptyIdentifierRequest = Self.fetchRequest()
+        emptyIdentifierRequest.predicate = .isNil(keyPath: #keyPath(Checklist.identifier))
+        do {
+            let checklists = try context.fetch(emptyIdentifierRequest)
+            checklists.forEach(context.delete)
+            Logger.default.info("[HOUSEKEEPING] deleted: \(checklists.count)")
+        } catch {
+            Logger.default.error("failed to fetch checklists with empty identifier: \(error)")
+        }
+    }
+
     @discardableResult
     static func checklist(title: String, icon: String, in context: NSManagedObjectContext) -> Checklist {
         let entry = Checklist(context: context)

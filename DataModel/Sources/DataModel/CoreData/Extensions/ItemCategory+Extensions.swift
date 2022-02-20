@@ -11,6 +11,16 @@ import Logger
 
 public extension ItemCategory {
     static func performHousekeeping(in context: NSManagedObjectContext) {
+        let emptyIdentifierRequest = Self.fetchRequest()
+        emptyIdentifierRequest.predicate = .isNil(keyPath: #keyPath(ItemCategory.identifier))
+        do {
+            let categories = try context.fetch(emptyIdentifierRequest)
+            categories.forEach(context.delete)
+            Logger.default.info("[HOUSEKEEPING] deleted: \(categories.count)")
+        } catch {
+            Logger.default.error("failed to fetch categories with empty identifier: \(error)")
+        }
+
         let request = Self.fetchRequest()
         do {
             let categories = try context.fetch(request)

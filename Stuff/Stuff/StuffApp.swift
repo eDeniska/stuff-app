@@ -59,6 +59,8 @@ struct StuffApp: App {
                 .onAppear {
                     Item.performHousekeeping(in: persistenceController.container.viewContext)
                     ItemCategory.performHousekeeping(in: persistenceController.container.viewContext)
+                    ItemPlace.performHousekeeping(in: persistenceController.container.viewContext)
+                    Checklist.performHousekeeping(in: persistenceController.container.viewContext)
                     persistenceController.container.viewContext.saveOrRollback()
                 }
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)

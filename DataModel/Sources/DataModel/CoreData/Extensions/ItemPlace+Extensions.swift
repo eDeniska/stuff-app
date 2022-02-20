@@ -9,6 +9,17 @@ import CoreData
 import Logger
 
 public extension ItemPlace {
+    static func performHousekeeping(in context: NSManagedObjectContext) {
+        let emptyIdentifierRequest = Self.fetchRequest()
+        emptyIdentifierRequest.predicate = .isNil(keyPath: #keyPath(ItemPlace.identifier))
+        do {
+            let places = try context.fetch(emptyIdentifierRequest)
+            places.forEach(context.delete)
+            Logger.default.info("[HOUSEKEEPING] deleted: \(places.count)")
+        } catch {
+            Logger.default.error("failed to fetch places with empty identifier: \(error)")
+        }
+    }
 
     @discardableResult
     static func place(title: String, icon: String, in context: NSManagedObjectContext) -> ItemPlace {

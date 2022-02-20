@@ -11,20 +11,22 @@ import Combine
 
 public class FileStorageManager: ObservableObject {
 
-    
-    private let folderPrefix: String = {
-#if DEBUG
-        return "debug"
-#else
-        return ""
-#endif
-    }()
+    private enum Constants {
+        static let debugMode: Bool = {
+    #if DEBUG
+            return true
+    #else
+            return false
+    #endif
+        }()
+        static let debugPrefix = "developmentStorage"
+    }
     
     private lazy var storageURL: URL = {
         Logger.default.info("iCloud integration is \(requiresCoordination), querying URL...")
         if requiresCoordination, var url = FileManager.default.url(forUbiquityContainerIdentifier: nil) {
-            if !folderPrefix.isEmpty {
-                url.appendPathComponent(folderPrefix)
+            if Constants.debugMode {
+                url.appendPathComponent(Constants.debugPrefix)
                 do {
                     if !FileManager.default.fileExists(atPath: url.path) {
                         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
@@ -236,6 +238,16 @@ extension FileStorageManager {
         metadataQuery.disableUpdates()
         if let metadatItems = metadataQuery.results as? [NSMetadataItem] {
             result = urls(from: metadatItems)
+        }
+        switch Constants.debugMode {
+        case true:
+            result = result.filter {
+                $0.deletingLastPathComponent().lastPathComponent == Constants.debugPrefix
+            }
+
+        case false:
+            result = result.filter {                 $0.deletingLastPathComponent().lastPathComponent != Constants.debugPrefix
+            }
         }
         metadataQuery.enableUpdates()
         return result

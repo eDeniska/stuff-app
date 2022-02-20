@@ -43,7 +43,8 @@ struct ConfirmationView: View {
                     dismiss()
                 } label: {
                     Text(L10n.Common.buttonDismiss.localized)
-                        .padding()
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 8)
                 }
                 .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity)

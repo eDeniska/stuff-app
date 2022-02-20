@@ -13,7 +13,7 @@ public class AppGroupManager {
     public static let shared = AppGroupManager()
 
     private enum Constants {
-        static let appGroup = "group.com.tazetdinov.stuff.widget"
+        static let appGroup = "group.com.tazetdinov.stuff.appData"
     }
 
     public let appGroupContainer: URL

@@ -121,6 +121,16 @@ public extension Item {
     }
     
     static func performHousekeeping(in context: NSManagedObjectContext) {
+        let emptyIdentifierRequest = Self.fetchRequest()
+        emptyIdentifierRequest.predicate = .isNil(keyPath: #keyPath(Item.identifier))
+        do {
+            let items = try context.fetch(emptyIdentifierRequest)
+            items.forEach(context.delete)
+            Logger.default.info("[HOUSEKEEPING] deleted: \(items.count)")
+        } catch {
+            Logger.default.error("failed to fetch items with empty identifier: \(error)")
+        }
+        
         let request = Self.fetchRequest()
         do {
             let items = try context.fetch(request)
