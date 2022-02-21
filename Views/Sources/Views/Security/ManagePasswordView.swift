@@ -12,6 +12,11 @@ import Localization
 struct AlertMessage {
     let message: String
     let completion: (() -> Void)?
+
+    init(message: String, completion: (() -> Void)? = nil) {
+        self.message = message
+        self.completion = completion
+    }
 }
 
 struct ManagePasswordView: View {
@@ -24,10 +29,17 @@ struct ManagePasswordView: View {
 
     @State private var alertMessage: AlertMessage? = nil
     @State private var confirmationMessage: AlertMessage? = nil
+    private let passwordIsSet: Bool
 
-    @StateObject private var viewModel = ManagePasswordViewModel()
+    @StateObject private var viewModel: ManagePasswordViewModel
 
     @FocusState private var focusedField: Field?
+
+    init() {
+        let vm = ManagePasswordViewModel()
+        _viewModel = StateObject(wrappedValue: vm)
+        passwordIsSet = vm.passwordIsSet()
+    }
 
     enum Field: Hashable {
         case existingPassword
@@ -41,14 +53,14 @@ struct ManagePasswordView: View {
                 Spacer()
                 VStack(spacing: 20) {
                     Spacer()
-                    Image(systemName: "lock")
+                    Image(systemName: "lock") // TODO: change image on success
                         .font(.title)
                         .imageScale(.large)
                         .foregroundColor(.secondary)
                     Text("viewModel.message")
                         .font(.title)
                         .foregroundColor(.secondary)
-                    if viewModel.passwordIsSet() {
+                    if passwordIsSet {
                         SecureField("Existing password", text: $existingPassword)
                             .textFieldStyle(.roundedBorder)
                             .focused($focusedField, equals: .existingPassword)
@@ -72,7 +84,7 @@ struct ManagePasswordView: View {
                         .padding()
                         .frame(width: proxy.size.width / 3, alignment: .center)
                         .onSubmit {
-                            if viewModel.passwordIsSet() {
+                            if passwordIsSet {
                                 let result = viewModel.changePassword(existing: existingPassword, password: password1, repeated: password2)
                                 switch result {
                                 case .success:
@@ -80,11 +92,12 @@ struct ManagePasswordView: View {
                                         dismissAction()
                                     }
                                 case .incorrectExisting:
-                                    break
+                                    focusedField = .existingPassword
+                                    alertMessage = AlertMessage(message: "Existing password is entered incorrectly.")
+
                                 case .passwordsNotMatch:
-                                    alertMessage = AlertMessage(message: "Passwords don't match.") {
-                                        focusedField = .password1
-                                    }
+                                    focusedField = .password1
+                                    alertMessage = AlertMessage(message: "Passwords don't match.")
                                 }
                             } else {
                                 let result = viewModel.setPassword(password: password1, repeated: password2)
@@ -94,17 +107,18 @@ struct ManagePasswordView: View {
                                         dismissAction()
                                     }
                                 case .passwordIsSet:
-                                    break
+                                    alertMessage = AlertMessage(message: "Internal inconsistency with passwords. Try closing the app and opening again.")
+
                                 case .passwordsNotMatch:
-                                    alertMessage = AlertMessage(message: "Passwords don't match.") {
-                                        focusedField = .password1
-                                    }
+                                    focusedField = .password1
+                                    alertMessage = AlertMessage(message: "Passwords don't match.")
                                 }
                             }
                         }
                     Spacer()
                 }
-                .confirmationDialog("Password is changed",
+                // TODO: looks weird on Mac. use alerts
+                .confirmationDialog("Success",
                                     isPresented: Binding { confirmationMessage != nil } set: { if !$0 { confirmationMessage = nil } },
                                     presenting: confirmationMessage) { message in
                     Button(role: .cancel) {
