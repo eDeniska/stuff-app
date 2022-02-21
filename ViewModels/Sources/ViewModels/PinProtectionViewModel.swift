@@ -10,11 +10,28 @@ import Combine
 import LocalAuthentication
 import Logger
 import Localization
+import UIKit
 
 public class PinProtectionViewModel: ObservableObject {
     
     public static func protectionIsSet() -> Bool {
         AppAccessManager.shared.isPasswordSet
+    }
+    
+    @Published public var message: String
+    
+    private var incorrectPassword = false {
+        didSet {
+            if incorrectPassword {
+                if UIDevice.current.isMac {
+                    message = L10n.Protection.messageIncorrectPassword.localized
+                } else {
+                    message = L10n.Protection.messageIncorrectPIN.localized
+                }
+            } else {
+                message = L10n.Protection.messageAuthenticate.localized
+            }
+        }
     }
     
     private let context: LAContext
@@ -37,18 +54,22 @@ public class PinProtectionViewModel: ObservableObject {
                 Logger.default.error("error: \(error)")
             }
         }
+        message = L10n.Protection.messageAuthenticate.localized
     }
     
     public func authenticateWithBiometrics() async throws -> Bool {
         guard context.biometryType != .none else {
             return false
         }
-        // TODO: localize biometry reason
         return try await context.evaluatePolicy(policy, localizedReason: L10n.Protection.biometryReason.localized)
     }
     
     public func authenticateWithPassword(_ password: String) -> Bool {
-        AppAccessManager.shared.validate(password: password)
+        let result = AppAccessManager.shared.validate(password: password)
+        defer {
+            incorrectPassword = !result
+        }
+        return result
     }
 
 }

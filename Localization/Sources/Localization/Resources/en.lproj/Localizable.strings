@@ -328,4 +328,9 @@
 "preferences.versionFormat" = "Stuff v%@ (%@)";
 
 // Protection
-"protection.biometry.reason" = "Authenticate to access application.";
+"protection.biometry.reason" = "access its data";
+"protection.message.authenticate" = "Unlock Stuff";
+"protection.message.incorrectPIN" = "Try again";
+"protection.message.incorrectPassword" = "Incorrect password, try again";
+"pin.protection.password.placeholder" = "Password";
+"protection.message.unlocked" = "Unlocked";

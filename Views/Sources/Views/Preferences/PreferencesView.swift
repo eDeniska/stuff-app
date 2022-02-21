@@ -26,6 +26,8 @@ public struct PreferencesView: View {
     @State private var showImportError = false
     @State private var showExportError = false
 
+    @State private var showChangePassword = false
+
     @State private var archiveDocument: ArchiveDocument? = nil
     @State private var scene: UIWindowScene? = nil
 
@@ -145,6 +147,24 @@ public struct PreferencesView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
+                GroupBox {
+                    HStack {
+                        Text("Manage password")
+                        Spacer()
+                        Button {
+                            showChangePassword = true
+                        } label: {
+                            Label("Change...", systemImage: "square.and.arrow.down")
+                                .contentShape(Rectangle())
+                        }
+                    }
+                    .font(.title3)
+                    .padding(8)
+                } label: {
+                    Text(L10n.Preferences.importTitle.localized)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
                 Spacer()
                 Text(appVersion())
                     .foregroundColor(.secondary)
@@ -205,6 +225,9 @@ public struct PreferencesView: View {
                 case .failure(let error):
                     Logger.default.error("could open file: \(error)")
                 }
+            }
+            .sheet(isPresented: $showChangePassword) {
+                ManagePasswordView()
             }
             .sheet(isPresented: $showImportSuccess) {
                 ConfirmationView(title: L10n.Preferences.importSuccessTitle.localized,

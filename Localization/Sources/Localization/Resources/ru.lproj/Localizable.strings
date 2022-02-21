@@ -330,4 +330,9 @@
 "preferences.versionFormat" = "Stuff v%@ (%@)";
 
 // Protection
-"protection.biometry.reason" = "Подтвердите свою личность, чтобы получить доступ к данным.";
+"protection.biometry.reason" = "получить достум к своим данным";
+"protection.message.authenticate" = "Разблокируйте Stuff";
+"protection.message.incorrectPIN" = "Попробуйте еще раз";
+"protection.message.incorrectPassword" = "Неверный пароль, попробуйте еще раз";
+"pin.protection.password.placeholder" = "Пароль";
+"protection.message.unlocked" = "Разблокировано";

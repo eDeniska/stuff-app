@@ -203,4 +203,7 @@ extension L10n {
         case versionFormat = "preferences.versionFormat"
     }
 
+    enum PinProtection: String, Localizable {
+        case passwordPlaceholder = "pin.protection.password.placeholder"
+    }
 }

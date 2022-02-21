@@ -15,5 +15,9 @@ extension L10n {
     
     enum Protection: String, Localizable {
         case biometryReason = "protection.biometry.reason"
+        case messageAuthenticate = "protection.message.authenticate"
+        case messageUnlocked = "protection.message.unlocked"
+        case messageIncorrectPIN = "protection.message.incorrectPIN"
+        case messageIncorrectPassword = "protection.message.incorrectPassword"
     }
 }

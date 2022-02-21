@@ -9,8 +9,7 @@ import SwiftUI
 import LocalAuthentication
 import ViewModels
 import Logger
-
-// TODO: add mac view with password text field
+import Localization
 
 public extension Notification.Name {
     static let requestBiometricAuthentiction = Notification.Name("RequestBiometricAuthentictionNotification")
@@ -21,15 +20,11 @@ public struct PinProtectionView: View {
     private let onUnlock: () -> Void
 
     @State private var pin = ""
-    // TODO: localize message
-    // TODO: change message on first incorrect pin entry
-    @State private var message = "Authenticate"
     @State private var state: PinKeypadView.LockState = .locked
 
     @StateObject private var viewModel = PinProtectionViewModel()
     @State private var processingBiometrics = false
     @State private var cancelledBiometrics = false
-    @State private var improper = false
 
     public init(onUnlock: @escaping () -> Void) {
         self.onUnlock = onUnlock
@@ -37,10 +32,8 @@ public struct PinProtectionView: View {
 
     private func height(for size: CGSize) -> CGFloat {
         if UIDevice.current.isPhone {
-            Logger.default.debug("[PROPOSING]: \(size.height)")
             return size.height
         } else {
-            Logger.default.debug("[PROPOSING]: \(min(size.width, size.height) / 3)")
             return max(size.width, size.height) / 2
         }
     }
@@ -48,34 +41,38 @@ public struct PinProtectionView: View {
     @ViewBuilder
     private func passwordView() -> some View {
         GeometryReader { proxy in
-        if UIDevice.current.isMac {
-            HStack {
-                Spacer()
-                VStack(spacing: 40) {
+            if UIDevice.current.isMac {
+                HStack {
                     Spacer()
-                    Text(message)
-                        .font(.title)
-                        .foregroundColor(.secondary)
-                    SecureField("Password", text: $pin)
-                        .textFieldStyle(.roundedBorder)
-                        .padding()
-                        .frame(width: proxy.size.width / 3, alignment: .center)
-                        .onSubmit {
-                            if viewModel.authenticateWithPassword(pin) {
-                                pin = ""
-                                onUnlock()
-                            } else {
-                                pin = ""
+                    VStack(spacing: 40) {
+                        Spacer()
+                        Image(systemName: "lock")
+                            .font(.title)
+                            .imageScale(.large)
+                            .foregroundColor(.secondary)
+                        Text(viewModel.message)
+                            .font(.title)
+                            .foregroundColor(.secondary)
+                        SecureField(L10n.PinProtection.passwordPlaceholder.localized, text: $pin)
+                            .textFieldStyle(.roundedBorder)
+                            .padding()
+                            .frame(width: proxy.size.width / 3, alignment: .center)
+                            .onSubmit {
+                                if viewModel.authenticateWithPassword(pin) {
+                                    pin = ""
+                                    onUnlock()
+                                } else {
+                                    pin = ""
+                                }
                             }
-                        }
+                        Spacer()
+                    }
                     Spacer()
                 }
-                Spacer()
-            }
-        } else {
+            } else {
                 VStack {
                     Spacer()
-                    PinKeypadView(pin: $pin, message: $message, state: $state, biometryType: viewModel.biometryType) { entered in
+                    PinKeypadView(pin: $pin, message: $viewModel.message, state: $state, biometryType: viewModel.biometryType) { entered in
                         if viewModel.authenticateWithPassword(entered) {
                             pin = ""
                             onUnlock()
@@ -87,6 +84,7 @@ public struct PinProtectionView: View {
                         Task {
                             if try await viewModel.authenticateWithBiometrics() {
                                 pin = ""
+                                cancelledBiometrics = false
                                 onUnlock()
                             }
                         }
