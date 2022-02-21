@@ -29,6 +29,16 @@ public class AppAccessManager {
             return false
         }
     }
+
+    public func clearPassword() {
+        do {
+            try KeychainPasswordItem(service: Constants.lockPasswordService,
+                                     account: Constants.lockPasswordAccount)
+                .deleteItem()
+        } catch {
+            Logger.default.error("could not clear password: \(error)")
+        }
+    }
     
     public func validate(password: String) -> Bool {
         do {
