@@ -18,7 +18,7 @@ public class PinProtectionViewModel: ObservableObject {
     }
     
     private let context: LAContext
-    
+    private let policy: LAPolicy
     public var biometryType: LABiometryType {
         context.biometryType
     }
@@ -26,7 +26,12 @@ public class PinProtectionViewModel: ObservableObject {
     public init() {
         context = LAContext()
         var error: NSError? = nil
-        if !context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometricsOrWatch, error: &error) {
+#if targetEnvironment(macCatalyst)
+        policy = .deviceOwnerAuthenticationWithBiometricsOrWatch
+#else
+        policy = .deviceOwnerAuthenticationWithBiometrics
+#endif
+        if !context.canEvaluatePolicy(policy, error: &error) {
             Logger.default.error("could not authenticate with biometrics or watch")
             if let error = error {
                 Logger.default.error("error: \(error)")
@@ -39,7 +44,7 @@ public class PinProtectionViewModel: ObservableObject {
             return false
         }
         // TODO: localize biometry reason
-        return try await context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometricsOrWatch, localizedReason: L10n.Protection.biometryReason.localized)
+        return try await context.evaluatePolicy(policy, localizedReason: L10n.Protection.biometryReason.localized)
     }
     
     public func authenticateWithPassword(_ password: String) -> Bool {

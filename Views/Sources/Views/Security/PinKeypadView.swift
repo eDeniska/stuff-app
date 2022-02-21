@@ -6,100 +6,23 @@
 //
 
 import SwiftUI
-
-struct FlashingNumberButtonStyle: ButtonStyle {
-
-    let foregroundColor: Color
-    let backgroundColor: Color
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundColor(configuration.isPressed ? backgroundColor : foregroundColor)
-            .background(configuration.isPressed ? foregroundColor : backgroundColor)
-            .clipShape(Circle().inset(by: 0.5))
-            .background(Circle().stroke(configuration.isPressed ? backgroundColor : foregroundColor))
-    }
-}
-
-struct SizePreferenceKey: PreferenceKey {
-    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
-        value = nextValue()
-    }
-    
-    static var defaultValue = CGSize.zero
-}
-
-extension View {
-    func withSize(_ sizeHandler: @escaping (CGSize) -> ()) -> some View {
-        background {
-            GeometryReader { proxy in
-                Color.clear
-                    .preference(key: SizePreferenceKey.self, value: proxy.size)
-            }
-        }
-        .onPreferenceChange(SizePreferenceKey.self, perform: sizeHandler)
-    }
-}
-
-struct PinButton: View {
-    let title: String
-    let action: ((String) -> Void)?
-    
-    @State private var height: CGFloat = .zero
-    
-    var body: some View {
-        Button {
-            self.action?(self.title)
-        } label: {
-            Text(title)
-                .font(.system(size: 32, weight: .light, design: .monospaced))
-                .padding(32)
-        }
-        .frame(height: height)
-        .buttonStyle(FlashingNumberButtonStyle(foregroundColor: .accentColor,
-                                               backgroundColor: .secondary))
-        .withSize { (size) in
-            if size.width > 0 {
-                self.height = size.width
-            }
-        }
-    }
-}
-
-struct Shake: GeometryEffect {
-    var amount: CGFloat = 10
-    var shakesPerUnit = 4
-    var percentage: CGFloat
-    var completion: (() -> Void)? = nil
-    var animatableData: CGFloat {
-        get {
-            percentage
-        }
-        set {
-            percentage = newValue
-            checkIfCompleted()
-        }
-    }
-    
-    func checkIfCompleted() {
-        if percentage == 1 {
-            completion?()
-        }
-    }
-
-    func effectValue(size: CGSize) -> ProjectionTransform {
-        ProjectionTransform(CGAffineTransform(translationX:
-            amount * sin(animatableData * .pi * CGFloat(shakesPerUnit)),
-            y: 0))
-    }
-}
-
+import LocalAuthentication
+import Logger
 
 struct PinKeypadView: View {
+
+    enum LockState {
+        case locked
+        case unlocked
+        case noLock
+    }
     
-    var biometryAllowed: Bool
     @Binding var pin: String
-    
+    @Binding var message: String
+    @Binding var state: LockState
+
+    var biometryType: LABiometryType
+
     var validationAction: ((String) -> Bool)
     var biometryAction: (() -> Void)?
     
@@ -112,11 +35,8 @@ struct PinKeypadView: View {
             if pin.count < 6 {
                 pin.append(number)
                 if pin.count == 6 {
-                    if validationAction(pin) {
-                        pin = ""
-                    } else {
+                    if !validationAction(pin) {
                         disabled = true
-                        pin = ""
                     }
                 }
             }
@@ -135,8 +55,116 @@ struct PinKeypadView: View {
         index < pin.count ? "circle.fill" : "circle"
     }
 
+    private func buttonSize(for size: CGSize) -> CGSize {
+        let horizontal = (size.width - 4 * buttonSpacing) / 3
+        let vertical = (size.height - 5 * buttonSpacing) / 4
+        let dimension = min(horizontal, vertical)
+        if dimension > 0  {
+            return CGSize(width: dimension, height: dimension)
+        } else {
+            return CGSize(width: 10, height: 10)
+        }
+
+    }
+
+    private let pinPad = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
 
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(spacing: 0) {
+            HStack {
+                Group {
+                    switch state {
+                    case .locked:
+                        Image(systemName: "lock")
+                    case .unlocked:
+                        Image(systemName: "lock.open")
+                    case .noLock:
+                        EmptyView()
+                    }
+                    Text(message)
+                        .fixedSize(horizontal: true, vertical: false)
+                        .animation(nil, value: true)
+                }
+                .font(.headline)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.primary)
+            }
+            HStack(spacing: buttonSpacing) {
+                Image(systemName: pinImage(index: 0))
+                Image(systemName: pinImage(index: 1))
+                Image(systemName: pinImage(index: 2))
+                Image(systemName: pinImage(index: 3))
+                Image(systemName: pinImage(index: 4))
+                Image(systemName: pinImage(index: 5))
+            }
+            .padding()
+            .modifier(ShakeModifier(percentage: disabled ? 1.0 : 0.0) {
+                DispatchQueue.main.async {
+                    disabled = false
+                    pin = ""
+                }
+            })
+
+            GeometryReader { proxy in
+                let buttonSize = buttonSize(for: proxy.size)
+                HStack {
+                    Spacer()
+                VStack(alignment: .center, spacing: buttonSpacing) {
+                    ForEach(pinPad, id: \.self) { padLine in
+                        HStack(alignment: .center, spacing: buttonSpacing) {
+                            ForEach(padLine, id: \.self) { key in
+                                PinButton(title: key, action: append(_:))
+                                    .frame(width: buttonSize.width, height: buttonSize.height)
+                            }
+                        }
+                    }
+
+                    HStack(alignment: .center, spacing: buttonSpacing) {
+                        if biometryType != .none {
+                            Button {
+                                biometryAction?()
+                            } label: {
+                                Group {
+                                    switch biometryType {
+                                    case .faceID:
+                                        Image(systemName: "faceid")
+
+                                    case .touchID:
+                                        Image(systemName: "touchid")
+
+                                    case .none:
+                                        EmptyView()
+
+                                    @unknown default:
+                                        EmptyView()
+                                    }
+                                }
+                                .contentShape(Circle())
+                            }
+                            .buttonStyle(.flashingButton(color: .accentColor))
+                            .frame(width: buttonSize.width, height: buttonSize.height)
+                        } else {
+                            Color.clear
+                                .frame(width: buttonSize.width, height: buttonSize.height)
+                        }
+                        PinButton(title: "0", action: append(_:))
+                            .frame(width: buttonSize.width, height: buttonSize.height)
+                        Button(action: delete) {
+                            Image(systemName: "delete.left")
+                                .contentShape(Circle())
+                        }
+                        .buttonStyle(.flashingButton(color: .accentColor))
+                        .frame(width: buttonSize.width, height: buttonSize.height)
+                        .disabled(pin.isEmpty)
+                        .keyboardShortcut(.delete, modifiers: [])
+                    }
+                }
+                .font(.title.monospaced())
+                .disabled(disabled)
+                    Spacer()
+                }
+
+            }
+        }
     }
 }

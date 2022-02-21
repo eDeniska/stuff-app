@@ -72,7 +72,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         super.buildMenu(with: builder)
         builder.remove(menu: .format)
     }
-
 }
 
 fileprivate extension UIViewController {

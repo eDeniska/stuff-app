@@ -9,6 +9,7 @@ import SwiftUI
 import DataModel
 import Logger
 import Views
+import ViewModels
 import Localization
 
 
@@ -49,76 +50,81 @@ struct StuffApp: App {
 
     @State private var sceneDelegate = SceneDelegate()
 
+    @State private var needsEnterPin = true
+    @State private var backgroundDate = Date.distantPast
+
     init() {
         FileStorageManager.shared.initialize()
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView(selectedItem: $selectedItem, selectedPlace: $selectedPlace, selectedChecklist: $selectedChecklist, requestedTab: $requestedTab)
-                .onAppear {
-                    Item.performHousekeeping(in: persistenceController.container.viewContext)
-                    ItemCategory.performHousekeeping(in: persistenceController.container.viewContext)
-                    ItemPlace.performHousekeeping(in: persistenceController.container.viewContext)
-                    Checklist.performHousekeeping(in: persistenceController.container.viewContext)
-                    persistenceController.container.viewContext.saveOrRollback()
+            PinProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
+                ContentView(selectedItem: $selectedItem, selectedPlace: $selectedPlace, selectedChecklist: $selectedChecklist, requestedTab: $requestedTab)
+            }
+            .onAppear {
+                Item.performHousekeeping(in: persistenceController.container.viewContext)
+                ItemCategory.performHousekeeping(in: persistenceController.container.viewContext)
+                ItemPlace.performHousekeeping(in: persistenceController.container.viewContext)
+                Checklist.performHousekeeping(in: persistenceController.container.viewContext)
+                persistenceController.container.viewContext.saveOrRollback()
+            }
+            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            .environment(\.persistentContainer, persistenceController.container)
+            .onContinueUserActivity(UserActivityRegistry.ItemsView.activityType) { _ in
+                requestedTab = .items
+            }
+            .onContinueUserActivity(UserActivityRegistry.PlacesView.activityType) { _ in
+                requestedTab = .places
+            }
+            .onContinueUserActivity(UserActivityRegistry.ChecklistsView.activityType) { _ in
+                requestedTab = .checklists
+            }
+            .onContinueUserActivity(UserActivityRegistry.ItemView.activityType) { activity in
+                Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
+                Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
+                guard let identifier = activity.userInfo?[UserActivityRegistry.ItemView.identifierKey] as? UUID else {
+                    Logger.default.error("[HANDOFF] could not build the identifier")
+                    return
                 }
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environment(\.persistentContainer, persistenceController.container)
-                .onContinueUserActivity(UserActivityRegistry.ItemsView.activityType) { _ in
-                    requestedTab = .items
+                selectedItem = Item.item(with: identifier, in: persistenceController.container.viewContext)
+                Logger.default.info("[HANDOFF] got item = [\(selectedItem?.title ?? "<>")]")
+            }
+            .onContinueUserActivity(UserActivityRegistry.PlaceView.activityType) { activity in
+                Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
+                Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
+                guard let identifier = activity.userInfo?[UserActivityRegistry.PlaceView.identifierKey] as? UUID else {
+                    Logger.default.error("[HANDOFF] could not build the identifier")
+                    return
                 }
-                .onContinueUserActivity(UserActivityRegistry.PlacesView.activityType) { _ in
-                    requestedTab = .places
+                selectedPlace = ItemPlace.place(with: identifier, in: persistenceController.container.viewContext)
+                Logger.default.info("[HANDOFF] got checklist = [\(selectedChecklist?.title ?? "<>")]")
+            }
+            .onContinueUserActivity(UserActivityRegistry.ChecklistView.activityType) { activity in
+                Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
+                Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
+                guard let identifier = activity.userInfo?[UserActivityRegistry.ChecklistView.identifierKey] as? UUID else {
+                    Logger.default.error("[HANDOFF] could not build the identifier")
+                    return
                 }
-                .onContinueUserActivity(UserActivityRegistry.ChecklistsView.activityType) { _ in
-                    requestedTab = .checklists
-                }
-                .onContinueUserActivity(UserActivityRegistry.ItemView.activityType) { activity in
-                    Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
-                    Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
-                    guard let identifier = activity.userInfo?[UserActivityRegistry.ItemView.identifierKey] as? UUID else {
-                        Logger.default.error("[HANDOFF] could not build the identifier")
-                        return
+                selectedChecklist = Checklist.checklist(with: identifier, in: persistenceController.container.viewContext)
+                Logger.default.info("[HANDOFF] got checklist = [\(selectedChecklist?.title ?? "<>")]")
+            }
+            .onOpenURL { url in
+                Logger.default.info("[WIDGET] url from widget = \(url)")
+                if let action = WidgetURLHandler.action(from: url, in: persistenceController.container.viewContext) {
+                    switch action {
+                    case .showChecklist(let checklist):
+                        Logger.default.info("[WIDGET] got checklist = \(checklist.identifier)")
+                        selectedChecklist = checklist
+                    case .createChecklist:
+                        requestedTab = .checklists
+                        NotificationCenter.default.post(name: .newChecklistRequest, object: nil)
                     }
-                    selectedItem = Item.item(with: identifier, in: persistenceController.container.viewContext)
-                    Logger.default.info("[HANDOFF] got item = [\(selectedItem?.title ?? "<>")]")
+                } else {
+                    Logger.default.error("[WIDGET] could not get action from url = \(url)")
                 }
-                .onContinueUserActivity(UserActivityRegistry.PlaceView.activityType) { activity in
-                    Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
-                    Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
-                    guard let identifier = activity.userInfo?[UserActivityRegistry.PlaceView.identifierKey] as? UUID else {
-                        Logger.default.error("[HANDOFF] could not build the identifier")
-                        return
-                    }
-                    selectedPlace = ItemPlace.place(with: identifier, in: persistenceController.container.viewContext)
-                    Logger.default.info("[HANDOFF] got checklist = [\(selectedChecklist?.title ?? "<>")]")
-                }
-                .onContinueUserActivity(UserActivityRegistry.ChecklistView.activityType) { activity in
-                    Logger.default.info("[HANDOFF] [\(activity.title ?? "<>")]")
-                    Logger.default.info("[HANDOFF] UserInfo = \(String(describing: activity.userInfo))")
-                    guard let identifier = activity.userInfo?[UserActivityRegistry.ChecklistView.identifierKey] as? UUID else {
-                        Logger.default.error("[HANDOFF] could not build the identifier")
-                        return
-                    }
-                    selectedChecklist = Checklist.checklist(with: identifier, in: persistenceController.container.viewContext)
-                    Logger.default.info("[HANDOFF] got checklist = [\(selectedChecklist?.title ?? "<>")]")
-                }
-                .onOpenURL { url in
-                    Logger.default.info("[WIDGET] url from widget = \(url)")
-                    if let action = WidgetURLHandler.action(from: url, in: persistenceController.container.viewContext) {
-                        switch action {
-                        case .showChecklist(let checklist):
-                            Logger.default.info("[WIDGET] got checklist = \(checklist.identifier)")
-                            selectedChecklist = checklist
-                        case .createChecklist:
-                            requestedTab = .checklists
-                            NotificationCenter.default.post(name: .newChecklistRequest, object: nil)
-                        }
-                    } else {
-                        Logger.default.error("[WIDGET] could not get action from url = \(url)")
-                    }
-                }
+            }
         }
         .commands {
             // TODO: consider opening "new..." forms from current tab (or in new window on iPad and Mac)
@@ -209,34 +215,42 @@ struct StuffApp: App {
         }
 
         WindowGroup(L10n.App.windowItems.localized) {
-            SingleItemDetailsView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environment(\.persistentContainer, persistenceController.container)
+            PinProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
+                SingleItemDetailsView()
+            }
+            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            .environment(\.persistentContainer, persistenceController.container)
         }
         .handlesExternalEvents(matching: [UserActivityRegistry.ItemScene.activityType])
 
         WindowGroup(L10n.App.windowPlaces.localized) {
-            SinglePlaceView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environment(\.persistentContainer, persistenceController.container)
+            PinProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
+                SinglePlaceView()
+            }
+            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            .environment(\.persistentContainer, persistenceController.container)
         }
         .handlesExternalEvents(matching: [UserActivityRegistry.PlaceScene.activityType])
 
         WindowGroup(L10n.App.windowChecklists.localized) {
-            SingleChecklistView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environment(\.persistentContainer, persistenceController.container)
+            PinProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
+                SingleChecklistView()
+            }
+            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            .environment(\.persistentContainer, persistenceController.container)
         }
         .handlesExternalEvents(matching: [UserActivityRegistry.ChecklistScene.activityType])
 
         WindowGroup(L10n.App.windowPreferences.localized) {
-            PreferencesView()
-                .onContinueUserActivity(UserActivityRegistry.SettingsScene.activityType) { userActivity in
-                    Logger.default.info("got activity - \(userActivity)")
-                }
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environment(\.persistentContainer, persistenceController.container)
-                .handlesExternalEvents(preferring: [UserActivityRegistry.SettingsScene.activityType], allowing: ["*"])
+            PinProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
+                PreferencesView()
+            }
+            .onContinueUserActivity(UserActivityRegistry.SettingsScene.activityType) { userActivity in
+                Logger.default.info("got activity - \(userActivity)")
+            }
+            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            .environment(\.persistentContainer, persistenceController.container)
+            .handlesExternalEvents(preferring: [UserActivityRegistry.SettingsScene.activityType], allowing: ["*"])
         }
         .handlesExternalEvents(matching: [UserActivityRegistry.SettingsScene.activityType])
 
