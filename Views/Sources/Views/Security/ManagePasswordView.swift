@@ -20,7 +20,10 @@ struct ManagePasswordView: View {
     @State private var password1 = ""
     @State private var password2 = ""
 
+    @Environment(\.dismiss) private var dismissAction
+
     @State private var alertMessage: AlertMessage? = nil
+    @State private var confirmationMessage: AlertMessage? = nil
 
     @StateObject private var viewModel = ManagePasswordViewModel()
 
@@ -73,11 +76,13 @@ struct ManagePasswordView: View {
                                 let result = viewModel.changePassword(existing: existingPassword, password: password1, repeated: password2)
                                 switch result {
                                 case .success:
-                                    break
+                                    confirmationMessage = AlertMessage(message: "Password is changed.") {
+                                        dismissAction()
+                                    }
                                 case .incorrectExisting:
                                     break
                                 case .passwordsNotMatch:
-                                    alertMessage = AlertMessage(message: "Passwords don't match") {
+                                    alertMessage = AlertMessage(message: "Passwords don't match.") {
                                         focusedField = .password1
                                     }
                                 }
@@ -85,17 +90,30 @@ struct ManagePasswordView: View {
                                 let result = viewModel.setPassword(password: password1, repeated: password2)
                                 switch result {
                                 case .success:
-                                    break
+                                    confirmationMessage = AlertMessage(message: "Password is set.") {
+                                        dismissAction()
+                                    }
                                 case .passwordIsSet:
                                     break
                                 case .passwordsNotMatch:
-                                    alertMessage = AlertMessage(message: "Passwords don't match") {
+                                    alertMessage = AlertMessage(message: "Passwords don't match.") {
                                         focusedField = .password1
                                     }
                                 }
                             }
                         }
                     Spacer()
+                }
+                .confirmationDialog("Password is changed",
+                                    isPresented: Binding { confirmationMessage != nil } set: { if !$0 { confirmationMessage = nil } },
+                                    presenting: confirmationMessage) { message in
+                    Button(role: .cancel) {
+                        message.completion?()
+                    } label: {
+                        Text(L10n.Common.buttonDismiss.localized)
+                    }
+                } message: { message in
+                    Text(message.message)
                 }
                 .alert("Password error",
                        isPresented: Binding { alertMessage != nil } set: { if !$0 { alertMessage = nil } },

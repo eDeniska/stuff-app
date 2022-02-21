@@ -112,10 +112,14 @@ public struct PinProtectionView: View {
                             pin = ""
                             cancelledBiometrics = false
                             onUnlock()
+                        } else {
+                            cancelledBiometrics = true
+                            // TODO: focus on password for mac
                         }
                     } catch {
                         Logger.default.error("[BIOMETRIC] could not perform biometric: \(error)")
                         cancelledBiometrics = true
+                        // TODO: focus on password for mac
                     }
                     processingBiometrics = false
                 }
