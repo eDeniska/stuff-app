@@ -16,6 +16,7 @@ public class ManagePasswordViewModel: ObservableObject {
         case success
         case incorrectExisting
         case passwordsNotMatch
+        case emptyPassword
     }
 
     public enum ClearResult {
@@ -27,6 +28,7 @@ public class ManagePasswordViewModel: ObservableObject {
         case success
         case passwordIsSet
         case passwordsNotMatch
+        case emptyPassword
     }
 
     public init() {
@@ -36,6 +38,9 @@ public class ManagePasswordViewModel: ObservableObject {
         AppAccessManager.shared.isPasswordSet
     }
 
+    private func isValid(password: String) -> Bool {
+        !password.isEmpty
+    }
 
     public func clearPassword(existing: String) -> ClearResult {
         guard AppAccessManager.shared.validate(password: existing) else {
@@ -53,6 +58,9 @@ public class ManagePasswordViewModel: ObservableObject {
         guard password == repeated else {
             return .passwordsNotMatch
         }
+        guard isValid(password: password) else {
+            return .emptyPassword
+        }
 
         AppAccessManager.shared.set(password: password)
         return .success
@@ -65,6 +73,9 @@ public class ManagePasswordViewModel: ObservableObject {
         }
         guard password == repeated else {
             return .passwordsNotMatch
+        }
+        guard isValid(password: password) else {
+            return .emptyPassword
         }
 
         AppAccessManager.shared.set(password: password)

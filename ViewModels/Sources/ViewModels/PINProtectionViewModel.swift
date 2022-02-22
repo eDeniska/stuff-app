@@ -1,5 +1,5 @@
 //
-//  PinProtectionViewModel.swift
+//  PINProtectionViewModel.swift
 //  
 //
 //  Created by Данис Тазетдинов on 20.02.2022.
@@ -12,7 +12,7 @@ import Logger
 import Localization
 import UIKit
 
-public class PinProtectionViewModel: ObservableObject {
+public class PINProtectionViewModel: ObservableObject {
     
     public static func protectionIsSet() -> Bool {
         AppAccessManager.shared.isPasswordSet

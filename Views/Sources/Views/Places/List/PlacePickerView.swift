@@ -114,6 +114,8 @@ struct PlacePickerView: View {
                         shouldAddNew = true
                     } label: {
                         Label(L10n.PlacesList.addPlaceButton.localized, systemImage: "plus")
+                            .contentShape(Rectangle())
+                            .frame(height: 96, alignment: .trailing)
                     }
                 }
             }

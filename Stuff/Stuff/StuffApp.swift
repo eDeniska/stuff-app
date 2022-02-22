@@ -19,7 +19,6 @@ import Localization
 // TODO: Siri/Shortcuts intents to manage lists
 
 // TODO: onboarding
-// TODO: pin/biometric lock of the app access
 // TODO: add onSubmit actions for text fields where appropriate
 // TODO: support undo in editing lists
 
@@ -27,13 +26,19 @@ import Localization
 // TODO: fill credits
 
 // TODO: fix keyboard shortcuts not working on places and checklists tabs on Mac Catalyst
-// TODO: fix settings window being opened multiple times on Catalyst
 
 enum Tab: Int, Codable, Equatable, Hashable {
     case items = 0
     case places = 1
     case checklists = 2
     case preferences = 3
+}
+
+class WeakBox<T: AnyObject> {
+    public weak var value: T?
+    init(_ value: T? = nil) {
+        self.value = value
+    }
 }
 
 @main
@@ -53,13 +58,15 @@ struct StuffApp: App {
     @State private var needsEnterPin = true
     @State private var backgroundDate = Date.distantPast
 
+    @State private var settingsScene = WeakBox<UIWindowScene>()
+
     init() {
         FileStorageManager.shared.initialize()
     }
 
     var body: some Scene {
         WindowGroup {
-            PinProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
+            PINProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
                 ContentView(selectedItem: $selectedItem, selectedPlace: $selectedPlace, selectedChecklist: $selectedChecklist, requestedTab: $requestedTab)
             }
             .onAppear {
@@ -127,17 +134,16 @@ struct StuffApp: App {
             }
         }
         .commands {
-            // TODO: consider opening "new..." forms from current tab (or in new window on iPad and Mac)
             CommandGroup(replacing: .appSettings) {
                 Button {
                     if UIDevice.current.isMac {
                         let activity = NSUserActivity(activityType: UserActivityRegistry.SettingsScene.activityType)
                         activity.targetContentIdentifier = UserActivityRegistry.SettingsScene.activityType
-                        UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil) { error in
+                        UIApplication.shared.requestSceneSessionActivation(settingsScene.value?.session, userActivity: activity, options: nil) { error in
                             Logger.default.error("[SCENE] could not spawn scene \(error)")
                         }
                     } else {
-                        Logger.default.info("show settings")
+                        requestedTab = .preferences
                     }
 
                 } label: {
@@ -215,7 +221,7 @@ struct StuffApp: App {
         }
 
         WindowGroup(L10n.App.windowItems.localized) {
-            PinProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
+            PINProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
                 SingleItemDetailsView()
             }
             .environment(\.managedObjectContext, persistenceController.container.viewContext)
@@ -224,7 +230,7 @@ struct StuffApp: App {
         .handlesExternalEvents(matching: [UserActivityRegistry.ItemScene.activityType])
 
         WindowGroup(L10n.App.windowPlaces.localized) {
-            PinProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
+            PINProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
                 SinglePlaceView()
             }
             .environment(\.managedObjectContext, persistenceController.container.viewContext)
@@ -233,7 +239,7 @@ struct StuffApp: App {
         .handlesExternalEvents(matching: [UserActivityRegistry.PlaceScene.activityType])
 
         WindowGroup(L10n.App.windowChecklists.localized) {
-            PinProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
+            PINProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
                 SingleChecklistView()
             }
             .environment(\.managedObjectContext, persistenceController.container.viewContext)
@@ -242,8 +248,11 @@ struct StuffApp: App {
         .handlesExternalEvents(matching: [UserActivityRegistry.ChecklistScene.activityType])
 
         WindowGroup(L10n.App.windowPreferences.localized) {
-            PinProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
+            PINProtected(needsEnterPin: $needsEnterPin, backgroundedDate: $backgroundDate) {
                 PreferencesView()
+                    .withWindow { window in
+                        settingsScene.value = window?.windowScene
+                    }
             }
             .onContinueUserActivity(UserActivityRegistry.SettingsScene.activityType) { userActivity in
                 Logger.default.info("got activity - \(userActivity)")

@@ -8,6 +8,10 @@
 import Foundation
 import Logger
 
+public extension Notification.Name {
+    static let appAccessSettingsChanged = Notification.Name("AppAccessSettingsChangedNotification")
+}
+
 public class AppAccessManager {
     public static let shared = AppAccessManager()
     
@@ -17,6 +21,10 @@ public class AppAccessManager {
     }
     
     private init() {
+    }
+
+    private func postNotification() {
+        NotificationCenter.default.post(name: .appAccessSettingsChanged, object: nil)
     }
     
     public var isPasswordSet: Bool {
@@ -35,6 +43,7 @@ public class AppAccessManager {
             try KeychainPasswordItem(service: Constants.lockPasswordService,
                                      account: Constants.lockPasswordAccount)
                 .deleteItem()
+            postNotification()
         } catch {
             Logger.default.error("could not clear password: \(error)")
         }
@@ -56,6 +65,7 @@ public class AppAccessManager {
             try KeychainPasswordItem(service: Constants.lockPasswordService,
                                      account: Constants.lockPasswordAccount)
                 .savePassword(password)
+            postNotification()
         } catch {
             Logger.default.error("could not access password: \(error)")
         }

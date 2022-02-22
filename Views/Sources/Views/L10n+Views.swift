@@ -201,9 +201,62 @@ extension L10n {
         case exportFailureTitle = "preferences.export.failure.title"
         case exportFailureDetails = "preferences.export.failure.details"
         case versionFormat = "preferences.versionFormat"
+
+        case managePINTitle = "preferences.manage.pin.title"
+        case managePINMessage = "preferences.manage.pin.message"
+        case managePINButtonSet = "preferences.manage.pin.button.set"
+        case managePINButtonClear = "preferences.manage.pin.button.clear"
+        case managePINButtonChange = "preferences.manage.pin.button.change"
+        case managePasswordTitle = "preferences.manage.password.title"
+        case managePasswordMessage = "preferences.manage.password.message"
+        case managePasswordButton = "preferences.manage.password.button"
     }
 
-    enum PinProtection: String, Localizable {
+    enum PINProtection: String, Localizable {
         case passwordPlaceholder = "pin.protection.password.placeholder"
+    }
+
+    enum ManagePassword: String, Localizable {
+        case title = "manage.password.title"
+        case existingPasswordPlaceholder = "manage.password.existingPassword.placeholder"
+        case existingPasswordTitle = "manage.password.existingPassword.title"
+        case password1Placeholder = "manage.password.password1.placeholder"
+        case password2Placeholder = "manage.password.password2.placeholder"
+        case newPasswordTitle = "manage.password.newPassword.title"
+        case clearPasswordButton = "manage.password.clearPassword.button"
+        case setPasswordButton = "manage.password.setPassword.button"
+        case changePasswordButton = "manage.password.changePassword.button"
+
+        case genericError = "manage.password.generic.error"
+        case genericSuccess = "manage.password.generic.success"
+
+        enum PasswordRemoved: String, Localizable {
+            case title = "manage.password.passwordRemoved.title" //  "Password is removed"
+            case message = "manage.password.passwordRemoved.message" // "App is no longer protected with password."
+        }
+        enum IncorrectPassword: String, Localizable {
+            case title = "manage.password.incorrectPassword.title" //  "Password doesn't match"
+            case message = "manage.password.incorrectPassword.message" // "Existing password is entered incorrectly."
+        }
+        enum EmptyPassword: String, Localizable {
+            case title = "manage.password.emptyPassword.title" //  "Incorrect password"
+            case message = "manage.password.emptyPassword.message" // "Password should not be empty."
+        }
+        enum PasswordsDontMatch: String, Localizable {
+            case title = "manage.password.passwordsDontMatch.title" //  "Passwords doesn't match"
+            case message = "manage.password.passwordsDontMatch.message" // "New passwords do not match."
+        }
+        enum PasswordChanged: String, Localizable {
+            case title = "manage.password.passwordChanged.title" //  "Password is changed"
+            case message = "manage.password.passwordChanged.message" // "New password is now used to protect the app data."
+        }
+        enum PasswordSet: String, Localizable {
+            case title = "manage.password.passwordSet.title" //  "Password is set"
+            case message = "manage.password.passwordSet.message" // "Password is now used to protect the app data."
+        }
+        enum InconsistencyError: String, Localizable {
+            case title = "manage.password.inconsistencyError.title" //  "Password error"
+            case message = "manage.password.inconsistencyError.message" // "Internal inconsistency with passwords. Try closing the app and opening again."
+        }
     }
 }

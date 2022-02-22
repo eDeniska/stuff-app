@@ -328,6 +328,14 @@
 "preferences.export.failure.title" = "Ошибка при экспорте";
 "preferences.export.failure.details" = "Проблемы при экспорте мешают завершению процесса. Свяжитесь с разработчиками, чтобы исправить эту ситуацию.";
 "preferences.versionFormat" = "Stuff v%@ (%@)";
+"preferences.manage.pin.title" = "PIN-код";
+"preferences.manage.pin.message" = "Ограничьте доступ к данным приложения с помощью PIN-кода";
+"preferences.manage.pin.button.set" = "Установить";
+"preferences.manage.pin.button.clear" = "Очистить";
+"preferences.manage.pin.button.change" = "Сменить";
+"preferences.manage.password.title" = "Пароль";
+"preferences.manage.password.message" = "Ограничьте доступ к данным приложения с помощью пароля";
+"preferences.manage.password.button" = "Управлять...";
 
 // Protection
 "protection.biometry.reason" = "получить достум к своим данным";
@@ -336,3 +344,41 @@
 "protection.message.incorrectPassword" = "Неверный пароль, попробуйте еще раз";
 "pin.protection.password.placeholder" = "Пароль";
 "protection.message.unlocked" = "Разблокировано";
+
+// Manage Password
+"manage.password.title" = "Управление паролем";
+"manage.password.existingPassword.placeholder" = "Введите текущий пароль";
+"manage.password.existingPassword.title" = "Текущий пароль";
+"manage.password.password1.placeholder" = "Введите новый пароль";
+"manage.password.password2.placeholder" = "Повторите новый пароль";
+"manage.password.newPassword.title" = "Новый пароль";
+"manage.password.clearPassword.button" = "Удалить пароль";
+"manage.password.setPassword.button" = "Задать пароль";
+"manage.password.changePassword.button" = "Сменить пароль";
+
+"manage.password.generic.error" = "Ошибка";
+"manage.password.generic.success" = "Готово";
+
+"manage.password.passwordRemoved.title" =  "Пароль удален";
+"manage.password.passwordRemoved.message" = "Приложение более не использует пароль для защиты.";
+"manage.password.incorrectPassword.title" = "Пароль не совпадает";
+"manage.password.incorrectPassword.message" = "Текущий пароль введен неверно.";
+"manage.password.passwordsDontMatch.title" = "Пароли не совпадают";
+"manage.password.passwordsDontMatch.message" = "Введенные пароли не совпадают.";
+"manage.password.passwordChanged.title" = "Пароль сменен";
+"manage.password.passwordChanged.message" = "Новый пароль используется для защиты данных приложения.";
+"manage.password.passwordSet.title" = "Пароль установлен";
+"manage.password.passwordSet.message" = "Пароль используется для защиты данных приложения.";
+"manage.password.inconsistencyError.title" = "Ошибка пароля";
+"manage.password.inconsistencyError.message" = "Внутренняя ошибка. Попробуйте закрыть приложение и открыть снова.";
+"manage.password.emptyPassword.title" = "Некорректный пароль";
+"manage.password.emptyPassword.message" = "Пароль не должен быть пустым.";
+
+// PIN View Model
+"pin.viewModel.unlock" = "Разблокируйте Stuff";
+"pin.viewModel.enterPIN" = "Enter PIN";
+"pin.viewModel.enterExistingPIN" = "Введите текущий PIN";
+"pin.viewModel.enterNewPIN" = "Введите новый PIN";
+"pin.viewModel.repeatPIN" = "Повторите PIN";
+"pin.viewModel.incorrectPIN" = "Попробуйте еще раз";
+

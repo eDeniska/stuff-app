@@ -10,6 +10,7 @@ import DataModel
 import UniformTypeIdentifiers
 import Logger
 import Localization
+import ViewModels
 
 @MainActor
 public struct PreferencesView: View {
@@ -27,6 +28,11 @@ public struct PreferencesView: View {
     @State private var showExportError = false
 
     @State private var showChangePassword = false
+    @State private var showChangePIN = false
+    @State private var showClearPIN = false
+    @State private var showSetPIN = false
+
+    @State private var passwordIsSet = PINProtectionViewModel.protectionIsSet()
 
     @State private var archiveDocument: ArchiveDocument? = nil
     @State private var scene: UIWindowScene? = nil
@@ -104,14 +110,12 @@ public struct PreferencesView: View {
 
     public var body: some View {
         NavigationView {
+            ScrollView {
             VStack(spacing: 40) {
-                Text(L10n.Preferences.exportImportTitle.localized)
-                    .font(.title2)
-                    .foregroundColor(.secondary)
-
                 GroupBox {
                     HStack {
                         Text(L10n.Preferences.exportAction.localized)
+                            .fixedSize(horizontal: false, vertical: true)
                         Spacer()
                         Button {
                             Task {
@@ -132,6 +136,7 @@ public struct PreferencesView: View {
                 GroupBox {
                     HStack {
                         Text(L10n.Preferences.importAction.localized)
+                            .fixedSize(horizontal: false, vertical: true)
                         Spacer()
                         Button {
                             showImport = true
@@ -147,28 +152,71 @@ public struct PreferencesView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                GroupBox {
-                    HStack {
-                        Text("Manage password")
-                        Spacer()
-                        Button {
-                            showChangePassword = true
-                        } label: {
-                            Label("Change...", systemImage: "square.and.arrow.down")
-                                .contentShape(Rectangle())
+                if UIDevice.current.isMac {
+                    GroupBox {
+                        HStack {
+                            Text(L10n.Preferences.managePasswordMessage.localized)
+                                .fixedSize(horizontal: false, vertical: true)
+                            Spacer()
+                            Button {
+                                showChangePassword = true
+                            } label: {
+                                Text(L10n.Preferences.managePasswordButton.localized)
+                                    .contentShape(Rectangle())
+                            }
                         }
+                        .font(.title3)
+                        .padding(8)
+                    } label: {
+                        Text(L10n.Preferences.managePasswordTitle.localized)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
-                    .font(.title3)
-                    .padding(8)
-                } label: {
-                    Text(L10n.Preferences.importTitle.localized)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                } else {
+                    GroupBox {
+                        VStack(alignment: .leading, spacing: 20) {
+                            Text(L10n.Preferences.managePINMessage.localized)
+                                .fixedSize(horizontal: false, vertical: true)
+                            HStack(spacing: 40) {
+                                Spacer()
+                                if passwordIsSet {
+                                    Button {
+                                        showChangePIN = true
+                                    } label: {
+                                        Text(L10n.Preferences.managePINButtonChange.localized)
+                                            .contentShape(Rectangle())
+                                    }
+                                    Button {
+                                        showClearPIN = true
+                                    } label: {
+                                        Text(L10n.Preferences.managePINButtonClear.localized)
+                                            .contentShape(Rectangle())
+                                    }
+                                } else {
+                                    Button {
+                                        showSetPIN = true
+                                    } label: {
+                                        Text(L10n.Preferences.managePINButtonSet.localized)
+                                            .contentShape(Rectangle())
+                                    }
+                                }
+                                Spacer()
+                            }
+                        }
+                        .font(.title3)
+                        .padding(8)
+                    } label: {
+                        Text(L10n.Preferences.managePINTitle.localized)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
                 }
                 Spacer()
                 Text(appVersion())
                     .foregroundColor(.secondary)
                     .font(.footnote)
+            }
+            .padding()
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -204,7 +252,9 @@ public struct PreferencesView: View {
                     .cornerRadius(8)
                 }
             })
-            .padding()
+            .onReceive(NotificationCenter.default.publisher(for: .appAccessSettingsChanged, object: nil)) { _ in
+                passwordIsSet = PINProtectionViewModel.protectionIsSet()
+            }
             .fileImporter(isPresented: $showImport, allowedContentTypes: [.appleArchive]) { result in
                 switch result {
                 case .success(let url):
@@ -225,6 +275,15 @@ public struct PreferencesView: View {
                 case .failure(let error):
                     Logger.default.error("could open file: \(error)")
                 }
+            }
+            .fullScreenCover(isPresented: $showSetPIN) {
+                ManagePINView(viewModel: SetPINViewModel(), showsCancel: true)
+            }
+            .fullScreenCover(isPresented: $showClearPIN) {
+                ManagePINView(viewModel: ClearPINViewModel(), showsCancel: true)
+            }
+            .fullScreenCover(isPresented: $showChangePIN) {
+                ManagePINView(viewModel: ChangePINViewModel(), showsCancel: true)
             }
             .sheet(isPresented: $showChangePassword) {
                 ManagePasswordView()

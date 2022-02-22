@@ -326,6 +326,14 @@
 "preferences.export.failure.title" = "Export failed";
 "preferences.export.failure.details" = "There are issues during export process. Please, contact developers to resolve these issues.";
 "preferences.versionFormat" = "Stuff v%@ (%@)";
+"preferences.manage.pin.title" = "PIN";
+"preferences.manage.pin.message" = "Manage access to app data by using PIN";
+"preferences.manage.pin.button.set" = "Set";
+"preferences.manage.pin.button.clear" = "Clear";
+"preferences.manage.pin.button.change" = "Change";
+"preferences.manage.password.title" = "Password";
+"preferences.manage.password.message" = "Manage access to app data by using password";
+"preferences.manage.password.button" = "Manage...";
 
 // Protection
 "protection.biometry.reason" = "access its data";
@@ -334,3 +342,41 @@
 "protection.message.incorrectPassword" = "Incorrect password, try again";
 "pin.protection.password.placeholder" = "Password";
 "protection.message.unlocked" = "Unlocked";
+
+// Manage Password
+"manage.password.title" = "Manage password";
+"manage.password.existingPassword.placeholder" = "Enter existing password";
+"manage.password.existingPassword.title" = "Existing password";
+"manage.password.password1.placeholder" = "Enter new password";
+"manage.password.password2.placeholder" = "Repeat new password";
+"manage.password.newPassword.title" = "New password";
+"manage.password.clearPassword.button" = "Clear password";
+"manage.password.setPassword.button" = "Set password";
+"manage.password.changePassword.button" = "Change password";
+
+"manage.password.generic.error" = "Error";
+"manage.password.generic.success" = "Success";
+
+"manage.password.passwordRemoved.title" =  "Password is removed";
+"manage.password.passwordRemoved.message" = "App is no longer protected with password.";
+"manage.password.incorrectPassword.title" = "Password doesn't match";
+"manage.password.incorrectPassword.message" = "Existing password is entered incorrectly.";
+"manage.password.passwordsDontMatch.title" = "Passwords doesn't match";
+"manage.password.passwordsDontMatch.message" = "New passwords do not match.";
+"manage.password.passwordChanged.title" = "Password is changed";
+"manage.password.passwordChanged.message" = "New password is now used to protect the app data.";
+"manage.password.passwordSet.title" = "Password is set";
+"manage.password.passwordSet.message" = "Password is now used to protect the app data.";
+"manage.password.inconsistencyError.title" = "Password error";
+"manage.password.inconsistencyError.message" = "Internal inconsistency with passwords. Try closing the app and opening again.";
+"manage.password.emptyPassword.title" = "Incorrect password";
+"manage.password.emptyPassword.message" = "Password should not be empty.";
+
+// PIN View Model
+"pin.viewModel.unlock" = "Unlock Stuff";
+"pin.viewModel.enterPIN" = "Enter PIN";
+"pin.viewModel.enterExistingPIN" = "Enter existing PIN";
+"pin.viewModel.enterNewPIN" = "Enter new PIN";
+"pin.viewModel.repeatPIN" = "Repeat PIN";
+"pin.viewModel.incorrectPIN" = "Try again";
+

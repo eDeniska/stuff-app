@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  PINProtectionView.swift
 //  
 //
 //  Created by Данис Тазетдинов on 20.02.2022.
@@ -15,16 +15,18 @@ public extension Notification.Name {
     static let requestBiometricAuthentiction = Notification.Name("RequestBiometricAuthentictionNotification")
 }
 
-public struct PinProtectionView: View {
+public struct PINProtectionView: View {
 
     private let onUnlock: () -> Void
 
     @State private var pin = ""
-    @State private var state: PinKeypadView.LockState = .locked
+    @State private var state: PINViewModelLockState = .locked
 
-    @StateObject private var viewModel = PinProtectionViewModel()
+    @StateObject private var viewModel = PINProtectionViewModel()
     @State private var processingBiometrics = false
     @State private var cancelledBiometrics = false
+
+    @FocusState private var passwordFocused: Bool
 
     public init(onUnlock: @escaping () -> Void) {
         self.onUnlock = onUnlock
@@ -40,8 +42,8 @@ public struct PinProtectionView: View {
 
     @ViewBuilder
     private func passwordView() -> some View {
-        GeometryReader { proxy in
-            if UIDevice.current.isMac {
+        if UIDevice.current.isMac {
+            GeometryReader { proxy in
                 HStack {
                     Spacer()
                     VStack(spacing: 40) {
@@ -53,7 +55,9 @@ public struct PinProtectionView: View {
                         Text(viewModel.message)
                             .font(.title)
                             .foregroundColor(.secondary)
-                        SecureField(L10n.PinProtection.passwordPlaceholder.localized, text: $pin)
+                        SecureField(L10n.PINProtection.passwordPlaceholder.localized, text: $pin)
+                            .textContentType(.password)
+                            .focused($passwordFocused)
                             .textFieldStyle(.roundedBorder)
                             .padding()
                             .frame(width: proxy.size.width / 3, alignment: .center)
@@ -69,28 +73,15 @@ public struct PinProtectionView: View {
                     }
                     Spacer()
                 }
-            } else {
-                VStack {
-                    Spacer()
-                    PinKeypadView(pin: $pin, message: $viewModel.message, state: $state, biometryType: viewModel.biometryType) { entered in
-                        if viewModel.authenticateWithPassword(entered) {
-                            pin = ""
-                            onUnlock()
-                            return true
-                        } else {
-                            return false
-                        }
-                    } biometryAction: {
-                        Task {
-                            if try await viewModel.authenticateWithBiometrics() {
-                                pin = ""
-                                cancelledBiometrics = false
-                                onUnlock()
-                            }
-                        }
+            }
+        } else {
+            ManagePINView(viewModel: UnlockPINViewModel(completionHandler: onUnlock), showsCancel: false) {
+                Task {
+                    if try await viewModel.authenticateWithBiometrics() {
+                        pin = ""
+                        cancelledBiometrics = false
+                        onUnlock()
                     }
-                    .frame(height: height(for: proxy.size), alignment: .center)
-                    Spacer()
                 }
             }
         }
@@ -114,12 +105,12 @@ public struct PinProtectionView: View {
                             onUnlock()
                         } else {
                             cancelledBiometrics = true
-                            // TODO: focus on password for mac
+                            passwordFocused = true
                         }
                     } catch {
                         Logger.default.error("[BIOMETRIC] could not perform biometric: \(error)")
                         cancelledBiometrics = true
-                        // TODO: focus on password for mac
+                        passwordFocused = true
                     }
                     processingBiometrics = false
                 }

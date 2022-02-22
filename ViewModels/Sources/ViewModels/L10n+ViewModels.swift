@@ -20,4 +20,13 @@ extension L10n {
         case messageIncorrectPIN = "protection.message.incorrectPIN"
         case messageIncorrectPassword = "protection.message.incorrectPassword"
     }
+
+    enum PINViewModel: String, Localizable {
+        case unlock = "pin.viewModel.unlock"
+        case enterPIN = "pin.viewModel.enterPIN"
+        case enterExistingPIN = "pin.viewModel.enterExistingPIN"
+        case enterNewPIN = "pin.viewModel.enterNewPIN"
+        case repeatPIN = "pin.viewModel.repeatPIN"
+        case incorrectPIN = "pin.viewModel.incorrectPIN"
+    }
 }

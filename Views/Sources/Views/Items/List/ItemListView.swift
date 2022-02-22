@@ -231,6 +231,7 @@ struct ItemListViewInternal: View {
                         showItemCapture = true
                     } label: {
                         Label(L10n.ItemDetails.takePhotoTitle.localized, systemImage: "camera")
+                            .contentShape(Rectangle())
                     }
                     .disabled(cameraAccessDisallowed())
                     Button {
@@ -239,6 +240,9 @@ struct ItemListViewInternal: View {
                         showNewItemForm = true
                     } label: {
                         Label(L10n.ItemsList.addItemButton.localized, systemImage: "plus")
+                            .contentShape(Rectangle())
+                            .frame(height: 96, alignment: .trailing)
+                        // this solves issue with button becoming unclickable after several clicks
                     }
                     Menu {
                         Picker(selection: $groupingType) {
@@ -252,6 +256,7 @@ struct ItemListViewInternal: View {
                         .pickerStyle(.inline)
                     } label: {
                         Label(L10n.ItemsList.menu.localized, systemImage: "ellipsis.circle")
+                            .contentShape(Rectangle())
                     }
                     .menuStyle(.borderlessButton)
                 }

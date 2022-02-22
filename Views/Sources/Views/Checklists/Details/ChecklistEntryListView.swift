@@ -153,12 +153,16 @@ public struct ChecklistEntryListView: View {
                             SingleChecklistView.activateSession(checklist: checklist)
                         } label: {
                             Label(L10n.Common.buttonSeparateWindow.localized, systemImage: "square.on.square")
+                                .contentShape(Rectangle())
                         }
                     }
                     Button {
                         addEntry = true
                     } label: {
                         Label(L10n.ChecklistDetails.addEntryButton.localized, systemImage: "plus")
+                            .contentShape(Rectangle())
+                            .frame(height: 96, alignment: .trailing)
+                        // this solves issue with button becoming unclickable after several clicks
                     }
                     EditButton()
                 }

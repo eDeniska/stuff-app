@@ -1,5 +1,5 @@
 //
-//  PinButton.swift
+//  PINButton.swift
 //  
 //
 //  Created by Danis Tazetdinov on 21.02.2022.
@@ -31,7 +31,7 @@ extension ButtonStyle where Self == FlashingButtonStyle {
     }
 }
 
-struct PinButton: View {
+struct PINButton: View {
     let title: String
     let action: ((String) -> Void)?
 

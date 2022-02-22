@@ -155,6 +155,8 @@ struct ChecklistListViewInternal: View {
                         shouldAddNew = true
                     } label: {
                         Label(L10n.ChecklistsList.addChecklistButton.localized, systemImage: "plus")
+                            .contentShape(Rectangle())
+                            .frame(height: 96, alignment: .trailing)
                     }
                     Menu {
                         Picker(selection: $sortType) {
