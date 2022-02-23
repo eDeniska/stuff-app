@@ -13,7 +13,7 @@ import Localization
 
 struct PlacePickerView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     
     @FetchRequest(sortDescriptors: [SortDescriptor(\ItemPlace.title)],animation: .default)
     private var places: FetchedResults<ItemPlace>
@@ -33,7 +33,7 @@ struct PlacePickerView: View {
                     ForEach(places) { placeElement in
                         Button {
                             place = placeElement
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         } label: {
                             HStack {
                                 PlaceListElement(place: placeElement)
@@ -54,7 +54,7 @@ struct PlacePickerView: View {
                 Section {
                     Button {
                         place = nil
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         HStack {
                             Text(L10n.PlacesList.noPlaceAssigned.localized)
@@ -103,7 +103,7 @@ struct PlacePickerView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonCancel.localized)
                     }

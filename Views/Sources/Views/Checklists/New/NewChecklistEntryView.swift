@@ -12,7 +12,7 @@ import Localization
 public struct NewChecklistEntryView: View {
 
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     @ObservedObject private var checklist: Checklist
 
@@ -77,7 +77,7 @@ public struct NewChecklistEntryView: View {
             return
         }
         save(title: trimmedTitle)
-        presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 
     public var body: some View {
@@ -95,7 +95,7 @@ public struct NewChecklistEntryView: View {
                         ForEach(items) { item in
                             Button {
                                 save(item: item)
-                                presentationMode.wrappedValue.dismiss()
+                                dismiss()
                             } label: {
                                 ItemListElement(item: item, displayCategory: true)
                                     .contentShape(Rectangle())
@@ -132,7 +132,7 @@ public struct NewChecklistEntryView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonCancel.localized)
                     }

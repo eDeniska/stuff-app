@@ -16,7 +16,7 @@ struct PlaceItemsAssingmentView: View {
     @ObservedObject private var place: ItemPlace
 
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     @SectionedFetchRequest(
         sectionIdentifier: \Item.categoryTitle,
@@ -87,7 +87,7 @@ struct PlaceItemsAssingmentView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonCancel.localized)
                     }
@@ -97,7 +97,7 @@ struct PlaceItemsAssingmentView: View {
                     Button {
                         place.updateItems(checked)
                         viewContext.saveOrRollback()
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonSave.localized)
                             .bold()

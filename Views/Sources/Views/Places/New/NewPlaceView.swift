@@ -11,7 +11,7 @@ import Localization
 
 struct NewPlaceView: View {
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
 
     @State private var newPlaceTitle = ""
@@ -31,7 +31,7 @@ struct NewPlaceView: View {
         }
         createdPlace = ItemPlace.place(title: trimmedTitle, icon: selectedIcon, in: viewContext)
         viewContext.saveOrRollback()
-        presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 
     var body: some View {
@@ -68,7 +68,7 @@ struct NewPlaceView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonCancel.localized)
                     }

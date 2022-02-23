@@ -22,7 +22,7 @@ public struct ItemCaptureView: View {
     // image is being set by camera capture before camera view is dismissed
     @State private var startingImage: UIImage? = nil
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     private func cameraAccessAllowed() -> Bool {
         AVCaptureDevice.authorizationStatus(for: .video) == .authorized || AVCaptureDevice.authorizationStatus(for: .video) == .notDetermined
@@ -39,7 +39,7 @@ public struct ItemCaptureView: View {
                 if let image = image {
                     startingImage = image
                 } else {
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }
             } content: {
                 CameraView(image: $image)

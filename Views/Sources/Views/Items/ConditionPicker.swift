@@ -13,7 +13,7 @@ struct ConditionPicker: View {
     @Binding var itemCondition: ItemCondition
     let itemTitle: String
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View  {
         PhoneNavigationView {
@@ -22,7 +22,7 @@ struct ConditionPicker: View {
                     ForEach(ItemCondition.allCases, id: \.self) { condition in
                         Button {
                             itemCondition = condition
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         } label: {
                             HStack {
                                 Text(condition.localizedTitle)
@@ -44,7 +44,7 @@ struct ConditionPicker: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonCancel.localized)
                     }

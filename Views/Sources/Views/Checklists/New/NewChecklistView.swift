@@ -11,7 +11,7 @@ import Localization
 
 struct NewChecklistView: View {
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
 
     @State private var newListTitle = ""
@@ -31,7 +31,7 @@ struct NewChecklistView: View {
         }
         createdChecklist = Checklist.checklist(title: trimmedTitle, icon: selectedIcon, in: viewContext)
         viewContext.saveOrRollback()
-        presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 
     var body: some View {
@@ -68,7 +68,7 @@ struct NewChecklistView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonCancel.localized)
                     }

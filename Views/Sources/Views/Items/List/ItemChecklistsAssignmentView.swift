@@ -13,7 +13,7 @@ import Localization
 
 struct ItemChecklistsAssignmentView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     @FetchRequest(sortDescriptors: [SortDescriptor(\Checklist.title)],animation: .default)
     private var checklists: FetchedResults<Checklist>
@@ -78,7 +78,7 @@ struct ItemChecklistsAssignmentView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonCancel.localized)
                     }
@@ -88,7 +88,7 @@ struct ItemChecklistsAssignmentView: View {
                     Button {
                         item.updateChecklists(checked)
                         viewContext.saveOrRollback()
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonSave.localized)
                             .bold()

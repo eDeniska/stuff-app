@@ -19,7 +19,7 @@ public struct CategoryPickerView: View {
     let itemTitle: String
 
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     @FetchRequest(
         sortDescriptors: [
@@ -57,7 +57,7 @@ public struct CategoryPickerView: View {
                             category = .custom(trimmedTitle)
                             let objCategory = category.itemCategory(in: viewContext)
                             objCategory.icon = selectedIcon
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                             Logger.default.info("create new and dismiss")
                         } label: {
                             Text(L10n.Category.createCategoryNamed.localized(with: trimmedTitle))
@@ -92,7 +92,7 @@ public struct CategoryPickerView: View {
                         Button {
                             category = .custom(customCategory.title)
                             viewContext.saveOrRollback()
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         } label: {
                             HStack {
                                 Label(customCategory.title,
@@ -112,7 +112,7 @@ public struct CategoryPickerView: View {
                     ForEach(AppCategory.allCases, id: \.self) { appCategory in
                         Button {
                             category = .predefined(appCategory)
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         } label: {
                             HStack {
                                 Label(appCategory.localizedTitle, systemImage: appCategory.iconName)
@@ -134,7 +134,7 @@ public struct CategoryPickerView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonCancel.localized)
                     }

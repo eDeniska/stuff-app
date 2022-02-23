@@ -92,7 +92,7 @@ struct ItemDetailsViewInternal: View {
 
     @FocusState private var focusedField: FocusedField?
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -520,7 +520,7 @@ struct ItemDetailsViewInternal: View {
                         item = itemDetails.save(in: viewContext)
                         viewContext.saveOrRollback()
                         if isNew {
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         } else {
                             isEditing.toggle()
                         }
@@ -542,7 +542,7 @@ struct ItemDetailsViewInternal: View {
                 if isEditing && (horizontalSizeClass != .compact || isNew) {
                     Button(role: .cancel) {
                         if isNew {
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         } else {
                             itemDetails.reset()
                             isEditing.toggle()
@@ -553,7 +553,7 @@ struct ItemDetailsViewInternal: View {
                     .keyboardShortcut(.cancelAction)
                 } else if hasDismissButton {
                     Button(role: .cancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonDismiss.localized)
                     }

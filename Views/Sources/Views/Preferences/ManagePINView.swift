@@ -12,7 +12,7 @@ import ViewModels
 
 struct ManagePINView<ViewModel: PINViewModelProtocol>: View {
 
-    @Environment(\.dismiss) private var dismissAction
+    @Environment(\.dismiss) private var dismiss
 
     @State private var pin = ""
 
@@ -46,7 +46,7 @@ struct ManagePINView<ViewModel: PINViewModelProtocol>: View {
                         return false
 
                     case .success:
-                        dismissAction()
+                        dismiss()
                         return true
 
                     case .next:
@@ -59,7 +59,7 @@ struct ManagePINView<ViewModel: PINViewModelProtocol>: View {
                 .frame(idealHeight: height(for: proxy.size), alignment: .bottom)
                 if showsCancel {
                     Button {
-                        dismissAction()
+                        dismiss()
                     } label: {
                         Text(L10n.Common.buttonCancel.localized)
                             .padding(.horizontal, 20)

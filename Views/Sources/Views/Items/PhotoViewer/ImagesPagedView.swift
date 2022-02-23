@@ -12,7 +12,7 @@ import Localization
 
 struct ImagesPagedView: View {
 
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     private let images: [UIImage]
     @State private var currentIndex: Int
@@ -41,7 +41,7 @@ struct ImagesPagedView: View {
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button(role: .cancel) {
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         } label: {
                             Text(L10n.Common.buttonDismiss.localized)
                         }

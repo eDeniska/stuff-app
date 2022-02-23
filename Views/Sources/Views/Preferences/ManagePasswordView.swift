@@ -27,7 +27,7 @@ struct ManagePasswordView: View {
     @State private var password1 = ""
     @State private var password2 = ""
 
-    @Environment(\.dismiss) private var dismissAction
+    @Environment(\.dismiss) private var dismiss
 
     @State private var errorMessage: AlertMessage? = nil
     @State private var confirmationMessage: AlertMessage? = nil
@@ -57,7 +57,7 @@ struct ManagePasswordView: View {
             actionCompleted = true
             confirmationMessage = AlertMessage(title: L10n.ManagePassword.PasswordRemoved.title.localized,
                                                message: L10n.ManagePassword.PasswordRemoved.message.localized) {
-                dismissAction()
+                dismiss()
             }
 
         case .incorrectExisting:
@@ -76,7 +76,7 @@ struct ManagePasswordView: View {
                 actionCompleted = true
                 confirmationMessage = AlertMessage(title: L10n.ManagePassword.PasswordChanged.title.localized,
                                                    message: L10n.ManagePassword.PasswordChanged.message.localized) {
-                    dismissAction()
+                    dismiss()
                 }
             case .incorrectExisting:
                 focusedField = .existingPassword
@@ -98,7 +98,7 @@ struct ManagePasswordView: View {
                 actionCompleted = true
                 confirmationMessage = AlertMessage(title: L10n.ManagePassword.PasswordSet.title.localized,
                                                    message: L10n.ManagePassword.PasswordSet.message.localized) {
-                    dismissAction()
+                    dismiss()
                 }
             case .passwordIsSet:
                 errorMessage = AlertMessage(title: L10n.ManagePassword.InconsistencyError.title.localized,
@@ -116,7 +116,7 @@ struct ManagePasswordView: View {
     }
 
     private func cancel() {
-        dismissAction()
+        dismiss()
     }
 
 
